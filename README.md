@@ -4,11 +4,11 @@
 _This README contains basic information about the project and its artifacts. If kept up to date, it will act as a primary dashboard for the project._
 
 ## Team Members
-- MEMBER1
+- Tyler Garcia
 - MEMBER2
 - Jabrecia Washington
 - Lucas Diamond
-- MEMBER5
+- Aedan Frank
 
 ## Repo Organization
 - [game/](game/) - Contains the main MonoGame project. Notes about how to run the game are in [game/README.md](game/README.md).
