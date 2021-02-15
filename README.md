@@ -4,10 +4,10 @@
 _This README contains basic information about the project and its artifacts. If kept up to date, it will act as a primary dashboard for the project._
 
 ## Team Members
-- Sammi K
-- MEMBER2
+- Tyler Garcia
+- Sammi Kendikian
 - MEMBER3
-- MEMBER4
+- Lucas Diamond
 - MEMBER5
 
 ## Repo Organization
