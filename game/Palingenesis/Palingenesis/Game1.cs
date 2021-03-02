@@ -4,10 +4,25 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Palingenesis
 {
+    //enum used in the FSM
+    enum gameState
+    {
+        Menu,
+        Game,
+        GameOver,
+        Dialouge,
+        Pause
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private KeyboardState kbState;
+        private KeyboardState prevKbState;
+        private SpriteFont font;
+
+        //game starts in the menu state
+        private gameState currentState = gameState.Menu;
 
         public Game1()
         {
@@ -28,6 +43,7 @@ namespace Palingenesis
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            font = This.LoadContent<SpriteFont>("font");
         }
 
         protected override void Update(GameTime gameTime)
@@ -36,16 +52,66 @@ namespace Palingenesis
                 Exit();
 
             // TODO: Add your update logic here
+            kbState = Keyboard.GetState();
 
+            switch (currentState)
+            {
+                case gameState.Menu:
+
+                    break;
+
+                case gameState.Game:
+
+                    break;
+
+                case gameState.GameOver:
+
+                    break;
+
+                case gameState.Dialouge:
+
+                    break;
+
+                case gameState.Pause:
+
+                    break;
+            }
+
+
+            prevKbState = kbState;
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            _spriteBatch.Begin();
             // TODO: Add your drawing code here
+            switch (currentState)
+            {
+                case gameState.Menu:
+                    
+                    break;
 
+                case gameState.Game:
+
+                    break;
+
+                case gameState.GameOver:
+
+                    break;
+
+                case gameState.Dialouge:
+
+                    break;
+
+                case gameState.Pause:
+
+                    break;
+            }
+
+
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
