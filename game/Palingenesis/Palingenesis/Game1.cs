@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Palingenesis
 {
@@ -23,6 +26,7 @@ namespace Palingenesis
         private double timer;
         private Player player;
         private Texture2D playerAsset;
+        
 
         int windowWidth;
         int windowHieght;
