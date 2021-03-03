@@ -42,6 +42,19 @@ namespace Palingenesis
             sb.Draw(texture, position, Color.White);
         }
 
+        //checks if the character is overlaping with a different rectangle, can be used by all inheriting classes
+        public virtual bool CheckCollision(Rectangle collider)
+        {
+            if (position.Intersects(collider))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public abstract void Update();
     }
 }
