@@ -25,6 +25,12 @@ namespace Palingenesis
             set { health = value; }
         }
 
+        public Rectangle Position 
+        {
+            get { return position; }
+
+        }
+
         public Character(int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth)
         {
             this.health = health;

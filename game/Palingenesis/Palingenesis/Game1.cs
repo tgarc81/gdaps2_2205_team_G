@@ -26,7 +26,8 @@ namespace Palingenesis
         private double timer;
         private Player player;
         private Texture2D playerAsset;
-        
+        private Boss boss1;
+        private int numberOfDialougeFrames;
 
         int windowWidth;
         int windowHieght;
@@ -60,6 +61,9 @@ namespace Palingenesis
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
 
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(0, 0, 10, 10), windowWidth, windowHieght);
+            //note: make a placeholder asset for the boss
+            boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHieght);
+                
         }
 
         protected override void Update(GameTime gameTime)
@@ -102,9 +106,32 @@ namespace Palingenesis
                     {
                         currentState = gameState.Menu;
                     }
+
+                    //when the bosses health hit's zero, starts the next dialouge section
+                    if (boss1.Health <= 0)
+                    {
+                        currentState = gameState.Dialouge;
+                    }
+
+                    if(player.Health <= 0)
+                    {
+                        currentState = gameState.GameOver;
+                    }
                     break;
 
                 case gameState.Dialouge:
+
+                    //each time the user presses enter the dialouge advances by one line
+                   if(SingleKeyPress((Keys.Enter), kbState))
+                   {
+                        numberOfDialougeFrames--;
+                   }
+
+                   //when there is no remaining dialouge starts the next section of the game
+                   if(numberOfDialougeFrames == 0)
+                    {
+                        currentState = gameState.Game;
+                    }
 
                     break;
 
@@ -132,23 +159,23 @@ namespace Palingenesis
             switch (currentState)
             {
                 case gameState.Menu:
-                    
+                    _spriteBatch.DrawString(font, "PlaceHolder for menu", new Vector2(0, 0), Color.White);
                     break;
 
                 case gameState.Game:
-
+                    _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
                     break;
 
                 case gameState.GameOver:
-
+                    _spriteBatch.DrawString(font, "PlaceHolder for gameover", new Vector2(0, 0), Color.White);
                     break;
 
                 case gameState.Dialouge:
-
+                    _spriteBatch.DrawString(font, "PlaceHolder for visual novel sections", new Vector2(0, 0), Color.White);
                     break;
 
                 case gameState.Pause:
-
+                    _spriteBatch.DrawString(font, "PlaceHolder for pause", new Vector2(0, 0), Color.White);
                     break;
             }
 
