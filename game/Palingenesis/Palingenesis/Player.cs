@@ -13,7 +13,7 @@ namespace Palingenesis
     {
         private Rectangle attackBox;
 
-        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowWidth, int windowHeight) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowWidth, windowHeight)
+        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             
         }
@@ -35,14 +35,14 @@ namespace Palingenesis
             //down
             if (keyboardState.IsKeyDown(Keys.S))
             {
-                if(position.Y < windowHeight)
+                if(position.Y < (windowHeight - position.Height))
                 position.Y += 1;
             }
 
             //right
             if (keyboardState.IsKeyDown(Keys.D))
             {
-                if(position.X < windowWidth)
+                if(position.X < (windowWidth - position.Width))
                 position.X += 1;
             }
 

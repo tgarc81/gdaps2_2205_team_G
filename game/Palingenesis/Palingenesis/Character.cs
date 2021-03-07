@@ -40,6 +40,8 @@ namespace Palingenesis
             this.texture = texture;
             this.windowWidth = windowWidth;
             this.windowHeight = windowHeight;
+            this.position = position;
+            this.texture = texture;
         }
 
         //draws object

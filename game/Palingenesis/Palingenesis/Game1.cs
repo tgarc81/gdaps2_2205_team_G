@@ -60,7 +60,7 @@ namespace Palingenesis
 
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(0, 0, 10, 10), windowWidth, windowHieght);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHieght, windowWidth);
             //note: make a placeholder asset for the boss
             boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHieght);
                 
@@ -85,6 +85,7 @@ namespace Palingenesis
                     break;
 
                 case gameState.Game:
+                    player.Update();
 
                     //pressing escape during the game pauses
                     if(SingleKeyPress(Keys.Escape, kbState))
@@ -98,6 +99,13 @@ namespace Palingenesis
                         currentState = gameState.GameOver;
                     }
 
+                    //when the bosses health hit's zero, starts the next dialouge section
+                    if (boss1.Health <= 0)
+                    {
+                        currentState = gameState.Dialouge;
+                    }
+
+                    
                     break;
 
                 case gameState.GameOver:
@@ -107,16 +115,6 @@ namespace Palingenesis
                         currentState = gameState.Menu;
                     }
 
-                    //when the bosses health hit's zero, starts the next dialouge section
-                    if (boss1.Health <= 0)
-                    {
-                        currentState = gameState.Dialouge;
-                    }
-
-                    if(player.Health <= 0)
-                    {
-                        currentState = gameState.GameOver;
-                    }
                     break;
 
                 case gameState.Dialouge:
@@ -129,9 +127,9 @@ namespace Palingenesis
 
                    //when there is no remaining dialouge starts the next section of the game
                    if(numberOfDialougeFrames == 0)
-                    {
+                   {
                         currentState = gameState.Game;
-                    }
+                   }
 
                     break;
 
@@ -164,6 +162,8 @@ namespace Palingenesis
 
                 case gameState.Game:
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
+
+                    player.Draw(_spriteBatch);
                     break;
 
                 case gameState.GameOver:
