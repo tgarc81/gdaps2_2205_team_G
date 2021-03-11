@@ -30,6 +30,8 @@ namespace Palingenesis
         private Texture2D playerAsset;
         private Boss boss1;
         private int numberOfDialougeFrames;
+        private List<string> dialougeList = new List<string>();
+        private String currentLine;
 
         int windowWidth;
         int windowHieght;
@@ -173,7 +175,8 @@ namespace Palingenesis
                     break;
 
                 case gameState.Dialouge:
-                    _spriteBatch.DrawString(font, "PlaceHolder for visual novel sections", new Vector2(0, 0), Color.White);
+                    //figure out the actual position later
+                    _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
 
                 case gameState.Pause:
