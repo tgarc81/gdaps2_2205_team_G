@@ -13,6 +13,19 @@ namespace Palingenesis
     {
         private Rectangle attackBox;
 
+        //for drawing based on player input
+        private enum PlayerState
+        {
+            FaceForward,
+            FaceRight,
+            FaceLeft,
+            FaceBack,
+            WalkForward,
+            WalkRight,
+            WalkLeft,
+            WalkBack
+        }
+
         public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             
@@ -29,21 +42,28 @@ namespace Palingenesis
             {
                 //stops player from going off screen
                 if (position.Y > 0)
-                position.Y -= 1;
+                {
+                    position.Y -= 1;
+                }
             }
 
             //down
             if (keyboardState.IsKeyDown(Keys.S))
             {
                 if(position.Y < (windowHeight - position.Height))
-                position.Y += 1;
+                {
+                    position.Y += 1;
+                }
             }
 
             //right
             if (keyboardState.IsKeyDown(Keys.D))
             {
                 if(position.X < (windowWidth - position.Width))
-                position.X += 1;
+                {
+                    position.X += 1;
+                }
+                
             }
 
             //Left
@@ -51,7 +71,10 @@ namespace Palingenesis
             {
                 //stops player from going off screen
                 if(position.X > 0)
-                position.X -= 1;
+                {
+                    position.X -= 1;
+                }
+                
             }
         }
 

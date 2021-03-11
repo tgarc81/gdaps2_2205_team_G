@@ -16,6 +16,8 @@ namespace Palingenesis
         Dialouge,
         Pause
     }
+    
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
