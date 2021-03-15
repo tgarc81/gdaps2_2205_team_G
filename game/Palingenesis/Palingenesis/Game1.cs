@@ -32,6 +32,7 @@ namespace Palingenesis
         private int numberOfDialougeFrames;
         private List<string> dialougeList = new List<string>();
         private String currentLine;
+        private Texture2D attackTexture;
 
         int windowWidth;
         int windowHieght;
@@ -63,7 +64,7 @@ namespace Palingenesis
             font = Content.Load<SpriteFont>("font");
 
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
-
+            attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHieght, windowWidth);
             //note: make a placeholder asset for the boss
             boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHieght);
@@ -90,6 +91,7 @@ namespace Palingenesis
 
                 case gameState.Game:
                     player.Update();
+                    player.Attack(boss1, prevKbState);
 
                     //pressing escape during the game pauses
                     if(SingleKeyPress(Keys.Escape, kbState))
@@ -168,6 +170,7 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
 
                     player.Draw(_spriteBatch);
+                    player.attackDraw(_spriteBatch, attackTexture);
                     break;
 
                 case gameState.GameOver:
