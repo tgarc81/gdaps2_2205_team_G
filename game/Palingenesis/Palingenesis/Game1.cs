@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Palingenesis
 {
@@ -24,17 +25,19 @@ namespace Palingenesis
         private SpriteBatch _spriteBatch;
         private KeyboardState kbState;
         private KeyboardState prevKbState;
-        private SpriteFont font;
-        private double timer;
-        private Player player;
-        private Texture2D playerAsset;
+        private SpriteFont font; 
+        private double timer; // Represents the time elapsed in the game
+        private Player player; // Represents the actual player
+        private Texture2D playerAsset; // Represents player image
         private Boss boss1;
-        private int numberOfDialougeFrames;
-        private List<string> dialougeList = new List<string>();
-        private String currentLine;
+        private Boss riceGoddess; // Represents Rice Goddess boss
+        private int numberOfDialougeFrames; // Number of frames for the dialogue
+        private List<string> dialougeList = new List<string>(); // List of the dialogue
+        private String currentLine; // Represents the current line in the dialogue
+        private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
 
         int windowWidth;
-        int windowHieght;
+        int windowHeight;
 
         //game starts in the menu state
         private gameState currentState = gameState.Menu;
@@ -49,7 +52,7 @@ namespace Palingenesis
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            isRiceGoddessLoaded = false; // Sets it so Rice Goddess is not loaded yet
             base.Initialize();
         }
 
@@ -59,14 +62,14 @@ namespace Palingenesis
 
             // TODO: use this.Content to load your game content here
             windowWidth = graphics.GraphicsDevice.Viewport.Width;
-            windowHieght = graphics.GraphicsDevice.Viewport.Height;
+            windowHeight = graphics.GraphicsDevice.Viewport.Height;
             font = Content.Load<SpriteFont>("font");
 
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHieght, windowWidth);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHieght);
+            boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight);
                 
         }
 
@@ -85,6 +88,7 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Game;
+                        LoadBoss();
                     }
                     break;
 
@@ -107,6 +111,7 @@ namespace Palingenesis
                     if (boss1.Health <= 0)
                     {
                         currentState = gameState.Dialouge;
+                        LoadBoss();
                     }
 
                     
@@ -199,6 +204,34 @@ namespace Palingenesis
             else
             {
                 return false;
+            }
+        }
+
+        private void LoadBoss()
+        {
+            if(!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
+            {
+                isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
+                StreamReader input = null;
+                try
+                {
+                    input = new StreamReader("../../../RiceGoddess.txt"); // Opens a StreamReader specifically to the RiceGoddess file
+                    string line = null;
+                    string[] data;
+                    while((line = input.ReadLine()) != null) // Reads line in Rice Goddess document
+                    {
+                        data = line.Split(',');
+                        int health = int.Parse(data[0]); // Makes health based on first element of data
+                        int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                        int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                        int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                        riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight); // Makes Rice Goddess using data gathered from the file
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"Error loading file: {e.Message}"); // If something goes wrong in loading the board's info from a file, state as such to the user
+                }
             }
         }
     }
