@@ -12,6 +12,7 @@ namespace Palingenesis
     enum gameState
     {
         Menu,
+        Instructions,
         Game,
         GameOver,
         Dialouge,
@@ -169,17 +170,20 @@ namespace Palingenesis
             {
                 case gameState.Menu:
                     _spriteBatch.DrawString(font, "PlaceHolder for menu", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Press enter to start game", new Vector2(0, 20), Color.White);
                     break;
 
                 case gameState.Game:
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
-
+                    _spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
+                    _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
+                    _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     player.Draw(_spriteBatch);
                     player.attackDraw(_spriteBatch, attackTexture);
                     break;
 
                 case gameState.GameOver:
-                    _spriteBatch.DrawString(font, "PlaceHolder for gameover", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Press enter to return to Main menu", new Vector2(0, 0), Color.White);
                     break;
 
                 case gameState.Dialouge:
@@ -188,7 +192,10 @@ namespace Palingenesis
                     break;
 
                 case gameState.Pause:
-                    _spriteBatch.DrawString(font, "PlaceHolder for pause", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
+                    _spriteBatch.DrawString(font, "Press P to return to game", new Vector2(0, 20), Color.White);
+                    _spriteBatch.DrawString(font, "Press M to return to main menu", new Vector2(0, 40), Color.White);
+
                     break;
             }
 
