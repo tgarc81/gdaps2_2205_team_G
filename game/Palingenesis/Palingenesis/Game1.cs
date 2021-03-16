@@ -68,9 +68,9 @@ namespace Palingenesis
 
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHieght, windowWidth);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight);
+            boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight, bossName.RiceGoddess);
                 
         }
 
@@ -147,7 +147,7 @@ namespace Palingenesis
                 case gameState.Pause:
 
                     //pressing escape on pause restarts the game
-                    if(SingleKeyPress(Keys.Escape, kbState))
+                    if(SingleKeyPress(Keys.P, kbState))
                     {
                         currentState = gameState.Game;
                     }
