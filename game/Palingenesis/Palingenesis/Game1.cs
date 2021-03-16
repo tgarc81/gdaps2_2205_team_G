@@ -98,7 +98,7 @@ namespace Palingenesis
                     player.Attack(boss1, prevKbState);
 
                     //pressing escape during the game pauses
-                    if(SingleKeyPress(Keys.Escape, kbState))
+                    if(SingleKeyPress(Keys.P, kbState))
                     {
                         currentState = gameState.Pause;
                     }
