@@ -12,6 +12,7 @@ namespace Palingenesis
     class Player : Character
     {
         private Rectangle attackBox;
+        private KeyboardState keyboardState;
 
         //for drawing based on player input
         private enum PlayerState
@@ -79,29 +80,29 @@ namespace Palingenesis
         }
 
         //when annimating I guess we'll draw something that will fit within the attack box
-        public void Attack(Boss target)
+        public void Attack(Boss target, KeyboardState prevKeyboardState)
         {
-            KeyboardState keyboardState = Keyboard.GetState();
-            
+            keyboardState = Keyboard.GetState();
 
 
-            if (keyboardState.IsKeyDown(Keys.Up))
+
+            if (keyboardState.IsKeyDown(Keys.Up) && prevKeyboardState.IsKeyUp(Keys.Up))
             {
                 //creates a rectangle 10 pixels above the player, will adjust exact values later
-                 attackBox = new Rectangle(position.X, position.Y - 10, 10, 10);
+                 attackBox = new Rectangle(position.X, position.Y - (100 - position.Height), 25, 50);
             }
             //use else if so the player can only attack in one direction at a time
-            else if (keyboardState.IsKeyDown(Keys.Down))
+            else if (keyboardState.IsKeyDown(Keys.Down) && prevKeyboardState.IsKeyUp(Keys.Down))
             {
-                 attackBox = new Rectangle(position.X, position.Y + 10, 10, 10);
+                 attackBox = new Rectangle(position.X, position.Y + (100 - position.Height), 25, 50);
             }
-            else if (keyboardState.IsKeyDown(Keys.Right))
+            else if (keyboardState.IsKeyDown(Keys.Right) && prevKeyboardState.IsKeyUp(Keys.Right))
             {
-                attackBox = new Rectangle(position.X + 10, position.Y, 10, 10);
+                attackBox = new Rectangle(position.X + (100 - position.Width), position.Y, 50, 25);
             }
-            else if (keyboardState.IsKeyDown(Keys.Left))
+            else if (keyboardState.IsKeyDown(Keys.Left) && prevKeyboardState.IsKeyUp(Keys.Left))
             {
-                 attackBox = new Rectangle(position.X - 10, position.Y, 10, 10);
+                 attackBox = new Rectangle(position.X - (100 - position.Width), position.Y, 50, 25);
             }
 
             //hit check
@@ -110,6 +111,15 @@ namespace Palingenesis
                 //each hit does 20 damage
                 target.Health -= 20;
             }
+
+            
+
+        }
+
+        public void attackDraw(SpriteBatch sb, Texture2D texture)
+        {
+            if(keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.Left))
+            sb.Draw(texture, attackBox, Color.White);
         }
     }
 }
