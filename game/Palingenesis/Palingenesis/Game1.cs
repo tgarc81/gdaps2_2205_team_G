@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+//Name: G-Force
+//Date: 3/16/2
+//Professor Mesh
+//Purpose: To intialize the base states of our game.
+
 namespace Palingenesis
 {
     //enum used in the FSM

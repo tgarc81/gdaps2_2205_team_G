@@ -1,5 +1,10 @@
 ﻿using System;
 
+//Name: G-Force
+//Date: 3/16/2
+//Professor Mesh
+//Purpose: Make our game run.
+
 namespace Palingenesis
 {
     public static class Program
