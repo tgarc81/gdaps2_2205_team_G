@@ -5,6 +5,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+//Name: G-Force
+//Date: 3/16/2
+//Professor Mesh
+//Purpose: To initialize boss traits and behaviors.
 
 namespace Palingenesis
 {
