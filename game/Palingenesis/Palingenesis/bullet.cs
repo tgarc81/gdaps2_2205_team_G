@@ -31,7 +31,8 @@ namespace Palingenesis
         //contructor
         public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base(0, 10, 0, 10, texture, position, windowHeight, windowWidth)
         {
-
+            this.texture = texture;
+            this.direction = direction;
         }
 
         public override void Update()
@@ -53,6 +54,11 @@ namespace Palingenesis
             {
                 position.X += moveSpeed;
             }
+        }
+
+        public override void Draw(SpriteBatch sb)
+        {
+            sb.Draw(texture, position, Color.Red);
         }
     }
 }

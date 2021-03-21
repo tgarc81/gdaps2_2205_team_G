@@ -37,10 +37,10 @@ namespace Palingenesis
         private String currentLine;
         private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
         private Texture2D attackTexture;
-
+        private Texture2D bossTexture;
         int windowWidth;
         int windowHeight;
-
+        private Random rng = new Random();
         //game starts in the menu state
         private gameState currentState = gameState.Menu;
 
@@ -67,11 +67,12 @@ namespace Palingenesis
             windowHeight = graphics.GraphicsDevice.Viewport.Height;
             font = Content.Load<SpriteFont>("font");
 
+            bossTexture = Content.Load<Texture2D>("bossPlaceHolder");
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight, bossName.RiceGoddess);
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight, bossName.RiceGoddess, bossTexture);
                 
         }
 
@@ -97,6 +98,7 @@ namespace Palingenesis
                 case gameState.Game:
                     player.Update();
                     player.Attack(boss1, prevKbState);
+                    boss1.AI(rng, player);
 
                     //pressing escape during the game pauses
                     if(SingleKeyPress(Keys.P, kbState))
@@ -180,6 +182,12 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     player.Draw(_spriteBatch);
                     player.attackDraw(_spriteBatch, attackTexture);
+                    boss1.Draw(_spriteBatch);
+                    for(int i =0; i < boss1.ProjectileList.Count; i++)
+                    {
+                        boss1.ProjectileList[i].Draw(_spriteBatch);
+                    }
+
                     break;
 
                 case gameState.GameOver:
@@ -235,7 +243,7 @@ namespace Palingenesis
                         int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                         int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                         int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight); // Makes Rice Goddess using data gathered from the file
+                        riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
                     }
                 }
                 catch (Exception e)
