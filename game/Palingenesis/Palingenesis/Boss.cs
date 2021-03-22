@@ -34,7 +34,10 @@ namespace Palingenesis
         {
             this.type = type;
             this.bulletTexture = bulletTexture;
+            this.texture = texture;
         }
+
+
 
         public override void Update()
         {
@@ -74,12 +77,12 @@ namespace Palingenesis
                 //creates between 1 and 5 projectiles that fly to the left
                 //each is set 50 pixels to the left of the boss
                 //first bullet is created at Y = 100 and each bullet after that is 25 pixels further down the screen
-                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X + 50), 100, 25, 25), 0, 25);
+                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X + 100), 100, 25, 25), 0, 25);
             }
 
             else
             {
-                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X - 50), 100, 25, 25), 0, 25);
+                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X - 100), 100, 25, 25), 0, 25);
             }
 
           for(int i = 0; i < projectileList.Count; i++)

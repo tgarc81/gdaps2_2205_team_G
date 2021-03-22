@@ -48,7 +48,8 @@ namespace Palingenesis
         private Random rng = new Random();
         //game starts in the menu state
         private gameState currentState = gameState.Menu;
-
+        private GameTime gametime = new GameTime();
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -77,7 +78,7 @@ namespace Palingenesis
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight, bossName.RiceGoddess, bossTexture);
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(300, 300, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
                 
         }
 
@@ -103,10 +104,18 @@ namespace Palingenesis
                 case gameState.Game:
                     player.Update();
                     player.Attack(boss1, prevKbState);
-                    boss1.AI(rng, player);
 
+                    if (timer > 2)
+                    {
+                        boss1.AI(rng, player);
+                        timer = 0;
+                    }
+
+                    timer += gameTime.ElapsedGameTime.TotalSeconds;
+
+                    Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
-                    if(SingleKeyPress(Keys.P, kbState))
+                    if (SingleKeyPress(Keys.P, kbState))
                     {
                         currentState = gameState.Pause;
                     }
