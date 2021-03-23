@@ -79,6 +79,8 @@ namespace Palingenesis
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
             boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(300, 300, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+
+            boss1.Center();
                 
         }
 
