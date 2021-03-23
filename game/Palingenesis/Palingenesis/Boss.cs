@@ -85,10 +85,7 @@ namespace Palingenesis
                 CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X - 100), 100, 25, 25), 0, 25);
             }
 
-          for(int i = 0; i < projectileList.Count; i++)
-            {
-                projectileList[i].Update();
-            }
+          
         }
         public void Circle()
         {

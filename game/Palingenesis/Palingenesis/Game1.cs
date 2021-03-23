@@ -105,10 +105,17 @@ namespace Palingenesis
                     player.Update();
                     player.Attack(boss1, prevKbState);
 
+                    //AI method runs every 2 seconds
                     if (timer > 2)
                     {
                         boss1.AI(rng, player);
                         timer = 0;
+                    }
+
+                    //runs update on each bullet after the pattern is spawned by AI
+                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
+                    {
+                        boss1.ProjectileList[i].Update();
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
