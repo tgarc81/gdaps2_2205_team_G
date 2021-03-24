@@ -17,7 +17,7 @@ namespace Palingenesis
         RiceGoddess,
 
     }
-    class Boss : Character
+    class Boss : GameObject
     {
         private bossName type;
         private Point playerPosition;
@@ -92,7 +92,7 @@ namespace Palingenesis
 
         }
 
-        public void specialAttack()
+        public void SpecialAttack()
         {
             if(type == bossName.RiceGoddess)
             {

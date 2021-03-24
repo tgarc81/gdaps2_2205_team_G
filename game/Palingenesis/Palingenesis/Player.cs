@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Palingenesis
 {
     //player the player plays as, it's kinda self explanitory 
-    class Player : Character
+    class Player : GameObject
     {
         private Rectangle attackBox;
         private KeyboardState keyboardState;
@@ -120,7 +120,7 @@ namespace Palingenesis
 
         }
 
-        public void attackDraw(SpriteBatch sb, Texture2D texture)
+        public void AttackDraw(SpriteBatch sb, Texture2D texture)
         {
             if(keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.Left))
             sb.Draw(texture, attackBox, Color.White);

@@ -21,7 +21,7 @@ namespace Palingenesis
         right,
     }
     //projectiles to be fired by bosses
-    class Bullet : Character
+    class Bullet : GameObject
     {
         //use 1,2,3,4 for up down left right
         private direction direction;
@@ -47,15 +47,15 @@ namespace Palingenesis
                 //moves up the screen by the set amount movespeed
                 position.Y -= moveSpeed;
             }
-            if(Direction == direction.down)
+            else if(direction == direction.down)
             {
                 position.Y += moveSpeed;
             }
-            if (Direction == direction.left)
+            else if (direction == direction.left)
             {
                 position.X -= moveSpeed;
             }
-            if (Direction == direction.right)
+            else if (direction == direction.right)
             {
                 position.X += moveSpeed;
             }
