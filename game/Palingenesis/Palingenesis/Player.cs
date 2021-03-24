@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Palingenesis
 {
     //player the player plays as, it's kinda self explanitory 
-    class Player : Character
+    class Player : GameObject
     {
         private Rectangle attackBox;
         private KeyboardState keyboardState;

@@ -21,7 +21,7 @@ namespace Palingenesis
         right,
     }
     //projectiles to be fired by bosses
-    class Bullet : Character
+    class Bullet : GameObject
     {
         //use 1,2,3,4 for up down left right
         private direction direction;

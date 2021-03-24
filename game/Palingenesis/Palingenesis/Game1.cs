@@ -32,11 +32,11 @@ namespace Palingenesis
         private KeyboardState kbState;
         private KeyboardState prevKbState;
         private SpriteFont font; 
-        private double timer; // Represents the time elapsed in the game
+        private double timer; // Represents the time elapsed in the game to be used for boss attacks
+        private double time; // Represents total time elapsed in the game
         private Player player; // Represents the actual player
         private Texture2D playerAsset; // Represents player image
-        private Boss boss1;
-        private Boss riceGoddess; // Represents Rice Goddess boss
+        private Boss boss;
         private int numberOfDialougeFrames;
         private List<string> dialougeList = new List<string>();
         private String currentLine;
@@ -46,6 +46,8 @@ namespace Palingenesis
         int windowWidth;
         int windowHeight;
         private Random rng = new Random();
+        private List<string> names; // Represents all the names to go in leaderboard
+        private List<double> times; // Represents all the times to go in leaderboard
         //game starts in the menu state
         private gameState currentState = gameState.Menu;
         private GameTime gametime = new GameTime();
@@ -61,6 +63,8 @@ namespace Palingenesis
         {
             // TODO: Add your initialization logic here
             isRiceGoddessLoaded = false; // Sets it so Rice Goddess is not loaded yet
+            names = new List<string>();
+            times = new List<double>();
             base.Initialize();
         }
 
@@ -77,9 +81,6 @@ namespace Palingenesis
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
-            //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(300, 300, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
-                
         }
 
         protected override void Update(GameTime gameTime)
@@ -103,15 +104,16 @@ namespace Palingenesis
 
                 case gameState.Game:
                     player.Update();
-                    player.Attack(boss1, prevKbState);
+                    player.Attack(boss, prevKbState);
 
                     if (timer > 2)
                     {
-                        boss1.AI(rng, player);
+                        boss.AI(rng, player);
                         timer = 0;
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
+                    time += gameTime.ElapsedGameTime.TotalSeconds;
 
                     Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
@@ -124,10 +126,11 @@ namespace Palingenesis
                     if(player.Health <= 0)
                     {
                         currentState = gameState.GameOver;
+                        LoadScoreboard();
                     }
 
                     //when the bosses health hit's zero, starts the next dialouge section
-                    if (boss1.Health <= 0)
+                    if (boss.Health <= 0)
                     {
                         currentState = gameState.Dialouge;
                         LoadBoss();
@@ -141,6 +144,7 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
+                        SaveScoreboard();
                     }
 
                     break;
@@ -168,7 +172,10 @@ namespace Palingenesis
                     {
                         currentState = gameState.Game;
                     }
-
+                    if(SingleKeyPress(Keys.M, kbState))
+                    {
+                        currentState = gameState.Menu;
+                    }
                     break;
             }
 
@@ -179,7 +186,7 @@ namespace Palingenesis
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.CadetBlue);
             _spriteBatch.Begin();
             // TODO: Add your drawing code here
             switch (currentState)
@@ -196,10 +203,10 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     player.Draw(_spriteBatch);
                     player.attackDraw(_spriteBatch, attackTexture);
-                    boss1.Draw(_spriteBatch);
-                    for(int i =0; i < boss1.ProjectileList.Count; i++)
+                    boss.Draw(_spriteBatch);
+                    for(int i =0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss1.ProjectileList[i].Draw(_spriteBatch);
+                        boss.ProjectileList[i].Draw(_spriteBatch);
                     }
 
                     break;
@@ -257,13 +264,78 @@ namespace Palingenesis
                         int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                         int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                         int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, playerAsset, new Rectangle(500, 500, 10, 10), windowWidth, windowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
+                        boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine($"Error loading file: {e.Message}"); // If something goes wrong in loading the board's info from a file, state as such to the user
+                    // A way to output to user
                 }
+            }
+            boss.Center();
+        }
+
+        /// <summary>
+        /// Saves the current scoreboard information to a file so that it may be saved and loaded in later on
+        /// </summary>
+        private void SaveScoreboard()
+        {
+            // Create the variable here since we need it after the try
+            StreamWriter output = null;
+            try
+            {
+                // When we open for writing, create the file if it doesn't exist yet
+                output = new StreamWriter("../../../Scoreboard.txt");
+                // We would get user input for name
+                string name = "Default"; // We would need a way to get user input for name
+                names.Add(name);
+                times.Add(time);
+                for (int i = 0; i < names.Count; i++) // For each element in both the names and times List
+                {
+                    output.WriteLine($"{names[i]},{times[i]}"); // Add the corresponding name with their time in the file
+                }
+                // Confirmation message
+            }
+            catch(Exception e)
+            {
+                //Output error message
+            }
+            // Ensure that we can close the file, as long as it was actually opened in the first place
+            if (output != null)
+            {
+                output.Close();
+            }
+        }
+
+        /// <summary>
+        /// Loads the scoreboard data in from a file so it may be used later on to display
+        /// </summary>
+        private void LoadScoreboard()
+        {
+            // Create the variable here since we need it after the try
+            StreamReader input = null;
+            try
+            {
+                // Creating the streamreader opens the file
+                input = new StreamReader("../../../Scoreboard.txt");
+                string line = "DEFAULT";
+                String[] data = line.Split(",");
+                // Loops through the file one line at a time
+                while ((line = input.ReadLine()) != null)
+                {
+                    names.Add(data[0]); // Adds the name in file to the list of names for scoreboard
+                    times.Add(int.Parse(data[1])); // Adds the corresponding times to match the name to the list of times for scoreboard
+                }
+                // Confirmation message
+            }
+            catch(Exception e)
+            {
+                // Error message
+            }
+            // Ensure that we can close the file, as long as it was actually opened in the first place
+            if (input != null)
+            {
+                input.Close();
             }
         }
     }

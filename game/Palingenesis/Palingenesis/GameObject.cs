@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Palingenesis
 {
     //parent class for player and boss
-    abstract class Character
+    abstract class GameObject
     {
         protected int health;
         protected int moveSpeed;
@@ -36,7 +36,7 @@ namespace Palingenesis
 
         }
 
-        public Character(int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth)
+        public GameObject(int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth)
         {
             this.health = health;
             this.moveSpeed = moveSpeed;
@@ -69,5 +69,12 @@ namespace Palingenesis
         }
 
         public abstract void Update();
+
+        //can center either the player or boss on screen
+        public void Center()
+        {
+            position.X = (windowWidth / 2) - (position.Width / 2);
+            position.Y = (windowHeight / 2) - (position.Height / 2);
+        }
     }
 }
