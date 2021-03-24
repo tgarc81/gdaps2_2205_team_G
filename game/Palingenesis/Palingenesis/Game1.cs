@@ -81,6 +81,7 @@ namespace Palingenesis
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
+ 
         }
 
         protected override void Update(GameTime gameTime)
@@ -106,10 +107,17 @@ namespace Palingenesis
                     player.Update();
                     player.Attack(boss, prevKbState);
 
+                    //AI method runs every 2 seconds
                     if (timer > 2)
                     {
                         boss.AI(rng, player);
                         timer = 0;
+                    }
+
+                    //runs update on each bullet after the pattern is spawned by AI
+                    for (int i = 0; i < boss.ProjectileList.Count; i++)
+                    {
+                        boss.ProjectileList[i].Update();
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
