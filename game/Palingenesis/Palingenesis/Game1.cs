@@ -7,7 +7,7 @@ using System.Text;
 using System.IO;
 
 //Name: G-Force
-//Date: 3/16/2
+//Date: 3/16/21
 //Professor Mesh
 //Purpose: To intialize the base states of our game.
 
@@ -35,8 +35,8 @@ namespace Palingenesis
         private double timer; // Represents the time elapsed in the game
         private Player player; // Represents the actual player
         private Texture2D playerAsset; // Represents player image
-        private Boss boss1;
-        private Boss riceGoddess; // Represents Rice Goddess boss
+        private Boss riceGoddess;
+       
         private int numberOfDialougeFrames;
         private List<string> dialougeList = new List<string>();
         private String currentLine;
@@ -62,6 +62,10 @@ namespace Palingenesis
             // TODO: Add your initialization logic here
             isRiceGoddessLoaded = false; // Sets it so Rice Goddess is not loaded yet
             base.Initialize();
+
+            graphics.PreferredBackBufferWidth = 1000;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 1000;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -78,9 +82,9 @@ namespace Palingenesis
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(300, 300, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+            riceGoddess= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(210, 210, 300, 300), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
 
-            boss1.Center();
+            
                 
         }
 
@@ -105,19 +109,19 @@ namespace Palingenesis
 
                 case gameState.Game:
                     player.Update();
-                    player.Attack(boss1, prevKbState);
+                    player.Attack(riceGoddess, prevKbState);
 
                     //AI method runs every 2 seconds
                     if (timer > 2)
                     {
-                        boss1.AI(rng, player);
+                        riceGoddess.AI(rng, player);
                         timer = 0;
                     }
 
                     //runs update on each bullet after the pattern is spawned by AI
-                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
+                    for (int i = 0; i < riceGoddess.ProjectileList.Count; i++)
                     {
-                        boss1.ProjectileList[i].Update();
+                        riceGoddess.ProjectileList[i].Update();
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -136,7 +140,7 @@ namespace Palingenesis
                     }
 
                     //when the bosses health hit's zero, starts the next dialouge section
-                    if (boss1.Health <= 0)
+                    if (riceGoddess.Health <= 0)
                     {
                         currentState = gameState.Dialouge;
                         LoadBoss();
@@ -205,10 +209,10 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     player.Draw(_spriteBatch);
                     player.attackDraw(_spriteBatch, attackTexture);
-                    boss1.Draw(_spriteBatch);
-                    for(int i =0; i < boss1.ProjectileList.Count; i++)
+                    riceGoddess.Draw(_spriteBatch);
+                    for(int i =0; i < riceGoddess.ProjectileList.Count; i++)
                     {
-                        boss1.ProjectileList[i].Draw(_spriteBatch);
+                        riceGoddess.ProjectileList[i].Draw(_spriteBatch);
                     }
 
                     break;

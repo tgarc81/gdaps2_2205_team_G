@@ -72,17 +72,17 @@ namespace Palingenesis
         {
 
             //if the player is to the left of the boss
-            if(target.Position.X < this.position.X)
+            if(target.Position.X > this.position.X)
             {
                 //creates between 1 and 5 projectiles that fly to the left
                 //each is set 50 pixels to the left of the boss
-                //first bullet is created at Y = 100 and each bullet after that is 25 pixels further down the screen
-                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X + 100), 100, 25, 25), 0, 25);
+                ///each bullet spawns 75 pixels apart on the y axis
+                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X + 100), this.Position.Y, 25, 25), 0, 75);
             }
 
             else
             {
-                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X - 100), 100, 25, 25), 0, 25);
+                CreateProjectiles(rng.Next(1, 6), direction.left, new Rectangle((this.Position.X - 100), this.Position.Y, 25, 25), 0, 75);
             }
 
           

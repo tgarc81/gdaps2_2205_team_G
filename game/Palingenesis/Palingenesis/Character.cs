@@ -74,8 +74,8 @@ namespace Palingenesis
         //can center either the player or boss on screen
         public void Center()
         {
-            position.X = (windowWidth / 2) - (position.Width / 2);
-            position.Y = (windowHeight / 2) - (position.Height / 2);
+            position.X = (windowWidth / 2) - (position.Width / 4);
+            position.Y = (windowHeight / 2) - (position.Height / 4);
         }
     }
 }
