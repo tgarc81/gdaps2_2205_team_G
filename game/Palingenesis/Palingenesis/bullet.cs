@@ -47,15 +47,15 @@ namespace Palingenesis
                 //moves up the screen by the set amount movespeed
                 position.Y -= moveSpeed;
             }
-            else if(Direction == direction.down)
+            else if(direction == direction.down)
             {
                 position.Y += moveSpeed;
             }
-            else if (Direction == direction.left)
+            else if (direction == direction.left)
             {
                 position.X -= moveSpeed;
             }
-            else if (Direction == direction.right)
+            else if (direction == direction.right)
             {
                 position.X += moveSpeed;
             }

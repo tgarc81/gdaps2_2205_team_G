@@ -92,7 +92,7 @@ namespace Palingenesis
 
         }
 
-        public void specialAttack()
+        public void SpecialAttack()
         {
             if(type == bossName.RiceGoddess)
             {

@@ -120,7 +120,7 @@ namespace Palingenesis
 
         }
 
-        public void attackDraw(SpriteBatch sb, Texture2D texture)
+        public void AttackDraw(SpriteBatch sb, Texture2D texture)
         {
             if(keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.Left))
             sb.Draw(texture, attackBox, Color.White);
