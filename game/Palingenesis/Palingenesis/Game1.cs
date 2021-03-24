@@ -24,7 +24,7 @@ namespace Palingenesis
         Pause
     }
     
-
+    //nothing
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
