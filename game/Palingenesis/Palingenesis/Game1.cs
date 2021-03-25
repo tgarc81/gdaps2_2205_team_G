@@ -7,7 +7,7 @@ using System.Text;
 using System.IO;
 
 //Name: G-Force
-//Date: 3/16/2
+//Date: 3/16/21
 //Professor Mesh
 //Purpose: To intialize the base states of our game.
 
@@ -24,7 +24,7 @@ namespace Palingenesis
         Pause
     }
     
-
+    //nothing
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
@@ -36,7 +36,8 @@ namespace Palingenesis
         private double time; // Represents total time elapsed in the game
         private Player player; // Represents the actual player
         private Texture2D playerAsset; // Represents player image
-        private Boss boss;
+        private Boss boss1;
+        private Boss riceGoddess; // Represents Rice Goddess boss
         private int numberOfDialougeFrames;
         private List<string> dialougeList = new List<string>();
         private String currentLine;
@@ -66,6 +67,10 @@ namespace Palingenesis
             names = new List<string>();
             times = new List<double>();
             base.Initialize();
+
+            graphics.PreferredBackBufferWidth = 1000;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 1000;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
         }
 
         protected override void LoadContent()
@@ -81,7 +86,11 @@ namespace Palingenesis
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
- 
+            //note: make a placeholder asset for the boss
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(300, 300, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+
+            boss1.Center();
+                
         }
 
         protected override void Update(GameTime gameTime)
@@ -105,19 +114,19 @@ namespace Palingenesis
 
                 case gameState.Game:
                     player.Update();
-                    player.Attack(boss, prevKbState);
+                    player.Attack(boss1, prevKbState);
 
                     //AI method runs every 2 seconds
                     if (timer > 2)
                     {
-                        boss.AI(rng, player);
+                        boss1.AI(rng, player);
                         timer = 0;
                     }
 
                     //runs update on each bullet after the pattern is spawned by AI
-                    for (int i = 0; i < boss.ProjectileList.Count; i++)
+                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
                     {
-                        boss.ProjectileList[i].Update();
+                        boss1.ProjectileList[i].Update();
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -138,7 +147,7 @@ namespace Palingenesis
                     }
 
                     //when the bosses health hit's zero, starts the next dialouge section
-                    if (boss.Health <= 0)
+                    if (boss1.Health <= 0)
                     {
                         currentState = gameState.Dialouge;
                         LoadBoss();
@@ -210,11 +219,11 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     player.Draw(_spriteBatch);
-                    player.AttackDraw(_spriteBatch, attackTexture);
-                    boss.Draw(_spriteBatch);
-                    for(int i =0; i < boss.ProjectileList.Count; i++)
+                    player.attackDraw(_spriteBatch, attackTexture);
+                    boss1.Draw(_spriteBatch);
+                    for(int i =0; i < boss1.ProjectileList.Count; i++)
                     {
-                        boss.ProjectileList[i].Draw(_spriteBatch);
+                        boss1.ProjectileList[i].Draw(_spriteBatch);
                     }
 
                     break;
