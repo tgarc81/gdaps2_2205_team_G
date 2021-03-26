@@ -219,7 +219,7 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     player.Draw(_spriteBatch);
-                    player.attackDraw(_spriteBatch, attackTexture);
+                    player.AttackDraw(_spriteBatch, attackTexture);
                     boss1.Draw(_spriteBatch);
                     for(int i =0; i < boss1.ProjectileList.Count; i++)
                     {
@@ -265,6 +265,7 @@ namespace Palingenesis
 
         private void LoadBoss()
         {
+            Boss boss = null;
             if(!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
             {
                 isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
