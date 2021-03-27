@@ -24,7 +24,7 @@ namespace Palingenesis
         Pause
     }
     
-    //nothing
+    
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
@@ -66,11 +66,13 @@ namespace Palingenesis
             isRiceGoddessLoaded = false; // Sets it so Rice Goddess is not loaded yet
             names = new List<string>();
             times = new List<double>();
-            base.Initialize();
 
             graphics.PreferredBackBufferWidth = 1000;  // set this value to the desired width of your window
             graphics.PreferredBackBufferHeight = 1000;   // set this value to the desired height of your window
             graphics.ApplyChanges();
+            base.Initialize();
+
+            
         }
 
         protected override void LoadContent()
@@ -87,10 +89,10 @@ namespace Palingenesis
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(300, 300, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(500, 500, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+
 
             boss1.Center();
-                
         }
 
         protected override void Update(GameTime gameTime)
@@ -109,6 +111,7 @@ namespace Palingenesis
                     {
                         currentState = gameState.Game;
                         LoadBoss();
+                        player.Reset();
                     }
                     break;
 
@@ -130,7 +133,7 @@ namespace Palingenesis
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
-                    time += gameTime.ElapsedGameTime.TotalSeconds;
+                    
 
                     Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
@@ -214,16 +217,30 @@ namespace Palingenesis
                     break;
 
                 case gameState.Game:
+
+                   
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
                     _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
+                     
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss1.Health), new Vector2(0, 100), Color.White);
+
                     player.Draw(_spriteBatch);
                     player.AttackDraw(_spriteBatch, attackTexture);
                     boss1.Draw(_spriteBatch);
                     for(int i =0; i < boss1.ProjectileList.Count; i++)
                     {
                         boss1.ProjectileList[i].Draw(_spriteBatch);
+                    }
+
+                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
+                    {
+                        if(boss1.ProjectileList[i].HasHit == true)
+                        {
+                            boss1.ProjectileList.RemoveAt(i);
+                        }
                     }
 
                     break;
@@ -290,7 +307,7 @@ namespace Palingenesis
                     // A way to output to user
                 }
             }
-            boss.Center();
+            //boss.Center();
         }
 
         /// <summary>
