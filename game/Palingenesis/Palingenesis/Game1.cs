@@ -17,7 +17,7 @@ namespace Palingenesis
     enum gameState
     {
         Menu,
-        Instructions,
+        ScoreBoard,
         Game,
         GameOver,
         Dialouge,
@@ -167,7 +167,7 @@ namespace Palingenesis
                     //pressing neter on the game over screen sends you to the menu
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Menu;
+                        currentState = gameState.ScoreBoard;
                         SaveScoreboard();
                     }
 
@@ -197,6 +197,13 @@ namespace Palingenesis
                         currentState = gameState.Game;
                     }
                     if(SingleKeyPress(Keys.M, kbState))
+                    {
+                        currentState = gameState.Menu;
+                    }
+                    break;
+
+                case gameState.ScoreBoard:
+                    if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
                     }
@@ -232,7 +239,7 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss1.Health), new Vector2(0, 100), Color.White);
 
                     player.Draw(_spriteBatch);
-                    player.attackDraw(_spriteBatch, attackTexture);
+                    
                     boss1.Draw(_spriteBatch);
                     for(int i =0; i < boss1.ProjectileList.Count; i++)
                     {
