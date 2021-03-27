@@ -21,22 +21,31 @@ namespace Palingenesis
         right,
     }
     //projectiles to be fired by bosses
-    class Bullet : Character
+    class Bullet : GameObject
     {
         //use 1,2,3,4 for up down left right
         private direction direction;
         private Texture2D texture;
-
+        private Player target;
+        private bool hasHit = false;
         public direction Direction
         {
             get { return this.direction; }
             set { direction = value; }
         }
 
-        //contructor
-        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base(0, 10, 0, 10, texture, position, windowHeight, windowWidth)
+        public bool HasHit
         {
+            get { return hasHit; }
+            set { hasHit = value; }
+        }
 
+        //contructor
+        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth, direction direction, Player target) : base(0, 10, 0, 10, texture, position, windowHeight, windowWidth)
+        {
+            this.texture = texture;
+            this.direction = direction;
+            this.target = target;
         }
 
         public override void Update()
@@ -46,18 +55,32 @@ namespace Palingenesis
                 //moves up the screen by the set amount movespeed
                 position.Y -= moveSpeed;
             }
-            else if(Direction == direction.down)
+            else if(direction == direction.down)
             {
                 position.Y += moveSpeed;
             }
-            else if (Direction == direction.left)
+            else if (direction == direction.left)
             {
                 position.X -= moveSpeed;
             }
-            else if (Direction == direction.right)
+            else if (direction == direction.right)
             {
                 position.X += moveSpeed;
             }
+
+            if (position.Intersects(target.Position))
+            {
+                target.Health -= 20;
+                hasHit = true;
+            }
+
+        }
+
+        public override void Draw(SpriteBatch sb)
+        {
+            //only drawn while on screen
+            if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
+            sb.Draw(texture, position, Color.Red);
         }
     }
 }
