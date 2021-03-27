@@ -60,7 +60,6 @@ namespace Palingenesis
         //used to decide what attack the boss will use with a random
         public void AI(Random rng, Player target)
         {
-            //want to steadily add more benhavior parameters but make sure I have each attack method
             if(rng.NextDouble() < 1)
             {
                 Line(target);
@@ -71,7 +70,7 @@ namespace Palingenesis
 
         //standard attacks
 
-        public void Line(Player target)  
+        public void Line(Player target) //currently busted 
         {
 
             //if the player is to the left of the boss
@@ -90,26 +89,22 @@ namespace Palingenesis
 
           
         }
-
-        //spawns a ring of shots around the boss to make the player retreat
-        public void Ring()
-        {
-
-        }
-
-        //fires out shots in a circle around the boss
         public void Circle()
         {
 
         }
 
-        //boss moves 3 times and if it makes contact with the player deals damage
+
+        public void Ring()
+        {
+
+        }
+
         public void Charge()
         {
 
         }
 
-        //fires a single large shot that does 2x damage at the player
         public void MegaShot()
         {
 

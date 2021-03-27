@@ -26,9 +26,8 @@ namespace Palingenesis
         //use 1,2,3,4 for up down left right
         private direction direction;
         private Texture2D texture;
-        GameObject target;
+        private GameObject target;
         private bool hasHit = false;
-        private int damage;
         public direction Direction
         {
             get { return this.direction; }
