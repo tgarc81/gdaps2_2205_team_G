@@ -26,18 +26,27 @@ namespace Palingenesis
         //use 1,2,3,4 for up down left right
         private direction direction;
         private Texture2D texture;
-
+        GameObject target;
+        private bool hasHit = false;
+        private int damage;
         public direction Direction
         {
             get { return this.direction; }
             set { direction = value; }
         }
 
+        public bool HasHit
+        {
+            get { return hasHit; }
+            set { hasHit = value; }
+        }
+
         //contructor
-        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base(0, 10, 0, 10, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth, direction direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
             this.direction = direction;
+            this.target = target;
         }
 
         public override void Update()
@@ -59,10 +68,19 @@ namespace Palingenesis
             {
                 position.X += moveSpeed;
             }
+
+            if (position.Intersects(target.Position))
+            {
+                target.Health -= damage;
+                hasHit = true;
+            }
+
         }
 
         public override void Draw(SpriteBatch sb)
         {
+            //only drawn while on screen
+            if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
             sb.Draw(texture, position, Color.Red);
         }
     }

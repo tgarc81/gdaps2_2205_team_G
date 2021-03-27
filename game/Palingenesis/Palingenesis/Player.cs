@@ -31,9 +31,15 @@ namespace Palingenesis
             WalkBack
         }
 
-        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        private List<Bullet> shotList = new List<Bullet>();
+        private Texture2D shotTexture;
+        public List<Bullet> ShotList
         {
-            
+            get { return shotList; }
+        }
+        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        {
+            this.shotTexture = shotTexture;
         }
 
         public override void Update()
@@ -48,7 +54,7 @@ namespace Palingenesis
                 //stops player from going off screen
                 if (position.Y > 0)
                 {
-                    position.Y -= 1;
+                    position.Y -= moveSpeed;
                 }
             }
 
@@ -57,7 +63,7 @@ namespace Palingenesis
             {
                 if(position.Y < (windowHeight - position.Height))
                 {
-                    position.Y += 1;
+                    position.Y += moveSpeed;
                 }
             }
 
@@ -66,7 +72,7 @@ namespace Palingenesis
             {
                 if(position.X < (windowWidth - position.Width))
                 {
-                    position.X += 1;
+                    position.X += moveSpeed;
                 }
                 
             }
@@ -77,7 +83,7 @@ namespace Palingenesis
                 //stops player from going off screen
                 if(position.X > 0)
                 {
-                    position.X -= 1;
+                    position.X -= moveSpeed;
                 }
                 
             }
@@ -92,38 +98,31 @@ namespace Palingenesis
 
             if (keyboardState.IsKeyDown(Keys.Up) && prevKeyboardState.IsKeyUp(Keys.Up))
             {
-                //creates a rectangle 10 pixels above the player, will adjust exact values later
-                 attackBox = new Rectangle(position.X, position.Y - (100 - position.Height), 25, 50);
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X + (position.Width/2), position.Y + 30, 20, 20), windowHeight, windowWidth, direction.up, target, 10));
+                
+                
+                    
             }
             //use else if so the player can only attack in one direction at a time
             else if (keyboardState.IsKeyDown(Keys.Down) && prevKeyboardState.IsKeyUp(Keys.Down))
             {
-                 attackBox = new Rectangle(position.X, position.Y + (100 - position.Height), 25, 50);
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y - 30, 20, 20), windowHeight, windowWidth, direction.down, target, 10));
             }
             else if (keyboardState.IsKeyDown(Keys.Right) && prevKeyboardState.IsKeyUp(Keys.Right))
             {
-                attackBox = new Rectangle(position.X + (100 - position.Width), position.Y, 50, 25);
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X + 30, position.Y, 20, 20), windowHeight, windowWidth, direction.right, target, 10));
             }
             else if (keyboardState.IsKeyDown(Keys.Left) && prevKeyboardState.IsKeyUp(Keys.Left))
             {
-                 attackBox = new Rectangle(position.X - (100 - position.Width), position.Y, 50, 25);
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X + 30, position.Y , 20, 20), windowHeight, windowWidth, direction.left, target, 10));
             }
 
-            //hit check
-            if (attackBox.Intersects(target.Position))
-            {
-                //each hit does 20 damage
-                target.Health -= 20;
-            }
+            
 
             
 
         }
 
-        public void AttackDraw(SpriteBatch sb, Texture2D texture)
-        {
-            if(keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.Left))
-            sb.Draw(texture, attackBox, Color.White);
-        }
+        
     }
 }

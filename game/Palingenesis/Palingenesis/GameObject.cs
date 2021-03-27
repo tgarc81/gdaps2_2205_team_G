@@ -24,6 +24,19 @@ namespace Palingenesis
         protected int windowWidth;
         protected int windowHeight;
 
+
+        int frame;              // The current animation frame
+        double timeCounter;     // The amount of time that has passed
+        double fps;             // The speed of the animation
+        double timePerFrame;    // The amount of time (in fractional seconds) per frame
+
+        // Constants for "source" rectangle (inside the image)
+        const int WalkFrameCount = 3;       // The number of frames in the animation
+        const int MarioRectOffsetY = 116;   // How far down in the image are the frames?
+        const int MarioRectHeight = 72;     // The height of a single frame
+        const int MarioRectWidth = 44;      // The width of a single frame
+
+
         public int Health
         {
             get { return health; }
@@ -73,8 +86,29 @@ namespace Palingenesis
         //can center either the player or boss on screen
         public void Center()
         {
-            position.X = (windowWidth / 2) - (position.Width / 4);
-            position.Y = (windowHeight / 2) - (position.Height / 4);
+            position.X = (windowWidth / 2) - (position.Width / 2);
+            position.Y = (windowHeight / 2) - (position.Height / 2);
+        }
+        public void UpdateAnimation(GameTime gameTime)
+        {
+            // Handle animation timing
+            // - Add to the time counter
+            // - Check if we have enough "time" to advance the frame
+
+            // How much time has passed?  
+            timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+
+            // If enough time has passed:
+            if (timeCounter >= timePerFrame)
+            {
+                frame += 1;                     // Adjust the frame to the next image
+
+                if (frame > WalkFrameCount)     // Check the bounds - have we reached the end of walk cycle?
+                    frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
+
+                timeCounter -= timePerFrame;    // Remove the time we "used" - don't reset to 0
+                                                // This keeps the time passed 
+            }
         }
     }
 }
