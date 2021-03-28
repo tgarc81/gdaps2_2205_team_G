@@ -31,7 +31,8 @@ namespace Palingenesis
         private SpriteBatch _spriteBatch;
         private KeyboardState kbState;
         private KeyboardState prevKbState;
-        private SpriteFont font; 
+        private SpriteFont font;
+        private SpriteFont fontVN;
         private double timer; // Represents the time elapsed in the game to be used for boss attacks
         private double time; // Represents total time elapsed in the game
         private Player player; // Represents the actual player
@@ -39,20 +40,27 @@ namespace Palingenesis
         private Boss boss1;
         private Boss riceGoddess; // Represents Rice Goddess boss
         private int numberOfDialougeFrames;
-        private List<string> dialougeList = new List<string>();
+        // private List<string> dialougeList = new List<string>();
+        private List<Dialogue> dialougeList;
         private String currentLine;
         private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
         private Texture2D attackTexture;
         private Texture2D bossTexture;
         int windowWidth;
         int windowHeight;
+        private int dialogueNum=0;
         private Random rng = new Random();
         private List<string> names; // Represents all the names to go in leaderboard
         private List<double> times; // Represents all the times to go in leaderboard
         //game starts in the menu state
         private gameState currentState = gameState.Menu;
         private GameTime gametime = new GameTime();
-        
+        private Texture2D bossVN;
+        private Texture2D playerVN;
+        private Texture2D backgroundVN;
+        private Texture2D textboxVN;
+        private Texture2D textboxNameVN;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -66,9 +74,12 @@ namespace Palingenesis
             isRiceGoddessLoaded = false; // Sets it so Rice Goddess is not loaded yet
             names = new List<string>();
             times = new List<double>();
+            dialougeList = new List<Dialogue>();
+            
 
-            graphics.PreferredBackBufferWidth = 1000;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 1000;   // set this value to the desired height of your window
+            graphics.PreferredBackBufferWidth = 1920;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 1080;   // set this value to the desired height of your window
+
             graphics.ApplyChanges();
             base.Initialize();
 
@@ -83,14 +94,24 @@ namespace Palingenesis
             windowWidth = graphics.GraphicsDevice.Viewport.Width;
             windowHeight = graphics.GraphicsDevice.Viewport.Height;
             font = Content.Load<SpriteFont>("font");
+            fontVN = Content.Load<SpriteFont>("bigfont");
 
             bossTexture = Content.Load<Texture2D>("bossPlaceHolder");
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth, attackTexture);
+
+            textboxVN= Content.Load<Texture2D>("textbox");
+            textboxNameVN = Content.Load<Texture2D>("rustyName");
+            backgroundVN = Content.Load<Texture2D>("bayo2");
+            playerVN = Content.Load<Texture2D>("theo");
+            bossVN = Content.Load<Texture2D>("bingus");
+            
+
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth,bossTexture);
             //note: make a placeholder asset for the boss
             boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(500, 500, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
 
+            DialogueListAdd();
 
             boss1.Center();
         }
@@ -109,8 +130,9 @@ namespace Palingenesis
                     //pressing enter on the main menu starts the game
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Game;
-                        LoadBoss();
+                        currentState = gameState.Dialouge;
+                        //LoadBoss();
+                        //player.Reset();
                     }
                     break;
 
@@ -177,15 +199,16 @@ namespace Palingenesis
 
                     //each time the user presses enter the dialouge advances by one line
                    if(SingleKeyPress((Keys.Enter), kbState))
-                   {
-                        numberOfDialougeFrames--;
+                   { 
+                        dialogueNum++;
                    }
 
                    //when there is no remaining dialouge starts the next section of the game
-                   if(numberOfDialougeFrames == 0)
+                   if(dialougeList[dialogueNum]== null)
                    {
                         currentState = gameState.Game;
-                   }
+                        dialogueNum++;
+                    }
 
                     break;
 
@@ -275,8 +298,11 @@ namespace Palingenesis
                     break;
 
                 case gameState.Dialouge:
+
+                    dialougeList[dialogueNum].Draw(_spriteBatch);
                     //figure out the actual position later
-                    _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
+
+                   // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
 
                 case gameState.Pause:
@@ -397,6 +423,16 @@ namespace Palingenesis
             {
                 input.Close();
             }
+        }
+
+        private void DialogueListAdd()
+        {
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, fontVN, "wus good", true));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "nm hbu", false));
+            dialougeList.Add(null);
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "I'm dead", false));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Lmao yea", true));
+            dialougeList.Add(null);
         }
     }
 }
