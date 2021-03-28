@@ -45,12 +45,12 @@ namespace Palingenesis
         }
 
         //helper method fills bullet list
-        public void CreateProjectiles(int amount, direction direction, Rectangle position, int xSpacing, int ySpacing, Player target, int damage)
+        public void CreateProjectiles(int amount, direction direction, Rectangle position, int xSpacing, int ySpacing, Player target)
         {
             for(int i = 0; i < amount; i++)
             {
                
-                projectileList.Add(new Bullet(bulletTexture, position, this.windowHeight, this.windowWidth, direction, target, damage));
+                projectileList.Add(new Bullet(bulletTexture, position, this.windowHeight, this.windowWidth, direction, target));
                 position.X += xSpacing;
                 position.Y += ySpacing;
 
@@ -79,32 +79,36 @@ namespace Palingenesis
                 //creates between 1 and 5 projectiles that fly to the left
                 //each is set 50 pixels to the left of the boss
                 ///each bullet spawns 75 pixels apart on the y axis
-                CreateProjectiles(rng.Next(5, 10), direction.right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target, 10);
+                CreateProjectiles(rng.Next(5, 10), direction.right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
             }
 
             else
             {
-                CreateProjectiles(rng.Next(5, 10), direction.left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target, 10);
+                CreateProjectiles(rng.Next(5, 10), direction.left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
             }
 
           
         }
-        public void Circle()
-        {
 
-        }
-
-
+        //spawns a ring of shots around the boss to make the player retreat
         public void Ring()
         {
 
         }
 
+        //fires out shots in a circle around the boss
+        public void Circle()
+        {
+
+        }
+
+        //boss moves 3 times and if it makes contact with the player deals damage
         public void Charge()
         {
 
         }
 
+        //fires a single large shot that does 2x damage at the player
         public void MegaShot()
         {
 
