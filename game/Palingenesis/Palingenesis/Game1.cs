@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using Microsoft.Xna.Framework.Media;
 
 //Name: G-Force
 //Date: 3/16/21
@@ -46,6 +47,9 @@ namespace Palingenesis
         private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
         private Texture2D attackTexture;
         private Texture2D bossTexture;
+        private Texture2D RiceGoddessBackground;
+        private Texture2D titleScreen;
+        Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
         int windowWidth;
         int windowHeight;
         private int dialogueNum=0;
@@ -55,12 +59,19 @@ namespace Palingenesis
         //game starts in the menu state
         private gameState currentState = gameState.Menu;
         private GameTime gametime = new GameTime();
+        //VN variables are for visual novel.
         private Texture2D bossVN;
         private Texture2D playerVN;
         private Texture2D backgroundVN;
         private Texture2D textboxVN;
         private Texture2D textboxNameVN;
         double scoreTimer = 0;
+        //Load sounds
+        public Song takeDamadge;
+        private Song deathSound;
+        private Song forwardVN;
+        private Song hit;
+        private Song error;
 
         public Game1()
         {
@@ -96,17 +107,28 @@ namespace Palingenesis
             windowHeight = graphics.GraphicsDevice.Viewport.Height;
             font = Content.Load<SpriteFont>("font");
             fontVN = Content.Load<SpriteFont>("bigfont");
+            
 
+            //Load title screen textures
+            titleScreen = Content.Load<Texture2D>("titlescreen");
+
+            //Load gameplay textures
             bossTexture = Content.Load<Texture2D>("bossPlaceHolder");
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
+            RiceGoddessBackground= Content.Load<Texture2D>("RiceGodessBackground");
+            takeDamadge = Content.Load<Song>("takeDamadge");
+            deathSound= Content.Load<Song>("deathSound");
+            hit = Content.Load<Song>("forward_sound");
 
-            textboxVN= Content.Load<Texture2D>("textbox");
+            //Load VN textures
+            textboxVN = Content.Load<Texture2D>("textbox");
             textboxNameVN = Content.Load<Texture2D>("rustyName");
             backgroundVN = Content.Load<Texture2D>("bayo2");
             playerVN = Content.Load<Texture2D>("theo");
             bossVN = Content.Load<Texture2D>("bingus");
-            
+            forwardVN= Content.Load<Song>("forward_sound");
+
 
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth,bossTexture);
             //note: make a placeholder asset for the boss
@@ -132,6 +154,7 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Dialouge;
+                        MediaPlayer.Play(forwardVN);
                         //LoadBoss();
                         //player.Reset();
                     }
@@ -172,6 +195,7 @@ namespace Palingenesis
                     //if the players health reaches zero game over
                     if(player.Health <= 0)
                     {
+                        MediaPlayer.Play(deathSound);
                         currentState = gameState.GameOver;
                         LoadScoreboard();
                     }
@@ -202,6 +226,7 @@ namespace Palingenesis
                    if(SingleKeyPress((Keys.Enter), kbState))
                    { 
                         dialogueNum++;
+                        MediaPlayer.Play(forwardVN);
                    }
 
                    //when there is no remaining dialouge starts the next section of the game
@@ -247,13 +272,15 @@ namespace Palingenesis
             switch (currentState)
             {
                 case gameState.Menu:
+                    _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
                     _spriteBatch.DrawString(font, "PlaceHolder for menu", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Press enter to start game", new Vector2(0, 20), Color.White);
                     break;
 
                 case gameState.Game:
 
-                   
+                    _spriteBatch.Draw(RiceGoddessBackground, fullScreen, Color.White);
+
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
                     _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
@@ -261,6 +288,8 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
                     _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss1.Health), new Vector2(0, 100), Color.White);
+
+                    
 
                     player.Draw(_spriteBatch);
                     
@@ -364,7 +393,12 @@ namespace Palingenesis
                     // A way to output to user
                 }
             }
-            boss.Center();
+            
+            if (boss != null)
+            {
+                boss.Center();
+            }
+            
         }
 
         /// <summary>
@@ -431,6 +465,8 @@ namespace Palingenesis
             }
         }
 
+        //Adds dialougue to list, after reading in textures type in text and true or false based on if the player is speaking
+        //insert null to break to fight
         private void DialogueListAdd()
         {
             dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, fontVN, "wus good", true));

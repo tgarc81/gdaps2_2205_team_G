@@ -25,6 +25,7 @@ namespace Palingenesis
         private string playername = "Theophania";
         private string bossname = "Rice Godess";
 
+        //rectangles for text boxes
         private Rectangle backgroundBox = new Rectangle(0, 0, 1920, 1080);
         private Rectangle textBox = new Rectangle(0, 800, 1920, 280);
         private Rectangle playerBox = new Rectangle(0, 100, 600, 1080);

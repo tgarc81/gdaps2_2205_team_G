@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 //Name: G-Force
 //Date: 3/16/21
@@ -28,6 +29,7 @@ namespace Palingenesis
         private Texture2D texture;
         private GameObject target;
         private bool hasHit = false;
+        Game1 w = new Game1();
         public direction Direction
         {
             get { return this.direction; }
