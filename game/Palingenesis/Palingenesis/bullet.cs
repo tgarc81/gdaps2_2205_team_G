@@ -26,7 +26,7 @@ namespace Palingenesis
         //use 1,2,3,4 for up down left right
         private direction direction;
         private Texture2D texture;
-        private Player target;
+        private GameObject target;
         private bool hasHit = false;
         public direction Direction
         {
@@ -41,7 +41,7 @@ namespace Palingenesis
         }
 
         //contructor
-        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth, direction direction, Player target) : base(0, 10, 0, 10, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth, direction direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
             this.direction = direction;
@@ -70,7 +70,7 @@ namespace Palingenesis
 
             if (position.Intersects(target.Position))
             {
-                target.Health -= 20;
+                target.Health -= damage;
                 hasHit = true;
             }
 

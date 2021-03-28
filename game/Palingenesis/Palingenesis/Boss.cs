@@ -45,12 +45,12 @@ namespace Palingenesis
         }
 
         //helper method fills bullet list
-        public void CreateProjectiles(int amount, direction direction, Rectangle position, int xSpacing, int ySpacing, Player target)
+        public void CreateProjectiles(int amount, direction direction, Rectangle position, int xSpacing, int ySpacing, Player target, int damage)
         {
             for(int i = 0; i < amount; i++)
             {
                
-                projectileList.Add(new Bullet(bulletTexture, position, this.windowHeight, this.windowWidth, direction, target));
+                projectileList.Add(new Bullet(bulletTexture, position, this.windowHeight, this.windowWidth, direction, target, damage));
                 position.X += xSpacing;
                 position.Y += ySpacing;
 
@@ -79,17 +79,33 @@ namespace Palingenesis
                 //creates between 1 and 5 projectiles that fly to the left
                 //each is set 50 pixels to the left of the boss
                 ///each bullet spawns 75 pixels apart on the y axis
-                CreateProjectiles(rng.Next(5, 10), direction.right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
+                CreateProjectiles(rng.Next(5, 10), direction.right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target, 10);
             }
 
             else
             {
-                CreateProjectiles(rng.Next(5, 10), direction.left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
+                CreateProjectiles(rng.Next(5, 10), direction.left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target, 10);
             }
 
           
         }
         public void Circle()
+        {
+
+        }
+
+
+        public void Ring()
+        {
+
+        }
+
+        public void Charge()
+        {
+
+        }
+
+        public void MegaShot()
         {
 
         }

@@ -17,7 +17,7 @@ namespace Palingenesis
     enum gameState
     {
         Menu,
-        Instructions,
+        ScoreBoard,
         Game,
         GameOver,
         Dialouge,
@@ -150,6 +150,11 @@ namespace Palingenesis
                         boss1.ProjectileList[i].Update();
                     }
 
+                    for (int i = 0; i < player.ShotList.Count; i++)
+                    {
+                        player.ShotList[i].Update();
+                    }
+
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
                     
 
@@ -181,7 +186,7 @@ namespace Palingenesis
                     //pressing neter on the game over screen sends you to the menu
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Menu;
+                        currentState = gameState.ScoreBoard;
                         SaveScoreboard();
                     }
 
@@ -211,6 +216,13 @@ namespace Palingenesis
                         currentState = gameState.Game;
                     }
                     if(SingleKeyPress(Keys.M, kbState))
+                    {
+                        currentState = gameState.Menu;
+                    }
+                    break;
+
+                case gameState.ScoreBoard:
+                    if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
                     }
@@ -246,7 +258,7 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss1.Health), new Vector2(0, 100), Color.White);
 
                     player.Draw(_spriteBatch);
-                    player.AttackDraw(_spriteBatch, attackTexture);
+                    
                     boss1.Draw(_spriteBatch);
                     for(int i =0; i < boss1.ProjectileList.Count; i++)
                     {
@@ -258,6 +270,20 @@ namespace Palingenesis
                         if(boss1.ProjectileList[i].HasHit == true)
                         {
                             boss1.ProjectileList.RemoveAt(i);
+                        }
+                    }
+
+                    for (int i = 0; i < player.ShotList.Count; i++)
+                    {
+                        player.ShotList[i].Draw(_spriteBatch);
+
+                    }
+
+                    for (int i = 0; i < player.ShotList.Count; i++)
+                    {
+                        if(player.ShotList[i].HasHit == true)
+                        {
+                            player.ShotList.RemoveAt(i);
                         }
                     }
 
@@ -328,7 +354,7 @@ namespace Palingenesis
                     // A way to output to user
                 }
             }
-            //boss.Center();
+            boss.Center();
         }
 
         /// <summary>

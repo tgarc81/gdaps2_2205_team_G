@@ -15,9 +15,9 @@ namespace Palingenesis
     //player the player plays as, it's kinda self explanitory 
     class Player : GameObject
     {
-        private Rectangle attackBox;
+        private List<Bullet> shotList = new List<Bullet>();
         private KeyboardState keyboardState;
-
+        private Texture2D shotTexture;
         //for drawing based on player input
         private enum PlayerState
         {
@@ -31,9 +31,14 @@ namespace Palingenesis
             WalkBack
         }
 
-        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        public List<Bullet> ShotList
         {
-            
+            get { return shotList; }
+        }
+
+        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        {
+            this.shotTexture = shotTexture;
         }
 
         public override void Update()
@@ -93,51 +98,22 @@ namespace Palingenesis
             if (keyboardState.IsKeyDown(Keys.Up) && prevKeyboardState.IsKeyUp(Keys.Up))
             {
                 //creates a rectangle 10 pixels above the player, will adjust exact values later
-                
-                
-                    attackBox = new Rectangle(position.X, position.Y - (100 - position.Height), 25, 50);
-               
 
-                //hit check in each block so that boss does not continue to be damaged after the attack ends
-                if (attackBox.Intersects(target.Position))
-                {
-                    //each hit does 20 damage
-                    target.Health -= 20;
-                }
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20),windowHeight, windowWidth, direction.up, target, 20));
+                
             }
             //use else if so the player can only attack in one direction at a time
             else if (keyboardState.IsKeyDown(Keys.Down) && prevKeyboardState.IsKeyUp(Keys.Down))
             {
-                 attackBox = new Rectangle(position.X, position.Y + (100 - position.Height), 25, 50);
-
-                //hit check
-                if (attackBox.Intersects(target.Position))
-                {
-                    //each hit does 20 damage
-                    target.Health -= 20;
-                }
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), windowHeight, windowWidth, direction.down, target, 20));
             }
             else if (keyboardState.IsKeyDown(Keys.Right) && prevKeyboardState.IsKeyUp(Keys.Right))
             {
-                attackBox = new Rectangle(position.X + (100 - position.Width), position.Y, 50, 25);
-
-                //hit check
-                if (attackBox.Intersects(target.Position))
-                {
-                    //each hit does 20 damage
-                    target.Health -= 20;
-                }
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), windowHeight, windowWidth, direction.right, target, 20));
             }
             else if (keyboardState.IsKeyDown(Keys.Left) && prevKeyboardState.IsKeyUp(Keys.Left))
             {
-                 attackBox = new Rectangle(position.X - (100 - position.Width), position.Y, 50, 25);
-
-                //hit check
-                if (attackBox.Intersects(target.Position))
-                {
-                    //each hit does 20 damage
-                    target.Health -= 20;
-                }
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), windowHeight, windowWidth, direction.left, target, 20));
             }
 
             
@@ -146,11 +122,7 @@ namespace Palingenesis
 
         }
 
-        public void AttackDraw(SpriteBatch sb, Texture2D texture)
-        {
-            if(keyboardState.IsKeyDown(Keys.Up) || keyboardState.IsKeyDown(Keys.Down) || keyboardState.IsKeyDown(Keys.Right) || keyboardState.IsKeyDown(Keys.Left))
-            sb.Draw(texture, attackBox, Color.White);
-        }
+        
 
         public void Reset()
         {
