@@ -296,6 +296,7 @@ namespace Palingenesis
 
                 case gameState.GameOver:
                     _spriteBatch.DrawString(font, "Press enter to return to Main menu", new Vector2(0, 0), Color.White);
+                    dialogueNum = 0;
                     break;
 
                 case gameState.Dialouge:
