@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Media;
 
 //Name: G-Force
 //Date: 3/16/21
+//Updated: 3/28/21
 //Professor Mesh
 //Purpose: To intialize the base states of our game.
 
@@ -49,6 +50,8 @@ namespace Palingenesis
         private Texture2D bossTexture;
         private Texture2D RiceGoddessBackground;
         private Texture2D titleScreen;
+        private Texture2D gameOver;
+        private bool BossBeaten;
         Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
         int windowWidth;
         int windowHeight;
@@ -119,7 +122,10 @@ namespace Palingenesis
             RiceGoddessBackground= Content.Load<Texture2D>("RiceGodessBackground");
             takeDamadge = Content.Load<Song>("takeDamadge");
             deathSound= Content.Load<Song>("deathSound");
-            hit = Content.Load<Song>("forward_sound");
+            hit = Content.Load<Song>("Punch_Hit_Sound_Effect");
+
+            //Load GameOver Textures
+            gameOver= Content.Load<Texture2D>("GameOver");
 
             //Load VN textures
             textboxVN = Content.Load<Texture2D>("textbox");
@@ -130,10 +136,10 @@ namespace Palingenesis
             forwardVN= Content.Load<Song>("forward_sound");
 
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth,bossTexture);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, windowHeight, windowWidth,bossTexture);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(960, 540, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
-
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(960, 540, 75, 75), takeDamadge, windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+            
             DialogueListAdd();
 
            
@@ -153,14 +159,20 @@ namespace Palingenesis
                     //pressing enter on the main menu starts the game
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
+                        BossBeaten = false;
+                        LoadBoss();
+                        player.Reset();
+
                         currentState = gameState.Dialouge;
                         MediaPlayer.Play(forwardVN);
-                        //LoadBoss();
-                        //player.Reset();
+                        
+                        
                     }
                     break;
 
                 case gameState.Game:
+
+
                     player.Update();
                     player.Attack(boss1, prevKbState);
 
@@ -203,6 +215,7 @@ namespace Palingenesis
                     //when the bosses health hit's zero, starts the next dialouge section
                     if (boss1.Health <= 0)
                     {
+                        BossBeaten = true;
                         currentState = gameState.Dialouge;
                         LoadBoss();
                     }
@@ -229,12 +242,20 @@ namespace Palingenesis
                         MediaPlayer.Play(forwardVN);
                    }
 
-                   //when there is no remaining dialouge starts the next section of the game
-                   if(dialougeList[dialogueNum]== null)
-                   {
+                   //checks for dialogue after game
+                    if ((dialougeList[dialogueNum] == null) && (BossBeaten == true))
+                    {
+                        currentState = gameState.ScoreBoard;
+                        dialogueNum = 0;
+                    }
+
+                    //when there is no remaining dialouge starts the next section of the game
+                    if (dialougeList[dialogueNum]== null)
+                    {
                         currentState = gameState.Game;
                         dialogueNum++;
-                    }
+                     }
+                   
 
                     break;
 
@@ -278,7 +299,7 @@ namespace Palingenesis
                     break;
 
                 case gameState.Game:
-
+                    //draws background
                     _spriteBatch.Draw(RiceGoddessBackground, fullScreen, Color.White);
 
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
@@ -324,12 +345,13 @@ namespace Palingenesis
                     break;
 
                 case gameState.GameOver:
+                    _spriteBatch.Draw(gameOver, fullScreen, Color.White);
                     _spriteBatch.DrawString(font, "Press enter to return to Main menu", new Vector2(0, 0), Color.White);
-                    dialogueNum = 0;
+                    
                     break;
 
                 case gameState.Dialouge:
-
+                    //draws object from dialgoe list using that object's dialogue method.
                     dialougeList[dialogueNum].Draw(_spriteBatch);
                     //figure out the actual position later
 
@@ -345,6 +367,7 @@ namespace Palingenesis
 
                 case gameState.ScoreBoard:
                     _spriteBatch.DrawString(font, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(980, 540), Color.White);
+                    dialogueNum = 0;
                     break;
             }
 
@@ -385,7 +408,7 @@ namespace Palingenesis
                         int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                         int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                         int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
+                        boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75),takeDamadge, windowWidth, windowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
                     }
                 }
                 catch (Exception e)

@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 //Name: G-Force
 //Date: 3/16/21
@@ -18,6 +19,7 @@ namespace Palingenesis
         private List<Bullet> shotList = new List<Bullet>();
         private KeyboardState keyboardState;
         private Texture2D shotTexture;
+        private Song takeDamadge;
         //for drawing based on player input
         private enum PlayerState
         {
@@ -36,9 +38,10 @@ namespace Palingenesis
             get { return shotList; }
         }
 
-        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.shotTexture = shotTexture;
+            this.takeDamadge = takeDamadge;
         }
 
         public override void Update()
@@ -99,24 +102,22 @@ namespace Palingenesis
             {
                 //creates a rectangle 10 pixels above the player, will adjust exact values later
 
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20),windowHeight, windowWidth, direction.up, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, direction.up, target, 20));
                 
             }
             //use else if so the player can only attack in one direction at a time
             else if (keyboardState.IsKeyDown(Keys.Down) && prevKeyboardState.IsKeyUp(Keys.Down))
             {
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), windowHeight, windowWidth, direction.down, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, direction.down, target, 20));
             }
             else if (keyboardState.IsKeyDown(Keys.Right) && prevKeyboardState.IsKeyUp(Keys.Right))
             {
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), windowHeight, windowWidth, direction.right, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, direction.right, target, 20));
             }
             else if (keyboardState.IsKeyDown(Keys.Left) && prevKeyboardState.IsKeyUp(Keys.Left))
             {
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), windowHeight, windowWidth, direction.left, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, direction.left, target, 20));
             }
-
-            
 
             
 

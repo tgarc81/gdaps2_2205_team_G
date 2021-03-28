@@ -4,6 +4,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
 
 //Name: G-Force
 //Date: 3/16/21
@@ -24,17 +25,19 @@ namespace Palingenesis
         private List<Bullet> projectileList = new List<Bullet>();
         private Random rng = new Random();
         private Texture2D bulletTexture;
+        private Song takeDamadge;
 
         public List<Bullet> ProjectileList
         {
             get { return projectileList; }
         }
 
-        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowWidth, int windowHeight, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowWidth, windowHeight)
+        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamadge, int windowWidth, int windowHeight, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowWidth, windowHeight)
         {
             this.type = type;
             this.bulletTexture = bulletTexture;
             this.texture = texture;
+            this.takeDamadge = takeDamadge;
         }
 
 
@@ -50,7 +53,7 @@ namespace Palingenesis
             for(int i = 0; i < amount; i++)
             {
                
-                projectileList.Add(new Bullet(bulletTexture, position, this.windowHeight, this.windowWidth, direction, target, 10));
+                projectileList.Add(new Bullet(bulletTexture, position, takeDamadge, this.windowHeight, this.windowWidth, direction, target, 10));
                 position.X += xSpacing;
                 position.Y += ySpacing;
 

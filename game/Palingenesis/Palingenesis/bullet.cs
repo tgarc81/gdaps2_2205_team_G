@@ -28,6 +28,7 @@ namespace Palingenesis
         private direction direction;
         private Texture2D texture;
         private GameObject target;
+        private Song takeDamadge;
         private bool hasHit = false;
        
         public direction Direction
@@ -43,11 +44,12 @@ namespace Palingenesis
         }
 
         //contructor
-        public Bullet(Texture2D texture, Rectangle position, int windowHeight, int windowWidth, direction direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, direction direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
             this.direction = direction;
             this.target = target;
+            this.takeDamadge = takeDamadge;
         }
 
         public override void Update()
@@ -72,6 +74,7 @@ namespace Palingenesis
 
             if (position.Intersects(target.Position))
             {
+                MediaPlayer.Play(takeDamadge);
                 target.Health -= damage;
                 hasHit = true;
             }
@@ -84,5 +87,6 @@ namespace Palingenesis
             if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
             sb.Draw(texture, position, Color.Red);
         }
+
     }
 }

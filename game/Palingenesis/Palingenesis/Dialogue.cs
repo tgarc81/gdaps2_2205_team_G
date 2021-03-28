@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 
 //Name: G-Force
 //Date: 3/16/21
+//Updated: 3/28/21
 //Professor Mesh
 //Purpose: To provide an amazing visual novel experience.
 
@@ -34,7 +35,7 @@ namespace Palingenesis
         private Rectangle bossName = new Rectangle(1500, 700, 300, 150);
 
        
-
+        //constructor that gets all of the texture info and actual dialogue
         public Dialogue(Texture2D player, Texture2D boss, Texture2D background, Texture2D textBoxColor, Texture2D textBoxName, SpriteFont font, string convo, bool isPlayer)
         { 
             this.player = player;
@@ -47,8 +48,10 @@ namespace Palingenesis
             this.textBoxName = textBoxName;
         }
 
+        //Specific draw method that draws all of the components for each frame
         public void Draw(SpriteBatch sb)
         {
+            //draws boss blacked out and displays player name box
             if (isPlayer == true)
             {
                 sb.Draw(background, backgroundBox, Color.White);
@@ -59,6 +62,8 @@ namespace Palingenesis
                 sb.DrawString(font, playername, new Vector2(65, 750), Color.White);
                 sb.DrawString(font, convo, new Vector2(60, 900), Color.White);
             }
+            
+            //draws player blacked out and displays boss name box
             else
             {
                 sb.Draw(background, backgroundBox, Color.White);
