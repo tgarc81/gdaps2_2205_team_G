@@ -60,6 +60,7 @@ namespace Palingenesis
         private Texture2D backgroundVN;
         private Texture2D textboxVN;
         private Texture2D textboxNameVN;
+        double scoreTimer = 0;
 
         public Game1()
         {
@@ -109,11 +110,11 @@ namespace Palingenesis
 
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth,bossTexture);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(500, 500, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(960, 540, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
 
             DialogueListAdd();
 
-            boss1.Center();
+           
         }
 
         protected override void Update(GameTime gameTime)
@@ -159,7 +160,7 @@ namespace Palingenesis
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
-                    
+                    scoreTimer += gameTime.ElapsedGameTime.TotalSeconds;
 
                     Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
@@ -310,6 +311,10 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, "Press P to return to game", new Vector2(0, 20), Color.White);
                     _spriteBatch.DrawString(font, "Press M to return to main menu", new Vector2(0, 40), Color.White);
 
+                    break;
+
+                case gameState.ScoreBoard:
+                    _spriteBatch.DrawString(font, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(980, 540), Color.White);
                     break;
             }
 
