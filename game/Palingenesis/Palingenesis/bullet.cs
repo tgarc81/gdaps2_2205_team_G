@@ -29,7 +29,7 @@ namespace Palingenesis
         private Texture2D texture;
         private GameObject target;
         private bool hasHit = false;
-        Game1 w = new Game1();
+       
         public direction Direction
         {
             get { return this.direction; }
