@@ -31,7 +31,8 @@ namespace Palingenesis
         private SpriteBatch _spriteBatch;
         private KeyboardState kbState;
         private KeyboardState prevKbState;
-        private SpriteFont font; 
+        private SpriteFont font;
+        private SpriteFont fontVN;
         private double timer; // Represents the time elapsed in the game to be used for boss attacks
         private double time; // Represents total time elapsed in the game
         private Player player; // Represents the actual player
@@ -59,6 +60,7 @@ namespace Palingenesis
         private Texture2D backgroundVN;
         private Texture2D textboxVN;
         private Texture2D textboxNameVN;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -92,6 +94,7 @@ namespace Palingenesis
             windowWidth = graphics.GraphicsDevice.Viewport.Width;
             windowHeight = graphics.GraphicsDevice.Viewport.Height;
             font = Content.Load<SpriteFont>("font");
+            fontVN = Content.Load<SpriteFont>("bigfont");
 
             bossTexture = Content.Load<Texture2D>("bossPlaceHolder");
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
@@ -104,7 +107,7 @@ namespace Palingenesis
             bossVN = Content.Load<Texture2D>("bingus");
             
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50), windowHeight, windowWidth,bossTexture);
             //note: make a placeholder asset for the boss
             boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(500, 500, 75, 75), windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
 
@@ -204,7 +207,8 @@ namespace Palingenesis
                    if(dialougeList[dialogueNum]== null)
                    {
                         currentState = gameState.Game;
-                   }
+                        dialogueNum++;
+                    }
 
                     break;
 
@@ -423,8 +427,12 @@ namespace Palingenesis
 
         private void DialogueListAdd()
         {
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, font, "wus good", true));
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, font, "nm hbu", false));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, fontVN, "wus good", true));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "nm hbu", false));
+            dialougeList.Add(null);
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "I'm dead", false));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Lmao yea", true));
+            dialougeList.Add(null);
         }
     }
 }
