@@ -75,7 +75,7 @@ namespace Palingenesis
         private Song forwardVN;
         private Song hit;
         private Song error;
-
+        private Song RiceGoddessOST;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -123,7 +123,7 @@ namespace Palingenesis
             takeDamadge = Content.Load<Song>("takeDamadge");
             deathSound= Content.Load<Song>("deathSound");
             hit = Content.Load<Song>("Punch_Hit_Sound_Effect");
-
+            RiceGoddessOST = Content.Load<Song>("Sad but True - The HU");
             //Load GameOver Textures
             gameOver= Content.Load<Texture2D>("GameOver");
 
@@ -172,7 +172,9 @@ namespace Palingenesis
 
                 case gameState.Game:
 
+                   
 
+                        
                     player.Update();
                     player.Attack(boss1, prevKbState);
 
@@ -492,11 +494,11 @@ namespace Palingenesis
         //insert null to break to fight
         private void DialogueListAdd()
         {
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, fontVN, "wus good", true));
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "nm hbu", false));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, fontVN, "Placeholder Theophania", true));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
             dialougeList.Add(null);
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "I'm dead", false));
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Lmao yea", true));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
+            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placeholder Theophania", true));
             dialougeList.Add(null);
         }
     }

@@ -53,7 +53,7 @@ namespace Palingenesis
             for(int i = 0; i < amount; i++)
             {
                
-                projectileList.Add(new Bullet(bulletTexture, position, takeDamadge, this.windowHeight, this.windowWidth, direction, target, 10));
+                projectileList.Add(new Bullet(bulletTexture, position, takeDamadge, this.windowHeight, this.windowWidth, direction, target, this.damage));
                 position.X += xSpacing;
                 position.Y += ySpacing;
 
