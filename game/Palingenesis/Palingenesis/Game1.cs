@@ -132,7 +132,7 @@ namespace Palingenesis
             textboxNameVN = Content.Load<Texture2D>("rustyName");
             backgroundVN = Content.Load<Texture2D>("bayo2");
             playerVN = Content.Load<Texture2D>("theo");
-            bossVN = Content.Load<Texture2D>("bingus");
+            bossVN = Content.Load<Texture2D>("ricegoddess");
             forwardVN= Content.Load<Song>("forward_sound");
 
 
