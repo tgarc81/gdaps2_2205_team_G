@@ -162,6 +162,7 @@ namespace Palingenesis
                         BossBeaten = false;
                         LoadBoss();
                         player.Reset();
+                        boss1.Reset();
 
                         currentState = gameState.Dialouge;
                         MediaPlayer.Play(forwardVN);
