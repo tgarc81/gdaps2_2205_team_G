@@ -30,7 +30,7 @@ namespace Palingenesis
         private Rectangle backgroundBox = new Rectangle(0, 0, 1920, 1080);
         private Rectangle textBox = new Rectangle(0, 800, 1920, 280);
         private Rectangle playerBox = new Rectangle(0, 100, 600, 1080);
-        private Rectangle bossBox = new Rectangle(1400, 100, 600, 1080);
+        private Rectangle bossBox = new Rectangle(1400, 100, 550, 1080);
         private Rectangle playerName = new Rectangle(50, 700, 300, 150);
         private Rectangle bossName = new Rectangle(1500, 700, 300, 150);
 

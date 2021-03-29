@@ -130,6 +130,7 @@ namespace Palingenesis
             health = 100;
             position.X = 200;
             position.Y = 200;
+            shotList.Clear();
         }
     }
 }

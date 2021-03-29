@@ -124,5 +124,13 @@ namespace Palingenesis
 
             }
         }
+
+        public void Reset()
+        {
+            health = 1000;
+            position.X = 960;
+            position.Y = 540;
+            projectileList.Clear();
+        }
     }
 }
