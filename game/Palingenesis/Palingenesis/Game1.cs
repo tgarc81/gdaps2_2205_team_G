@@ -163,7 +163,7 @@ namespace Palingenesis
                         LoadBoss();
                         player.Reset();
                         boss1.Reset();
-
+                        scoreTimer = 0;
                         currentState = gameState.Dialouge;
                         MediaPlayer.Play(forwardVN);
                         
