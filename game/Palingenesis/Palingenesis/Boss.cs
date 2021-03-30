@@ -25,19 +25,19 @@ namespace Palingenesis
         private List<Bullet> projectileList = new List<Bullet>();
         private Random rng = new Random();
         private Texture2D bulletTexture;
-        private Song takeDamadge;
+        private Song takeDamage;
 
         public List<Bullet> ProjectileList
         {
             get { return projectileList; }
         }
 
-        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamadge, int windowWidth, int windowHeight, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowWidth, windowHeight)
+        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamage, int windowWidth, int windowHeight, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowWidth, windowHeight)
         {
             this.type = type;
             this.bulletTexture = bulletTexture;
             this.texture = texture;
-            this.takeDamadge = takeDamadge;
+            this.takeDamage = takeDamage;
         }
 
 
@@ -53,7 +53,7 @@ namespace Palingenesis
             for(int i = 0; i < amount; i++)
             {
                
-                projectileList.Add(new Bullet(bulletTexture, position, takeDamadge, this.windowHeight, this.windowWidth, direction, target, this.damage));
+                projectileList.Add(new Bullet(bulletTexture, position, takeDamage, this.windowHeight, this.windowWidth, direction, target, this.damage));
                 position.X += xSpacing;
                 position.Y += ySpacing;
 
@@ -63,9 +63,13 @@ namespace Palingenesis
         //used to decide what attack the boss will use with a random
         public void AI(Random rng, Player target)
         {
-            if(rng.NextDouble() < 1)
+            if(rng.NextDouble() < 0.5)
             {
                 Line(target);
+            }
+            else
+            {
+                MegaShot(target);
             }
 
             
@@ -82,12 +86,12 @@ namespace Palingenesis
                 //creates between 1 and 5 projectiles that fly to the left
                 //each is set 50 pixels to the left of the boss
                 ///each bullet spawns 75 pixels apart on the y axis
-                CreateProjectiles(rng.Next(5, 10), direction.right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
+                CreateProjectiles(rng.Next(5, 11), direction.right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
             }
 
             else
             {
-                CreateProjectiles(rng.Next(5, 10), direction.left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
+                CreateProjectiles(rng.Next(5, 11), direction.left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
             }
 
           
@@ -108,22 +112,31 @@ namespace Palingenesis
         //boss moves 3 times and if it makes contact with the player deals damage
         public void Charge()
         {
-
-        }
-
-        //fires a single large shot that does 2x damage at the player
-        public void MegaShot()
-        {
-
-        }
-
-        public void SpecialAttack()
-        {
-            if(type == bossName.RiceGoddess)
             {
 
             }
         }
+        //fires a single large shot that does 2x damage at the player
+        public void MegaShot(Player target)
+        {
+            if (target.Position.X > this.position.X)
+            {
+                projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, direction.right, target, this.damage * 2));
+            }
+
+            else
+            {
+                projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, direction.left, target, this.damage * 2));
+            }
+        }
+
+            public void SpecialAttack()
+            {
+                if(type == bossName.RiceGoddess)
+                {
+
+                }
+            }
 
         public void Reset()
         {
