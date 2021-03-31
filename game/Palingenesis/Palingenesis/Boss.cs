@@ -75,7 +75,7 @@ namespace Palingenesis
                 }
                 else
                 {
-                    Ring(target,);
+                    //Ring(target,);
                 }
             
             

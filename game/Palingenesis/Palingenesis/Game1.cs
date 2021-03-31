@@ -211,7 +211,6 @@ namespace Palingenesis
                     {
                         MediaPlayer.Play(deathSound);
                         currentState = gameState.GameOver;
-                        LoadScoreboard();
                     }
 
                     //when the bosses health hit's zero, starts the next dialouge section
@@ -226,11 +225,10 @@ namespace Palingenesis
                     break;
 
                 case gameState.GameOver:
-                    //pressing neter on the game over screen sends you to the menu
+                    //pressing enter on the game over screen sends you to the menu
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.ScoreBoard;
-                        SaveScoreboard();
+                        currentState = gameState.Menu;
                     }
 
                     break;
@@ -249,6 +247,7 @@ namespace Palingenesis
                     {
                         currentState = gameState.ScoreBoard;
                         dialogueNum = 0;
+                        LoadScoreboard();
                     }
 
                     //when there is no remaining dialouge starts the next section of the game
@@ -278,6 +277,7 @@ namespace Palingenesis
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
+                        SaveScoreboard();
                     }
                     break;
             }
@@ -354,7 +354,7 @@ namespace Palingenesis
 
                 case gameState.Dialouge:
                     //draws object from dialgoe list using that object's dialogue method.
-                    dialougeList[dialogueNum].Draw(_spriteBatch);
+                    dialougeList[dialogueNum].Draw(_spriteBatch); // possible bug
                     //figure out the actual position later
 
                    // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
@@ -438,9 +438,9 @@ namespace Palingenesis
                 // When we open for writing, create the file if it doesn't exist yet
                 output = new StreamWriter("../../../Scoreboard.txt");
                 // We would get user input for name
-                string name = "Default"; // We would need a way to get user input for name
+                string name = "DEFAULT"; // We would need a way to get user input for name
                 names.Add(name);
-                times.Add(time);
+                times.Add(scoreTimer);
                 for (int i = 0; i < names.Count; i++) // For each element in both the names and times List
                 {
                     output.WriteLine($"{names[i]},{times[i]}"); // Add the corresponding name with their time in the file
