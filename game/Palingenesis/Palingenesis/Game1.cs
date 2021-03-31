@@ -40,7 +40,6 @@ namespace Palingenesis
         private Player player; // Represents the actual player
         private Texture2D playerAsset; // Represents player image
         private Boss boss1;
-        private Boss riceGoddess; // Represents Rice Goddess boss
         private int numberOfDialougeFrames;
         // private List<string> dialougeList = new List<string>();
         private List<Dialogue> dialougeList;

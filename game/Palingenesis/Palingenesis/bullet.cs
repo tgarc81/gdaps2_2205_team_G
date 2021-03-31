@@ -20,6 +20,7 @@ namespace Palingenesis
         down,
         left,
         right,
+        none,
     }
     //projectiles to be fired by bosses
     class Bullet : GameObject
