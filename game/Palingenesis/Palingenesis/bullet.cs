@@ -31,6 +31,7 @@ namespace Palingenesis
         private GameObject target;
         private Song takeDamadge;
         private bool hasHit = false;
+        private Color color;
        
         public direction Direction
         {
@@ -42,6 +43,11 @@ namespace Palingenesis
         {
             get { return hasHit; }
             set { hasHit = value; }
+        }
+
+        public Color Color
+        {
+            set { color = value; }
         }
 
         //contructor
@@ -86,7 +92,7 @@ namespace Palingenesis
         {
             //only drawn while on screen
             if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
-            sb.Draw(texture, position, Color.Red);
+            sb.Draw(texture, position, color);
         }
 
     }

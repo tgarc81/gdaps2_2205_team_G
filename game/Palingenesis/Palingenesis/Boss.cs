@@ -26,7 +26,7 @@ namespace Palingenesis
         private Random rng = new Random();
         private Texture2D bulletTexture;
         private Song takeDamage;
-
+        private Color color = Color.White;
         public List<Bullet> ProjectileList
         {
             get { return projectileList; }
@@ -155,12 +155,48 @@ namespace Palingenesis
 
         }
 
-        //boss moves 3 times and if it makes contact with the player deals damage
-        public void Charge()
+        //boss charges once at the player  and if it makes contact with the player deals damage
+        public void Charge(Player target)
         {
-            {
+            //sets color to red to telegraph the attack to the player 
+           color = Color.Red;
+            
+            //player is too the right of the boss
+                if(target.Position.X > position.X)
+                {
+                    //player is below the boss
+                    if(target.Position.Y > position.Y)
+                    {
+                        position.X += 3;
+                        position.Y += 3;
+                    }
+                    //player is above the boss
+                    else
+                    {
+                        position.X += 3;
+                        position.Y -= 3;
+                    }
+                }
+                //player is to the left of the boss
+                else
+                {
+                    //player is below the boss
+                    if (target.Position.Y > position.Y)
+                    {
+                        position.X -= 3;
+                        position.Y += 3;
+                    }
+                    //player is above the boss
+                    else
+                    {
+                        position.X -= 3;
+                        position.Y -= 3;
+                    }
+                }
+            
 
-            }
+            //after the boss has finished charging resets the color to white
+            color = Color.White;
         }
         //fires a single large shot that does 2x damage at the player
         public void MegaShot(Player target)
@@ -176,11 +212,23 @@ namespace Palingenesis
             }
         }
 
-            public void SpecialAttack()
+            public void SpecialAttack(Player target)
             {
                 if(type == bossName.RiceGoddess)
                 {
+                    //I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player
+                    //shell list
+                    List<Bullet> specialList = new List<Bullet>();
+                    for(int i = 0; i < rng.Next(10, 16); i++)
+                    {
+                        specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, direction.none, target, damage + 5));
 
+                        //color is set to green so that they player knows that they won't be damage by the projectile yet 
+                        specialList[i].Color = Color.Green;
+
+                    }   
+
+                    //gonna go to office hours on tuesday to try and figure out to get timer to work which will set it so the projectiles do damage
                 }
             }
 
@@ -190,6 +238,11 @@ namespace Palingenesis
             position.X = 960;
             position.Y = 540;
             projectileList.Clear();
+        }
+
+        public override void Draw(SpriteBatch sb)
+        {
+            sb.Draw(texture, Position, color);
         }
     }
 }
