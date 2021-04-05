@@ -54,8 +54,11 @@ namespace Palingenesis
             {
                
                 projectileList.Add(new Bullet(bulletTexture, position, takeDamage, this.windowHeight, this.windowWidth, direction, target, this.damage));
-                position.X += xSpacing;
-                position.Y += ySpacing;
+                
+                    position.X += xSpacing;
+                    position.Y += ySpacing;
+                
+                
 
             }
         }
@@ -75,7 +78,7 @@ namespace Palingenesis
                 }
                 else
                 {
-                    //Ring(target,);
+                    Circle(target);
                 }
             
             
@@ -150,8 +153,19 @@ namespace Palingenesis
         }
 
         //fires out shots in a circle around the boss
-        public void Circle()
+        public void Circle(Player target)
         {
+            //left
+            CreateProjectiles(2, direction.left, new Rectangle(position.X - 25, position.Y - 50, 25, 25), 0, 75, target);
+
+            //bottom
+            CreateProjectiles(2, direction.down, new Rectangle(position.X + 50, position.Y + 25, 25, 25), 75, 0, target);
+
+            //right 
+            CreateProjectiles(2, direction.right, new Rectangle(position.X + 25, position.Y + 50, 25, 25), 0, 75, target);
+
+            //top
+            CreateProjectiles(2, direction.up, new Rectangle(position.X - 50, position.Y - 25, 25, 25), 75, 0, target);
 
         }
 

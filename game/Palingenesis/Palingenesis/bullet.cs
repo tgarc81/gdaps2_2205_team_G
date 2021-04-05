@@ -31,7 +31,7 @@ namespace Palingenesis
         private GameObject target;
         private Song takeDamadge;
         private bool hasHit = false;
-        private Color color;
+        private Color color = Color.Red;
        
         public direction Direction
         {
