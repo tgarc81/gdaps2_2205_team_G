@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Palingenesis
 {
-    public enum direction
+    public enum Direction
     {
         //at the moment they can only move in straight lines
         up,
@@ -26,14 +26,14 @@ namespace Palingenesis
     class Bullet : GameObject
     {
         //use 1,2,3,4 for up down left right
-        private direction direction;
+        private Direction direction;
         private Texture2D texture;
         private GameObject target;
         private Song takeDamadge;
         private bool hasHit = false;
         private Color color = Color.Red;
        
-        public direction Direction
+        public Direction Direction
         {
             get { return this.direction; }
             set { direction = value; }
@@ -51,7 +51,7 @@ namespace Palingenesis
         }
 
         //contructor
-        public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, direction direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, Direction direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
             this.direction = direction;
@@ -61,20 +61,20 @@ namespace Palingenesis
 
         public override void Update()
         {
-            if(Direction == direction.up)
+            if(Direction == Direction.up)
             {
                 //moves up the screen by the set amount movespeed
                 position.Y -= moveSpeed;
             }
-            else if(direction == direction.down)
+            else if(direction == Direction.down)
             {
                 position.Y += moveSpeed;
             }
-            else if (direction == direction.left)
+            else if (direction == Direction.left)
             {
                 position.X -= moveSpeed;
             }
-            else if (direction == direction.right)
+            else if (direction == Direction.right)
             {
                 position.X += moveSpeed;
             }
@@ -93,6 +93,7 @@ namespace Palingenesis
             //only drawn while on screen
             if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
             sb.Draw(texture, position, color);
+            
         }
 
     }

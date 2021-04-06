@@ -52,8 +52,6 @@ namespace Palingenesis
         private Texture2D gameOver;
         private bool BossBeaten;
         Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
-        int windowWidth;
-        int windowHeight;
         private int dialogueNum=0;
         private Random rng = new Random();
         private List<string> names; // Represents all the names to go in leaderboard
@@ -75,6 +73,9 @@ namespace Palingenesis
         private Song hit;
         private Song error;
         private Song RiceGoddessOST;
+        private const int WindowWidth = 1920;
+        private const int WindowHeight = 1080;
+        private double attackTimer;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -91,8 +92,8 @@ namespace Palingenesis
             dialougeList = new List<Dialogue>();
             
 
-            graphics.PreferredBackBufferWidth = 1920;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 1080;   // set this value to the desired height of your window
+            graphics.PreferredBackBufferWidth = WindowWidth;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = WindowHeight;   // set this value to the desired height of your window
 
             graphics.ApplyChanges();
             base.Initialize();
@@ -105,8 +106,7 @@ namespace Palingenesis
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            windowWidth = graphics.GraphicsDevice.Viewport.Width;
-            windowHeight = graphics.GraphicsDevice.Viewport.Height;
+            
             font = Content.Load<SpriteFont>("font");
             fontVN = Content.Load<SpriteFont>("bigfont");
             
@@ -135,9 +135,9 @@ namespace Palingenesis
             forwardVN= Content.Load<Song>("forward_sound");
 
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, windowHeight, windowWidth,bossTexture);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth,bossTexture);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(960, 540, 75, 75), takeDamadge, windowWidth, windowHeight, bossName.RiceGoddess, attackTexture);
+            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(960, 540, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTexture);
             
             DialogueListAdd();
 
@@ -181,8 +181,10 @@ namespace Palingenesis
                     //AI method runs every 2 seconds
                     if (timer > 2)
                     {
-                        boss1.AI(rng, player);
+                        
+                        boss1.AI(rng, player, attackTimer);
                         timer = 0;
+
                     }
 
                     //runs update on each bullet after the pattern is spawned by AI
@@ -198,7 +200,7 @@ namespace Palingenesis
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
                     scoreTimer += gameTime.ElapsedGameTime.TotalSeconds;
-
+                    attackTimer += gametime.ElapsedGameTime.TotalSeconds;
                     Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
                     if (SingleKeyPress(Keys.P, kbState))
@@ -410,7 +412,7 @@ namespace Palingenesis
                         int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                         int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                         int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75),takeDamadge, windowWidth, windowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
+                        boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75),takeDamadge, WindowWidth, WindowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
                     }
                 }
                 catch (Exception e)
