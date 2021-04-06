@@ -142,7 +142,7 @@ namespace Palingenesis
             DialogueListAdd();
 
            
-        }// push
+        }
 
         protected override void Update(GameTime gameTime)
         {
@@ -196,23 +196,6 @@ namespace Palingenesis
                     for (int i = 0; i < player.ShotList.Count; i++)
                     {
                         player.ShotList[i].Update();
-                    }
-
-
-                    for (int i = 0; i < player.ShotList.Count; i++)
-                    {
-                        if (player.ShotList[i].HasHit == true)
-                        {
-                            player.ShotList.RemoveAt(i);
-                        }
-                    }
-
-                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
-                    {
-                        if (boss1.ProjectileList[i].HasHit == true)
-                        {
-                            boss1.ProjectileList.RemoveAt(i);
-                        }
                     }
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -341,7 +324,13 @@ namespace Palingenesis
                         boss1.ProjectileList[i].Draw(_spriteBatch);
                     }
 
-                   
+                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
+                    {
+                        if(boss1.ProjectileList[i].HasHit == true)
+                        {
+                            boss1.ProjectileList.RemoveAt(i);
+                        }
+                    }
 
                     for (int i = 0; i < player.ShotList.Count; i++)
                     {
@@ -349,7 +338,13 @@ namespace Palingenesis
 
                     }
 
-                   
+                    for (int i = 0; i < player.ShotList.Count; i++)
+                    {
+                        if(player.ShotList[i].HasHit == true)
+                        {
+                            player.ShotList.RemoveAt(i);
+                        }
+                    }
 
                     break;
 
