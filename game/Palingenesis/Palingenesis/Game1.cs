@@ -82,7 +82,7 @@ namespace Palingenesis
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-
+        //the
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
