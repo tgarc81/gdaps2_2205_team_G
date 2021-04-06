@@ -142,7 +142,7 @@ namespace Palingenesis
             DialogueListAdd();
 
            
-        }
+        }// push
 
         protected override void Update(GameTime gameTime)
         {
