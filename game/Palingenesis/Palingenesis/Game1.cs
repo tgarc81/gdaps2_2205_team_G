@@ -39,12 +39,15 @@ namespace Palingenesis
         private double time; // Represents total time elapsed in the game
         private Player player; // Represents the actual player
         private Texture2D playerAsset; // Represents player image
-        private Boss boss1;
+        private Boss boss;
         private int numberOfDialougeFrames;
         // private List<string> dialougeList = new List<string>();
         private List<Dialogue> dialougeList;
         private String currentLine;
         private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
+        private bool isNagaBossLoaded; // Bool that represents whether Naga boss has been loaded in this game
+        private int bossesDefeated;
+        private const int numberOfBosses = 2;
         private Texture2D attackTexture;
         private Texture2D bossTexture;
         private Texture2D RiceGoddessBackground;
@@ -87,6 +90,8 @@ namespace Palingenesis
         {
             // TODO: Add your initialization logic here
             isRiceGoddessLoaded = false; // Sets it so Rice Goddess is not loaded yet
+            isNagaBossLoaded = false; // Sets it so Naga boss is not loaded yet
+            bossesDefeated = 0;
             names = new List<string>();
             times = new List<double>();
             dialougeList = new List<Dialogue>();
@@ -137,7 +142,7 @@ namespace Palingenesis
 
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth,bossTexture);
             //note: make a placeholder asset for the boss
-            boss1= new Boss(1000, 0, 10, 10, bossTexture, new Rectangle(960, 540, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTexture);
+            boss = null;
             
             DialogueListAdd();
 
@@ -161,7 +166,7 @@ namespace Palingenesis
                         BossBeaten = false;
                         LoadBoss();
                         player.Reset();
-                        boss1.Reset();
+                        boss.Reset();
                         scoreTimer = 0;
                         currentState = gameState.Dialouge;
                         MediaPlayer.Play(forwardVN);
@@ -176,21 +181,21 @@ namespace Palingenesis
 
                         
                     player.Update();
-                    player.Attack(boss1, prevKbState);
+                    player.Attack(boss, prevKbState);
 
                     //AI method runs every 2 seconds
                     if (timer > 2)
                     {
                         
-                        boss1.AI(rng, player, attackTimer);
+                        boss.AI(rng, player, attackTimer);
                         timer = 0;
 
                     }
 
                     //runs update on each bullet after the pattern is spawned by AI
-                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
+                    for (int i = 0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss1.ProjectileList[i].Update();
+                        boss.ProjectileList[i].Update();
                     }
 
                     for (int i = 0; i < player.ShotList.Count; i++)
@@ -216,7 +221,7 @@ namespace Palingenesis
                     }
 
                     //when the bosses health hit's zero, starts the next dialouge section
-                    if (boss1.Health <= 0)
+                    if (boss.Health <= 0)
                     {
                         BossBeaten = true;
                         currentState = gameState.Dialouge;
@@ -312,23 +317,23 @@ namespace Palingenesis
                      
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
-                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss1.Health), new Vector2(0, 100), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
 
                     
 
                     player.Draw(_spriteBatch);
                     
-                    boss1.Draw(_spriteBatch);
-                    for(int i =0; i < boss1.ProjectileList.Count; i++)
+                    boss.Draw(_spriteBatch);
+                    for(int i =0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss1.ProjectileList[i].Draw(_spriteBatch);
+                        boss.ProjectileList[i].Draw(_spriteBatch);
                     }
 
-                    for (int i = 0; i < boss1.ProjectileList.Count; i++)
+                    for (int i = 0; i < boss.ProjectileList.Count; i++)
                     {
-                        if(boss1.ProjectileList[i].HasHit == true)
+                        if(boss.ProjectileList[i].HasHit == true)
                         {
-                            boss1.ProjectileList.RemoveAt(i);
+                            boss.ProjectileList.RemoveAt(i);
                         }
                     }
 
@@ -395,32 +400,70 @@ namespace Palingenesis
 
         private void LoadBoss()
         {
-            Boss boss = null;
-            if(!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
+            Random rng = new Random();
+            int randomChoice = rng.Next(1, 3);
+            if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
-                isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
-                StreamReader input = null;
-                try
+                if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
                 {
-                    input = new StreamReader("../../../RiceGoddess.txt"); // Opens a StreamReader specifically to the RiceGoddess file
-                    string line = null;
-                    string[] data;
-                    while((line = input.ReadLine()) != null) // Reads line in Rice Goddess document
+                    isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
+                    StreamReader input = null;
+                    try
                     {
-                        data = line.Split(',');
-                        int health = int.Parse(data[0]); // Makes health based on first element of data
-                        int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
-                        int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
-                        int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75),takeDamadge, WindowWidth, WindowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
+                        input = new StreamReader("../../../RiceGoddess.txt"); // Opens a StreamReader specifically to the RiceGoddess file
+                        string line = null;
+                        string[] data;
+                        while ((line = input.ReadLine()) != null) // Reads line in Rice Goddess document
+                        {
+                            data = line.Split(',');
+                            int health = int.Parse(data[0]); // Makes health based on first element of data
+                            int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                            int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                            int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // A way to output to user
                     }
                 }
-                catch (Exception e)
+                while(randomChoice == 1)
                 {
-                    // A way to output to user
+                    randomChoice = rng.Next(1, 3);
                 }
             }
-            
+            else if (randomChoice == 2) // If it randomly chooses to load the Naga boss
+            {
+                if (!isNagaBossLoaded) // If the Naga boss hasn't been loaded in this game yet
+                {
+                    isNagaBossLoaded = true; // Changes bool so that Naga boss has been loaded in this game
+                    StreamReader input = null;
+                    try
+                    {
+                        input = new StreamReader("../../../NagaBoss.txt"); // Opens a StreamReader specifically to the Naga boss file
+                        string line = null;
+                        string[] data;
+                        while ((line = input.ReadLine()) != null) // Reads line in Naga boss document
+                        {
+                            data = line.Split(',');
+                            int health = int.Parse(data[0]); // Makes health based on first element of data
+                            int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                            int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                            int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.NagaBoss, bossTexture); // Makes Naga boss using data gathered from the file
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        // A way to output to user
+                    }
+                }
+                while (randomChoice == 2)
+                {
+                    randomChoice = rng.Next(1, 3);
+                }
+            }
             if (boss != null)
             {
                 boss.Center();

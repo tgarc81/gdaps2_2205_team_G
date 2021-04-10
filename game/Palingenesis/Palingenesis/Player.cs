@@ -127,7 +127,7 @@ namespace Palingenesis
 
         public void Reset()
         {
-            health = 100;
+            health = maxHealth;
             position.X = 200;
             position.Y = 200;
             shotList.Clear();

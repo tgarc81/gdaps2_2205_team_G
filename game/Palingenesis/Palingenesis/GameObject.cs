@@ -16,6 +16,7 @@ namespace Palingenesis
     abstract class GameObject
     {
         protected int health;
+        protected int maxHealth;
         protected int moveSpeed;
         protected int attackSpeed;
         protected int damage;
@@ -52,6 +53,7 @@ namespace Palingenesis
         public GameObject(int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth)
         {
             this.health = health;
+            maxHealth = health;
             this.moveSpeed = moveSpeed;
             this.attackSpeed = attackSpeed;
             this.damage = Damage;

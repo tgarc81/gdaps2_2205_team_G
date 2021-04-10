@@ -16,6 +16,7 @@ namespace Palingenesis
     public enum bossName
     {
         RiceGoddess,
+        NagaBoss
 
     }
     class Boss : GameObject
@@ -252,7 +253,7 @@ namespace Palingenesis
 
         public void Reset()
         {
-            health = 1000;
+            health = maxHealth;
             position.X = 960;
             position.Y = 540;
             projectileList.Clear();
