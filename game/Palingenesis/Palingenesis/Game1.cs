@@ -120,7 +120,7 @@ namespace Palingenesis
             titleScreen = Content.Load<Texture2D>("titlescreen");
 
             //Load gameplay textures
-            bossTexture = Content.Load<Texture2D>("bossPlaceHolder");
+            bossTexture = Content.Load<Texture2D>("RiceGoddessSprite");
             playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             RiceGoddessBackground= Content.Load<Texture2D>("RiceGodessBackground");
@@ -451,7 +451,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.NagaBoss, bossTexture); // Makes Naga boss using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.NagaBoss, attackTexture); // Makes Naga boss using data gathered from the file
                         }
                     }
                     catch (Exception e)
