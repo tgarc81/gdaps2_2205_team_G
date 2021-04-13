@@ -140,7 +140,7 @@ namespace Palingenesis
             forwardVN= Content.Load<Song>("forward_sound");
 
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth,bossTexture);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexture);
             //note: make a placeholder asset for the boss
             boss = null;
             
@@ -420,7 +420,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.RiceGoddess, bossTexture); // Makes Rice Goddess using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.RiceGoddess, attackTexture); // Makes Rice Goddess using data gathered from the file
                         }
                     }
                     catch (Exception e)
