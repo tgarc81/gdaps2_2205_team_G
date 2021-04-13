@@ -21,6 +21,8 @@ namespace Palingenesis
         left,
         right,
         none,
+        sinLeft,
+        sinRight
     }
     //projectiles to be fired by bosses
     class Bullet : GameObject
@@ -61,6 +63,7 @@ namespace Palingenesis
 
         public override void Update()
         {
+            
             if(Direction == Direction.up)
             {
                 //moves up the screen by the set amount movespeed
@@ -77,6 +80,17 @@ namespace Palingenesis
             else if (direction == Direction.right)
             {
                 position.X += moveSpeed;
+            }
+            else if(direction == Direction.sinLeft)
+            {
+                position.X -= moveSpeed;
+                double timer = 0;
+                while(hasHit == false)
+                {
+                    position.Y += (int)Math.Sin(timer);
+                    timer += 0.001;
+                }
+
             }
 
             if (position.Intersects(target.Position))
