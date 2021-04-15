@@ -205,7 +205,7 @@ namespace Palingenesis
 
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
                     scoreTimer += gameTime.ElapsedGameTime.TotalSeconds;
-                    attackTimer += gametime.ElapsedGameTime.TotalSeconds;
+                    attackTimer += gameTime.TotalGameTime.TotalSeconds;
                     Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
                     if (SingleKeyPress(Keys.P, kbState))
