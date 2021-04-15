@@ -28,6 +28,8 @@ namespace Palingenesis
         private Texture2D bulletTexture;
         private Song takeDamage;
         private Color color = Color.White;
+        private List<Bullet> specialList = new List<Bullet>();
+        List<Bullet> ringList = new List<Bullet>();
         public List<Bullet> ProjectileList
         {
             get { return projectileList; }
@@ -85,8 +87,8 @@ namespace Palingenesis
                 {
                     Circle(target);
                 }
-            
-            
+
+            RemoveBullet(attackTimer);
 
             
         }
@@ -129,7 +131,7 @@ namespace Palingenesis
             Bullet bottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.none, target, this.damage);
 
             //creates a shell list so that I can loop through all of the ring bullets
-            List<Bullet> ringList = new List<Bullet>();
+            
 
             ringList.Add(topLeftCorner);
             ringList.Add(leftMiddle);
@@ -237,7 +239,7 @@ namespace Palingenesis
                 {
                     //I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player
                     //shell list
-                    List<Bullet> specialList = new List<Bullet>();
+                    
                     for(int i = 0; i < rng.Next(10, 16); i++)
                     {
                         specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, Direction.none, target, damage + 5));
@@ -264,8 +266,31 @@ namespace Palingenesis
             sb.Draw(texture, Position, color);
         }
 
-        public void RemoveBullet()
+        public void RemoveBullet(double attackTimer)
         {
+            double initialValue = attackTimer;
+            //after 2 seconds
+            if(attackTimer >= (initialValue + 2))
+            {
+                for (int i = 0; i < specialList.Count; i++)
+                {
+                    specialList[i].Color = Color.Red;
+                    projectileList.Add(specialList[i]);
+                }
+                for (int i = 0; i < ringList.Count; i++)
+                {
+                    projectileList.Remove(ringList[i]);
+                }
+
+            }
+
+            if(attackTimer >= initialValue + 4)
+            {
+                for (int i = 0; i < specialList.Count; i++)
+                {
+                    projectileList.Remove(specialList[i]);
+                }
+            }
 
         }
     }
