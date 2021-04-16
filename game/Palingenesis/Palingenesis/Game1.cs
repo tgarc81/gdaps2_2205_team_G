@@ -327,6 +327,11 @@ namespace Palingenesis
                     for(int i =0; i < boss.ProjectileList.Count; i++)
                     {
                         boss.ProjectileList[i].Draw(_spriteBatch);
+                        
+                    }
+                    for(int i = 0; i < boss.SpecialList.Count; i++)
+                    {
+                        boss.SpecialList[i].Draw(_spriteBatch);
                     }
 
                     for (int i = 0; i < boss.ProjectileList.Count; i++)
@@ -420,7 +425,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.RiceGoddess, attackTexture); // Makes Rice Goddess using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTexture); // Makes Rice Goddess using data gathered from the file
                         }
                     }
                     catch (Exception e)
@@ -451,7 +456,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowWidth, WindowHeight, bossName.NagaBoss, attackTexture); // Makes Naga boss using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTexture); // Makes Naga boss using data gathered from the file
                         }
                     }
                     catch (Exception e)

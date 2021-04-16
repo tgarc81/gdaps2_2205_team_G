@@ -34,6 +34,10 @@ namespace Palingenesis
         {
             get { return projectileList; }
         }
+        public List<Bullet> SpecialList
+        {
+            get { return specialList; }
+        }
 
         public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
@@ -69,8 +73,9 @@ namespace Palingenesis
         //used to decide what attack the boss will use with a random
         public void AI(Random rng, Player target, double attackTimer)
         {
-           
-                int tmp = rng.Next(0, 4);
+            double initialValue = 0;
+
+            int tmp = rng.Next(0, 5);
                 if (tmp == 0)
                 {
                     Line(target);
@@ -81,15 +86,21 @@ namespace Palingenesis
                 }
                 else if(tmp == 2)
                 {
+                
                     Ring(target, attackTimer);
+                }
+                else if(tmp == 3)
+                {
+               
+                    SpecialAttack(target);
                 }
                 else
                 {
                     Circle(target);
                 }
 
-            RemoveBullet(attackTimer);
-
+            RemoveBullet(attackTimer, initialValue);
+            initialValue = attackTimer;
             
         }
 
@@ -149,14 +160,7 @@ namespace Palingenesis
             }
 
             //after 2 seconds have passed
-            if(timer >= 2)
-            {
-                for(int i = 0; i < ringList.Count; i++)
-                {
-                    projectileList.Remove(ringList[i]);
-                }
-            }
-            timer = 0;
+            
         }
 
         //fires out shots in a circle around the boss
@@ -235,8 +239,7 @@ namespace Palingenesis
 
             public void SpecialAttack(Player target)
             {
-                if(type == bossName.RiceGoddess)
-                {
+                
                     //I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player
                     //shell list
                     
@@ -250,7 +253,7 @@ namespace Palingenesis
                     }   
 
                     //gonna go to office hours on tuesday to try and figure out to get timer to work which will set it so the projectiles do damage
-                }
+                
             }
 
         public void Reset()
@@ -266,9 +269,9 @@ namespace Palingenesis
             sb.Draw(texture, Position, color);
         }
 
-        public void RemoveBullet(double attackTimer)
+        public void RemoveBullet(double attackTimer, double initialValue)
         {
-            double initialValue = attackTimer;
+            
             //after 2 seconds
             if(attackTimer >= (initialValue + 2))
             {
