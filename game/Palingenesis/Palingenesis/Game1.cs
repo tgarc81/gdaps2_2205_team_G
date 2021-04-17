@@ -49,7 +49,7 @@ namespace Palingenesis
         private int bossesDefeated;
         private const int numberOfBosses = 2;
         private Texture2D attackTexture;
-        private Texture2D bossTexture;
+        private Texture2D riceGoddessTexture;
         private Texture2D RiceGoddessBackground;
         private Texture2D titleScreen;
         private Texture2D gameOver;
@@ -63,8 +63,10 @@ namespace Palingenesis
         private gameState currentState = gameState.Menu;
         private GameTime gametime = new GameTime();
         //VN variables are for visual novel.
-        private Texture2D bossVN;
-        private Texture2D playerVN;
+        private Texture2D bossVNDefault;
+        private Texture2D bossVNAlternate;
+        private Texture2D playerVNDefault;
+        private Texture2D playerVNAlternate;
         private Texture2D backgroundVN;
         private Texture2D textboxVN;
         private Texture2D textboxNameVN;
@@ -79,6 +81,8 @@ namespace Palingenesis
         private const int WindowWidth = 1920;
         private const int WindowHeight = 1080;
         private double attackTimer;
+
+        private Texture2D nagaBossTexture;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -120,8 +124,9 @@ namespace Palingenesis
             titleScreen = Content.Load<Texture2D>("titlescreen");
 
             //Load gameplay textures
-            bossTexture = Content.Load<Texture2D>("RiceGoddessSprite");
-            playerAsset = Content.Load<Texture2D>("playerPlaceHolderTexture");
+            riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
+            nagaBossTexture = Content.Load<Texture2D>("Bingus");
+            playerAsset = Content.Load<Texture2D>("theophaniaInGame");
             attackTexture = Content.Load<Texture2D>("attackPlaceholder");
             RiceGoddessBackground= Content.Load<Texture2D>("RiceGodessBackground");
             takeDamadge = Content.Load<Song>("takeDamadge");
@@ -135,8 +140,10 @@ namespace Palingenesis
             textboxVN = Content.Load<Texture2D>("textbox");
             textboxNameVN = Content.Load<Texture2D>("rustyName");
             backgroundVN = Content.Load<Texture2D>("bayo2");
-            playerVN = Content.Load<Texture2D>("theo");
-            bossVN = Content.Load<Texture2D>("ricegoddess");
+            playerVNDefault = Content.Load<Texture2D>("theophaniaExpression1");
+            playerVNAlternate = Content.Load<Texture2D>("TheoVisualNovelExpression2");
+            bossVNDefault = Content.Load<Texture2D>("riceGoddessExpression1");
+            bossVNAlternate = Content.Load<Texture2D>("RiceGoddessVisualNovelExpression2");
             forwardVN= Content.Load<Song>("forward_sound");
 
 
@@ -187,7 +194,7 @@ namespace Palingenesis
                     if (timer > 2)
                     {
                         
-                        boss.AI(rng, player, attackTimer);
+                        boss.AI(rng, player, attackTimer, gameTime);
                         timer = 0;
 
                     }
@@ -425,7 +432,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTexture); // Makes Rice Goddess using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTexture); // Makes Rice Goddess using data gathered from the file
                         }
                     }
                     catch (Exception e)
@@ -456,7 +463,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, bossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTexture); // Makes Naga boss using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTexture); // Makes Naga boss using data gathered from the file
                         }
                     }
                     catch (Exception e)
@@ -544,11 +551,11 @@ namespace Palingenesis
         //insert null to break to fight
         private void DialogueListAdd()
         {
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN,textboxVN,textboxNameVN, fontVN, "Placeholder Theophania", true));
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
+            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN,textboxVN,textboxNameVN, fontVN, "Placeholder Theophania", true));
+            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
             dialougeList.Add(null);
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
-            dialougeList.Add(new Dialogue(playerVN, bossVN, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placeholder Theophania", true));
+            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
+            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placeholder Theophania", true));
             dialougeList.Add(null);
         }
     }

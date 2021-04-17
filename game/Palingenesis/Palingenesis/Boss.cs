@@ -30,6 +30,7 @@ namespace Palingenesis
         private Color color = Color.White;
         private List<Bullet> specialList = new List<Bullet>();
         List<Bullet> ringList = new List<Bullet>();
+        
         public List<Bullet> ProjectileList
         {
             get { return projectileList; }
@@ -71,11 +72,11 @@ namespace Palingenesis
         }
 
         //used to decide what attack the boss will use with a random
-        public void AI(Random rng, Player target, double attackTimer)
+        public void AI(Random rng, Player target, double attackTimer, GameTime gameTime)
         {
             double initialValue = 0;
 
-            int tmp = rng.Next(0, 5);
+            int tmp = 4;
                 if (tmp == 0)
                 {
                     Line(target);
@@ -93,6 +94,10 @@ namespace Palingenesis
                 {
                
                     SpecialAttack(target);
+                }
+                else if(tmp == 4)
+                {
+                    Charge(target, gameTime);
                 }
                 else
                 {
@@ -181,44 +186,25 @@ namespace Palingenesis
         }
 
         //boss charges once at the player  and if it makes contact with the player deals damage
-        public void Charge(Player target)
+        public void Charge(Player target, GameTime gameTime)
         {
             //sets color to red to telegraph the attack to the player 
            color = Color.Red;
+
             
-            //player is too the right of the boss
-                if(target.Position.X > position.X)
-                {
-                    //player is below the boss
-                    if(target.Position.Y > position.Y)
-                    {
-                        position.X += 3;
-                        position.Y += 3;
-                    }
-                    //player is above the boss
-                    else
-                    {
-                        position.X += 3;
-                        position.Y -= 3;
-                    }
-                }
-                //player is to the left of the boss
-                else
-                {
-                    //player is below the boss
-                    if (target.Position.Y > position.Y)
-                    {
-                        position.X -= 3;
-                        position.Y += 3;
-                    }
-                    //player is above the boss
-                    else
-                    {
-                        position.X -= 3;
-                        position.Y -= 3;
-                    }
-                }
+            //finds the vector of difference between the boss and the player's positions
+            Vector2 direction = new Vector2(target.Position.X - position.X, target.Position.Y - position.Y);
+            direction.Normalize();
+
+            Point tmp = new Point(target.Position.X, target.Position.Y);
+
+            while(position.X != tmp.X && position.Y != tmp.Y)
+            {
+                position.X += (int)(direction.X * 10 * gameTime.ElapsedGameTime.TotalSeconds + 1);
+                position.Y += (int)(direction.Y * 10 * gameTime.ElapsedGameTime.TotalSeconds + 1);
+            }
             
+
 
             //after the boss has finished charging resets the color to white
             color = Color.White;

@@ -147,6 +147,18 @@
 /processorParam:TextureFormat=Color
 /build:ricegoddess.png
 
+#begin riceGoddessExpression1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:riceGoddessExpression1.png
+
 #begin RiceGoddessSprite.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -158,6 +170,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:RiceGoddessSprite.png
+
+#begin RiceGoddessVisualNovelExpression2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:RiceGoddessVisualNovelExpression2.png
 
 #begin RiceGodessBackground.png
 /importer:TextureImporter
@@ -242,6 +266,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:theo.png
+
+#begin theophaniaExpression1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:theophaniaExpression1.png
+
+#begin theophaniaInGame.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:theophaniaInGame.png
+
+#begin TheoVisualNovelExpression2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:TheoVisualNovelExpression2.png
 
 #begin titlescreen.png
 /importer:TextureImporter
