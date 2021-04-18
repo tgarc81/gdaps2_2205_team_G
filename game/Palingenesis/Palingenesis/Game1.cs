@@ -50,6 +50,7 @@ namespace Palingenesis
         private const int numberOfBosses = 2;
         private Texture2D attackTextureRG;
         private Texture2D attackTextureNA;
+        private Texture2D attackTexturePlayer;
         private Texture2D riceGoddessTexture;
         private Texture2D RiceGoddessBackground;
         private Texture2D NagaBackground;
@@ -146,6 +147,7 @@ namespace Palingenesis
             playerAsset = Content.Load<Texture2D>("theophaniaInGame");
             attackTextureRG = Content.Load<Texture2D>("rice");
             attackTextureNA = Content.Load<Texture2D>("Fireball");
+            attackTexturePlayer = Content.Load<Texture2D>("attackPlaceholder");
             RiceGoddessBackground = Content.Load<Texture2D>("RiceGodessBackground");
             NagaBackground = Content.Load<Texture2D>("NagaBackgroundFight");
             bar = Content.Load<Texture2D>("bar");
@@ -170,7 +172,7 @@ namespace Palingenesis
             forwardVN = Content.Load<Song>("forward_sound");
 
             
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTextureRG);
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
             //note: make a placeholder asset for the boss
             boss = null;
         }
