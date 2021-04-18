@@ -249,7 +249,7 @@ namespace Palingenesis
                         if (target.Position.X > this.position.X)
                         {
                             projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, Direction.sinRight, target, this.damage * 2));
-                        }=
+                        }
 
                         else
                         {
