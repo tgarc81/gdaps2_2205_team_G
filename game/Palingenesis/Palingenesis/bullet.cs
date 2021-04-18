@@ -16,13 +16,13 @@ namespace Palingenesis
     public enum Direction
     {
         //at the moment they can only move in straight lines
-        up,
-        down,
-        left,
-        right,
-        none,
-        sinLeft,
-        sinRight
+        Up,
+        Down,
+        Left,
+        Right,
+        None,
+        SinLeft,
+        SinRight
     }
     //projectiles to be fired by bosses
     class Bullet : GameObject
@@ -64,24 +64,24 @@ namespace Palingenesis
         public override void Update()
         {
             
-            if(Direction == Direction.up)
+            if(Direction == Direction.Up)
             {
                 //moves up the screen by the set amount movespeed
                 position.Y -= moveSpeed;
             }
-            else if(direction == Direction.down)
+            else if(direction == Direction.Down)
             {
                 position.Y += moveSpeed;
             }
-            else if (direction == Direction.left)
+            else if (direction == Direction.Left)
             {
                 position.X -= moveSpeed;
             }
-            else if (direction == Direction.right)
+            else if (direction == Direction.Right)
             {
                 position.X += moveSpeed;
             }
-            else if(direction == Direction.sinLeft)
+            else if(direction == Direction.SinLeft)
             {
                 position.X -= moveSpeed;
                 double timer = 0;
