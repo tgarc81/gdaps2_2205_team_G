@@ -33,7 +33,7 @@ namespace Palingenesis
         private GameObject target;
         private Song takeDamadge;
         private bool hasHit = false;
-        private Color color = Color.Red;
+        private Color color = Color.White;
        
         public Direction Direction
         {
@@ -98,6 +98,7 @@ namespace Palingenesis
                 MediaPlayer.Play(takeDamadge);
                 target.Health -= damage;
                 hasHit = true;
+                
             }
 
         }

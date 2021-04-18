@@ -48,11 +48,14 @@ namespace Palingenesis
         private bool isNagaBossLoaded; // Bool that represents whether Naga boss has been loaded in this game
         private int bossesDefeated;
         private const int numberOfBosses = 2;
-        private Texture2D attackTexture;
+        private Texture2D attackTextureRG;
+        private Texture2D attackTextureNA;
         private Texture2D riceGoddessTexture;
         private Texture2D RiceGoddessBackground;
+        private Texture2D NagaBackground;
         private Texture2D titleScreen;
         private Texture2D gameOver;
+        private Texture2D bar;
         private bool BossBeaten;
         Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
         private int dialogueNum=0;
@@ -63,13 +66,16 @@ namespace Palingenesis
         private gameState currentState = gameState.Menu;
         private GameTime gametime = new GameTime();
         //VN variables are for visual novel.
-        private Texture2D bossVNDefault;
-        private Texture2D bossVNAlternate;
+        private Texture2D RGVNDefault;
+        private Texture2D RGVNAlternate;
+        private Texture2D RGVNWise;
         private Texture2D playerVNDefault;
         private Texture2D playerVNAlternate;
-        private Texture2D backgroundVN;
+        private Texture2D RGbackgroundVN;
         private Texture2D textboxVN;
         private Texture2D textboxNameVN;
+        private Texture2D NAVNDefault;
+        private Texture2D NAbackgroundVN;
         double scoreTimer = 0;
         //Load sounds
         public Song takeDamadge;
@@ -81,6 +87,10 @@ namespace Palingenesis
         private const int WindowWidth = 1920;
         private const int WindowHeight = 1080;
         private double attackTimer;
+        int randomChoice;
+
+
+        HealthBar BossHealth;
 
         private Texture2D nagaBossTexture;
         public Game1()
@@ -127,8 +137,11 @@ namespace Palingenesis
             riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
             nagaBossTexture = Content.Load<Texture2D>("Bingus");
             playerAsset = Content.Load<Texture2D>("theophaniaInGame");
-            attackTexture = Content.Load<Texture2D>("attackPlaceholder");
-            RiceGoddessBackground= Content.Load<Texture2D>("RiceGodessBackground");
+            attackTextureRG = Content.Load<Texture2D>("rice");
+            attackTextureNA = Content.Load<Texture2D>("Fireball");
+            RiceGoddessBackground = Content.Load<Texture2D>("RiceGodessBackground");
+            NagaBackground = Content.Load<Texture2D>("NagaBackgroundFight");
+            bar = Content.Load<Texture2D>("bar");
             takeDamadge = Content.Load<Song>("takeDamadge");
             deathSound= Content.Load<Song>("deathSound");
             hit = Content.Load<Song>("Punch_Hit_Sound_Effect");
@@ -139,21 +152,20 @@ namespace Palingenesis
             //Load VN textures
             textboxVN = Content.Load<Texture2D>("textbox");
             textboxNameVN = Content.Load<Texture2D>("rustyName");
-            backgroundVN = Content.Load<Texture2D>("bayo2");
+            RGbackgroundVN = Content.Load<Texture2D>("RGbackgroundVN");
             playerVNDefault = Content.Load<Texture2D>("theophaniaExpression1");
             playerVNAlternate = Content.Load<Texture2D>("TheoVisualNovelExpression2");
-            bossVNDefault = Content.Load<Texture2D>("riceGoddessExpression1");
-            bossVNAlternate = Content.Load<Texture2D>("RiceGoddessVisualNovelExpression2");
-            forwardVN= Content.Load<Song>("forward_sound");
+            RGVNDefault = Content.Load<Texture2D>("riceGoddessExpression1");
+            RGVNAlternate = Content.Load<Texture2D>("RiceGoddessVisualNovelExpression2");
+            RGVNWise = Content.Load<Texture2D>("ricegoddessWise");
+            NAbackgroundVN = Content.Load<Texture2D>("NagaBackground");
+            NAVNDefault= Content.Load<Texture2D>("bingus");
+            forwardVN = Content.Load<Song>("forward_sound");
 
-
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexture);
+            
+            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTextureRG);
             //note: make a placeholder asset for the boss
             boss = null;
-            
-            DialogueListAdd();
-
-           
         }
 
         protected override void Update(GameTime gameTime)
@@ -168,37 +180,41 @@ namespace Palingenesis
             {
                 case gameState.Menu:
                     //pressing enter on the main menu starts the game
-                    if(SingleKeyPress(Keys.Enter, kbState))
+                    if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         BossBeaten = false;
                         LoadBoss();
                         player.Reset();
                         boss.Reset();
                         scoreTimer = 0;
+                        DialogueListAdd();
                         currentState = gameState.Dialouge;
                         MediaPlayer.Play(forwardVN);
-                        
-                        
+                        Rectangle BossHPBar = new Rectangle(WindowWidth / 2 - WindowWidth / 4, WindowHeight / 10, boss.Health, 50);
+                        switch (randomChoice)
+                        {
+                            case 1:
+                                //Loads bigger rice goddess health bar
+                                BossHealth = new HealthBar(textboxVN, bar, BossHPBar, new Vector2(WindowWidth / 2 - BossHPBar.Width / 4, (WindowHeight / 10) - WindowHeight / 20), fontVN, "Rice Goddess", boss.Health);
+                                break;
+
+                            case 2:
+                                //Loads smaller Naga health bar
+                                BossHealth = new HealthBar(textboxVN, bar, BossHPBar, new Vector2(WindowWidth / 2 - BossHPBar.Width / 4, (WindowHeight / 10) - WindowHeight / 20), fontVN, "Naga", boss.Health);
+                                break;
+                        }
                     }
                     break;
-
                 case gameState.Game:
 
-                   
-
-                        
                     player.Update();
                     player.Attack(boss, prevKbState);
+                    BossHealth.Update(boss.Health);
+                   
 
                     //AI method runs every 2 seconds
-                    if (timer > 2)
-                    {
-                        
-                        boss.AI(rng, player, attackTimer, gameTime);
-                        timer = 0;
-
-                    }
-
+                    /*if (timer > 2)e
+                    */
                     //runs update on each bullet after the pattern is spawned by AI
                     for (int i = 0; i < boss.ProjectileList.Count; i++)
                     {
@@ -213,7 +229,7 @@ namespace Palingenesis
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
                     scoreTimer += gameTime.ElapsedGameTime.TotalSeconds;
                     attackTimer += gameTime.TotalGameTime.TotalSeconds;
-                    Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
+                    //Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
                     if (SingleKeyPress(Keys.P, kbState))
                     {
@@ -315,8 +331,18 @@ namespace Palingenesis
                     break;
 
                 case gameState.Game:
-                    //draws background
-                    _spriteBatch.Draw(RiceGoddessBackground, fullScreen, Color.White);
+                    //draws backgrounds for bosses
+                    switch (randomChoice)
+                    {
+                        case 1:
+                        _spriteBatch.Draw(RiceGoddessBackground, fullScreen, Color.White);
+                            break;
+
+                        case 2:
+                            _spriteBatch.Draw(NagaBackground, fullScreen, Color.White);
+                            break;
+
+                    }
 
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
@@ -326,10 +352,11 @@ namespace Palingenesis
                     _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
                     _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
 
-                    
+                   
 
                     player.Draw(_spriteBatch);
-                    
+                    BossHealth.Draw(_spriteBatch);
+
                     boss.Draw(_spriteBatch);
                     for(int i =0; i < boss.ProjectileList.Count; i++)
                     {
@@ -413,7 +440,7 @@ namespace Palingenesis
         private void LoadBoss()
         {
             Random rng = new Random();
-            int randomChoice = rng.Next(1, 3);
+            randomChoice = rng.Next(1, 3);
             if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
                 if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
@@ -432,7 +459,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTexture); // Makes Rice Goddess using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
                         }
                     }
                     catch (Exception e)
@@ -440,10 +467,13 @@ namespace Palingenesis
                         // A way to output to user
                     }
                 }
+                //I commented this out because it would always end up loading the opposite boss dialogue
+                /*
                 while(randomChoice == 1)
                 {
                     randomChoice = rng.Next(1, 3);
                 }
+                */
             }
             else if (randomChoice == 2) // If it randomly chooses to load the Naga boss
             {
@@ -463,7 +493,7 @@ namespace Palingenesis
                             int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                             int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                             int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTexture); // Makes Naga boss using data gathered from the file
+                            boss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 75, 75), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga boss using data gathered from the file
                         }
                     }
                     catch (Exception e)
@@ -471,10 +501,13 @@ namespace Palingenesis
                         // A way to output to user
                     }
                 }
+                //I commented this out because it would always end up loading the opposite boss dialogue
+                /*
                 while (randomChoice == 2)
                 {
                     randomChoice = rng.Next(1, 3);
                 }
+                */
             }
             if (boss != null)
             {
@@ -551,12 +584,55 @@ namespace Palingenesis
         //insert null to break to fight
         private void DialogueListAdd()
         {
-            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN,textboxVN,textboxNameVN, fontVN, "Placeholder Theophania", true));
-            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
-            dialougeList.Add(null);
-            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placerholder RiceGoddess", false));
-            dialougeList.Add(new Dialogue(playerVNDefault, bossVNDefault, backgroundVN, textboxVN, textboxNameVN, fontVN, "Placeholder Theophania", true));
-            dialougeList.Add(null);
+            switch (randomChoice)
+            {
+             case 1:
+                    //Adds RiceGoddess dialougue
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "All this life in a place of death, kinda ironic.", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "This is not a place of death, it's a place of rebirth.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "Who are you supposed to be?", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "I'm the rice goddess and I'm acting as a substitute for now.", false));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "So you got stuck as a temp, because some other god decided to bail?", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "Yes, even though it is a duty I would rather not wish to perform I must still take \n responsibility!", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNAlternate, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "Responsibility, which entails me dealing with souls like you!", false));
+                    dialougeList.Add(null);
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "I think that's enough.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "Had enough?", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNAlternate, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "We can go back to the fields if you'd like.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "No, I'm good.", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "I'll give you my blessing, but remember that this is your path.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "ALL the responsiblity for what happens next lies on your shoulders.", false));
+                    dialougeList.Add(null);
+
+             break;
+
+                case 2:
+                    //Adds naga dialogue
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "It's hot as hell down here.", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "Some heat will do some good to warm up that cold heart of yours.", false));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "Who are you calling cold, you snake...thing...whatever you are!", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "I'm a Naga, and you should really hold your tongue when asking for favors.", false));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "I didn't ask you for anything yet, you slimy snake.", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "Yet, but you wouldn't be here if you weren't seeking my blessing.", false));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "Just shut up and get on with it already, eel!", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "I hate the stubborn ones.", false));
+                    dialougeList.Add(null);
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "...", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "Well I won, where's the blessing?", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "I'd never bless such an arrogant soul!", false));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "That's not fair!", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "What's not fair is for everyone to put up with your attitiude.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "You're nothing but a pain in the tail!", false));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "...", true));
+                    dialougeList.Add(new Dialogue(playerVNAlternate, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "I'm sorry Naga.", true));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "See that wasn't so hard, recieve my blessing.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "As you progress, don't forget that true strength manifests itself from within.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "...", true));
+                    dialougeList.Add(null);
+                    break;
+            
+            }
+          
         }
     }
 }
