@@ -54,6 +54,7 @@ namespace Palingenesis
         private Texture2D RiceGoddessBackground;
         private Texture2D NagaBackground;
         private Texture2D titleScreen;
+        private Texture2D scoreBoard;
         private Texture2D gameOver;
         private Texture2D bar;
         private bool BossBeaten;
@@ -76,6 +77,7 @@ namespace Palingenesis
         private Texture2D textboxNameVN;
         private Texture2D NAVNDefault;
         private Texture2D NAbackgroundVN;
+        private Texture2D pauseScreen;
         double scoreTimer = 0;
         //Load sounds
         public Song takeDamadge;
@@ -88,9 +90,12 @@ namespace Palingenesis
         private const int WindowHeight = 1080;
         private double attackTimer;
         int randomChoice;
+        private double elapsed = 2;
+        private const double Elapsed = 2;
 
 
         HealthBar BossHealth;
+        HealthBar PlayerHealth;
 
         private Texture2D nagaBossTexture;
         public Game1()
@@ -132,6 +137,8 @@ namespace Palingenesis
 
             //Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
+            pauseScreen = Content.Load<Texture2D>("PauseScreen");
+            scoreBoard= Content.Load<Texture2D>("ScoreBoard");
 
             //Load gameplay textures
             riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
@@ -190,7 +197,13 @@ namespace Palingenesis
                         DialogueListAdd();
                         currentState = gameState.Dialouge;
                         MediaPlayer.Play(forwardVN);
+                        
+                        //Makes the rectangles for player and boss HP
                         Rectangle BossHPBar = new Rectangle(WindowWidth / 2 - WindowWidth / 4, WindowHeight / 10, boss.Health, 50);
+                        Rectangle PlayerHPBar = new Rectangle(WindowWidth / 10 , WindowHeight - WindowHeight/20, player.Health, 50);
+
+                        //Loads Health bar for Theophania
+                        PlayerHealth = new HealthBar(textboxVN, bar, PlayerHPBar, new Vector2((WindowWidth / 10 - PlayerHPBar.Width / 4), WindowHeight - WindowHeight / 10), fontVN, "Theophania", player.Health);
                         switch (randomChoice)
                         {
                             case 1:
@@ -203,14 +216,31 @@ namespace Palingenesis
                                 BossHealth = new HealthBar(textboxVN, bar, BossHPBar, new Vector2(WindowWidth / 2 - BossHPBar.Width / 4, (WindowHeight / 10) - WindowHeight / 20), fontVN, "Naga", boss.Health);
                                 break;
                         }
+
                     }
                     break;
                 case gameState.Game:
-
+                    //updates player and bosses
                     player.Update();
                     player.Attack(boss, prevKbState);
                     BossHealth.Update(boss.Health);
-                   
+                    PlayerHealth.Update(player.Health);
+
+                    //this is the timer component needed for the special attack method
+                    float time = (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    elapsed -= time;
+
+                    //logic for drawing each order based on elapsed seconds
+                    if (elapsed < 0)
+                    {
+                        //I moved the random variable generation oustide the AI method to save on memory
+                        int tmp = rng.Next(1, 5);
+                       
+                        boss.AI(tmp, player, elapsed, gameTime);
+
+                        //updates timer
+                        elapsed = Elapsed;
+                    }
 
                     //AI method runs every 2 seconds
                     /*if (timer > 2)e
@@ -285,7 +315,7 @@ namespace Palingenesis
                     {
                         currentState = gameState.Game;
                         dialogueNum++;
-                     }
+                    }
                    
 
                     break;
@@ -293,7 +323,7 @@ namespace Palingenesis
                 case gameState.Pause:
 
                     //pressing escape on pause restarts the game
-                    if(SingleKeyPress(Keys.P, kbState))
+                    if(SingleKeyPress(Keys.R, kbState))
                     {
                         currentState = gameState.Game;
                     }
@@ -356,6 +386,7 @@ namespace Palingenesis
 
                     player.Draw(_spriteBatch);
                     BossHealth.Draw(_spriteBatch);
+                    PlayerHealth.Draw(_spriteBatch);
 
                     boss.Draw(_spriteBatch);
                     for(int i =0; i < boss.ProjectileList.Count; i++)
@@ -407,14 +438,19 @@ namespace Palingenesis
                     break;
 
                 case gameState.Pause:
+                    _spriteBatch.Draw(pauseScreen, fullScreen, Color.White);
+                    
+                    /*
                     _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Press P to return to game", new Vector2(0, 20), Color.White);
                     _spriteBatch.DrawString(font, "Press M to return to main menu", new Vector2(0, 40), Color.White);
+                    */
 
                     break;
 
                 case gameState.ScoreBoard:
-                    _spriteBatch.DrawString(font, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(980, 540), Color.White);
+                    _spriteBatch.Draw(scoreBoard, fullScreen, Color.White);
+                    _spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(1150, 200), Color.White);
                     dialogueNum = 0;
                     break;
             }

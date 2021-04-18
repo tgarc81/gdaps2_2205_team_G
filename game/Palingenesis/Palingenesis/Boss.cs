@@ -72,11 +72,11 @@ namespace Palingenesis
         }
 
         //used to decide what attack the boss will use with a random
-        public void AI(Random rng, Player target, double attackTimer, GameTime gameTime)
+        public void AI(int tmp, Player target, double attackTimer, GameTime gameTime)
         {
+            
             double initialValue = 0;
 
-            int tmp = 4;
                 if (tmp == 0)
                 {
                     Line(target);
@@ -93,19 +93,20 @@ namespace Palingenesis
                 else if(tmp == 3)
                 {
                
-                    SpecialAttack(target);
+                    SpecialAttack(target); 
                 }
-                else if(tmp == 4)
+               /* else if(tmp == 4)
                 {
                     Charge(target, gameTime);
                 }
+               */
                 else
                 {
                     Circle(target);
                 }
 
             RemoveBullet(attackTimer, initialValue);
-            initialValue = attackTimer;
+            
             
         }
 
@@ -163,8 +164,12 @@ namespace Palingenesis
                 //adds each of the ring bullets to the main list
                 projectileList.Add(ringList[i]);
             }
-
-            //after 2 seconds have passed
+            if (timer <= 0)
+            {
+                projectileList.Clear();
+            }
+               
+            
             
         }
 
