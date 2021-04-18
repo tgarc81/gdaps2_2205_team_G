@@ -228,18 +228,24 @@ namespace Palingenesis
                 
                     //I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player
                     //shell list
-                    
-                    for(int i = 0; i < rng.Next(10, 16); i++)
+                    if(type == bossName.RiceGoddess)
                     {
-                        specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, Direction.none, target, damage + 5));
+                        for (int i = 0; i < rng.Next(10, 16); i++)
+                        {
+                            specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, Direction.none, target, damage + 5));
 
-                        //color is set to green so that they player knows that they won't be damage by the projectile yet 
-                        specialList[i].Color = Color.Green;
+                            //color is set to green so that they player knows that they won't be damage by the projectile yet 
+                            specialList[i].Color = Color.Green;
 
-                    }   
+                        }
+            }
+                    else if(type == bossName.NagaBoss)
+                    {
 
-                    //gonna go to office hours on tuesday to try and figure out to get timer to work which will set it so the projectiles do damage
-                
+                    }
+                    
+
+                    
             }
 
         public void Reset()
