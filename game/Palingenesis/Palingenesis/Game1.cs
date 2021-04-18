@@ -143,7 +143,7 @@ namespace Palingenesis
 
             //Load gameplay textures
             riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
-            nagaBossTexture = Content.Load<Texture2D>("Bingus");
+            nagaBossTexture = Content.Load<Texture2D>("naga fire worm");
             playerAsset = Content.Load<Texture2D>("theophaniaInGame");
             attackTextureRG = Content.Load<Texture2D>("rice");
             attackTextureNA = Content.Load<Texture2D>("Fireball");
