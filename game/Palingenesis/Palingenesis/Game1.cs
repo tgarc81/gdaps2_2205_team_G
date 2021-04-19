@@ -236,7 +236,7 @@ namespace Palingenesis
                     if (elapsed < 0)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
-                        int tmp = rng.Next(1, 5);
+                        int tmp = rng.Next(0, 5);
                        
                         boss.AI(tmp, player, elapsed, gameTime);
 
@@ -478,7 +478,7 @@ namespace Palingenesis
         private void LoadBoss()
         {
             Random rng = new Random();
-            randomChoice = rng.Next(1, 3);
+            randomChoice = 1; //temporarily set so only the rice goddess will appear
             if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
                 if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
