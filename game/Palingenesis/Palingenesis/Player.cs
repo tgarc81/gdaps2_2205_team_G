@@ -102,21 +102,21 @@ namespace Palingenesis
             {
                 //creates a rectangle 10 pixels above the player, will adjust exact values later
 
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.up, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.Up, target, 20));
                 
             }
             //use else if so the player can only attack in one direction at a time
             else if (keyboardState.IsKeyDown(Keys.Down) && prevKeyboardState.IsKeyUp(Keys.Down))
             {
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.down, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.Down, target, 20));
             }
             else if (keyboardState.IsKeyDown(Keys.Right) && prevKeyboardState.IsKeyUp(Keys.Right))
             {
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.right, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.Right, target, 20));
             }
             else if (keyboardState.IsKeyDown(Keys.Left) && prevKeyboardState.IsKeyUp(Keys.Left))
             {
-                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.left, target, 20));
+                shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, Direction.Left, target, 20));
             }
 
             
