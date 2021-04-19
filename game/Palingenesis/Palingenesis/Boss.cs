@@ -87,8 +87,8 @@ namespace Palingenesis
                 }
                 else if(tmp == 2)
                 {
-                
-                    Ring(target, attackTimer);
+                    Circle(target);
+                    
                 }
                 else if(tmp == 3)
                 {
@@ -102,8 +102,8 @@ namespace Palingenesis
                */
                 else
                 {
-                    Circle(target);
-                }
+                Ring(target, attackTimer);
+            }
 
             RemoveBullet(attackTimer, initialValue);
             
