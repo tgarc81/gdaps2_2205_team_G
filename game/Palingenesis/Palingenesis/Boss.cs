@@ -30,6 +30,8 @@ namespace Palingenesis
         private Color color = Color.White;
         private List<Bullet> specialList = new List<Bullet>();
         List<Bullet> ringList = new List<Bullet>();
+        private bool isCharging = false;
+        private Vector2 positionVector;
         
         public List<Bullet> ProjectileList
         {
@@ -46,6 +48,7 @@ namespace Palingenesis
             this.bulletTexture = bulletTexture;
             this.texture = texture;
             this.takeDamage = takeDamage;
+            
         }
 
 
@@ -95,15 +98,15 @@ namespace Palingenesis
                
                     SpecialAttack(target); 
                 }
-               /* else if(tmp == 4)
+                else if(tmp == 4)
                 {
                     Charge(target, gameTime);
                 }
-               */
+               
                 else
                 {
-                Ring(target, attackTimer);
-            }
+                    Ring(target, attackTimer);
+                }
 
             RemoveBullet(attackTimer, initialValue);
             
@@ -193,8 +196,10 @@ namespace Palingenesis
         //boss charges once at the player  and if it makes contact with the player deals damage
         public void Charge(Player target, GameTime gameTime)
         {
+            positionVector = new Vector2(position.X, position.Y);
             //sets color to red to telegraph the attack to the player 
-           color = Color.Red;
+            color = Color.Red;
+            isCharging = true;
 
             
             //finds the vector of difference between the boss and the player's positions
@@ -203,12 +208,15 @@ namespace Palingenesis
 
             Point tmp = new Point(target.Position.X, target.Position.Y);
 
-            while(position.X != tmp.X && position.Y != tmp.Y)
+            while(positionVector.X != tmp.X && positionVector.Y != tmp.Y)
             {
-                position.X += (int)(direction.X * 10 * gameTime.ElapsedGameTime.TotalSeconds + 1);
-                position.Y += (int)(direction.Y * 10 * gameTime.ElapsedGameTime.TotalSeconds + 1);
+                positionVector.X += (float)(direction.X * 50 * gameTime.ElapsedGameTime.TotalSeconds);
+                positionVector.Y += (float)(direction.Y * 50 * gameTime.ElapsedGameTime.TotalSeconds);
             }
-            
+
+
+            position.X = (int)positionVector.X;
+            position.Y = (int)positionVector.Y;
 
 
             //after the boss has finished charging resets the color to white
@@ -271,7 +279,15 @@ namespace Palingenesis
 
         public override void Draw(SpriteBatch sb)
         {
-            sb.Draw(texture, Position, color);
+            if (!isCharging)
+            {
+                sb.Draw(texture, Position, color);
+            }
+            else
+            {
+                sb.Draw(texture, positionVector, color);
+            }
+            
         }
 
         public void RemoveBullet(double attackTimer, double initialValue)

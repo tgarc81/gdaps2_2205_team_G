@@ -88,7 +88,7 @@ namespace Palingenesis
                       BossNameFormat,
                       Color.White);
 
-           // sb.Draw(barCase, Fullbar, Color.White);
+            sb.Draw(barCase, Fullbar, Color.White);
             sb.Draw(bar, redHealthBar, Color.Red);
             sb.Draw(bar, greenHealthBar, Color.Green);
         }

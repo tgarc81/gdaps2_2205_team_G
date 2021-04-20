@@ -236,7 +236,7 @@ namespace Palingenesis
                     if (elapsed < 0)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
-                        int tmp = rng.Next(0, 3);
+                        int tmp = rng.Next(0, 5);
                        
                         boss.AI(tmp, player, elapsed, gameTime);
 
