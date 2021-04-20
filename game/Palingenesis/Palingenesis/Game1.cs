@@ -565,6 +565,7 @@ namespace Palingenesis
             {
                 // When we open for writing, create the file if it doesn't exist yet
                 output = new StreamWriter("../../../Scoreboard.txt");
+
                 // We would get user input for name
                 string name = "DEFAULT"; // We would need a way to get user input for name
                 names.Add(name);
