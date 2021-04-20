@@ -238,7 +238,7 @@ namespace Palingenesis
                         //I moved the random variable generation oustide the AI method to save on memory
                         int tmp = rng.Next(0, 5);
                        
-                        boss.AI(tmp, player, elapsed, gameTime);
+                        boss.AI(4, player, elapsed, gameTime);
 
                         //updates timer
                         elapsed = Elapsed;

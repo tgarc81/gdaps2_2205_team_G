@@ -32,6 +32,7 @@ namespace Palingenesis
         List<Bullet> ringList = new List<Bullet>();
         private bool isCharging = false;
         private Vector2 positionVector;
+        private Vector2 ChargeUpdateVector;
         
         public List<Bullet> ProjectileList
         {
@@ -55,11 +56,14 @@ namespace Palingenesis
 
         public override void Update()
         {
-            //does nothing for now
+            if(isCharging == true)
+            {
+
+            }
         }
 
         //helper method fills bullet list
-        public void CreateProjectiles(int amount, Direction direction, Rectangle position, int xSpacing, int ySpacing, Player target)
+        public void CreateProjectiles(int amount, BulletType direction, Rectangle position, int xSpacing, int ySpacing, Player target)
         {
             for(int i = 0; i < amount; i++)
             {
@@ -124,12 +128,12 @@ namespace Palingenesis
                 //creates between 1 and 5 projectiles that fly to the Right
                 //each is set 50 pixels to the Right of the boss
                 ///each bullet spawns 75 pixels apart on the y axis
-                CreateProjectiles(rng.Next(5, 11), Direction.Right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
+                CreateProjectiles(rng.Next(5, 11), BulletType.Right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
             }
 
             else
             {
-                CreateProjectiles(rng.Next(5, 11), Direction.Left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
+                CreateProjectiles(rng.Next(5, 11), BulletType.Left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
             }
 
           
@@ -139,16 +143,16 @@ namespace Palingenesis
         public void Ring(Player target, double timer)
         {
             //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
-            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y - 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
-            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
-            Bullet bottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
+            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y - 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet bottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
 
-            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
-            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
+            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
 
-            Bullet toprightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y - 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
-            Bullet rightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
-            Bullet bottomrightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, Direction.None, target, this.damage);
+            Bullet toprightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y - 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet rightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet bottomrightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
 
             //creates a shell list so that I can loop through all of the ring bullets
             
@@ -180,16 +184,16 @@ namespace Palingenesis
         public void Circle(Player target)
         {
             //Left
-            CreateProjectiles(2, Direction.Left, new Rectangle(position.X - 25, position.Y - 50, 25, 25), 0, 75, target);
+            CreateProjectiles(2, BulletType.Left, new Rectangle(position.X - 25, position.Y - 50, 25, 25), 0, 75, target);
 
             //bottom
-            CreateProjectiles(2, Direction.Down, new Rectangle(position.X + 50, position.Y + 25, 25, 25), 75, 0, target);
+            CreateProjectiles(2, BulletType.Down, new Rectangle(position.X + 50, position.Y + 25, 25, 25), 75, 0, target);
 
             //Right 
-            CreateProjectiles(2, Direction.Right, new Rectangle(position.X + 25, position.Y + 50, 25, 25), 0, 75, target);
+            CreateProjectiles(2, BulletType.Right, new Rectangle(position.X + 25, position.Y + 50, 25, 25), 0, 75, target);
 
             //top
-            CreateProjectiles(2, Direction.Up, new Rectangle(position.X - 50, position.Y - 25, 25, 25), 75, 0, target);
+            CreateProjectiles(2, BulletType.Up, new Rectangle(position.X - 50, position.Y - 25, 25, 25), 75, 0, target);
 
         }
 
@@ -208,11 +212,10 @@ namespace Palingenesis
 
             Point tmp = new Point(target.Position.X, target.Position.Y);
 
-            while(positionVector.X != tmp.X && positionVector.Y != tmp.Y)
-            {
-                positionVector.X += (float)(direction.X * 50 * gameTime.ElapsedGameTime.TotalSeconds);
-                positionVector.Y += (float)(direction.Y * 50 * gameTime.ElapsedGameTime.TotalSeconds);
-            }
+            
+            positionVector.X += (float)(direction.X * 50 * gameTime.ElapsedGameTime.TotalSeconds);
+            positionVector.Y += (float)(direction.Y * 50 * gameTime.ElapsedGameTime.TotalSeconds);
+            
 
 
             position.X = (int)positionVector.X;
@@ -227,12 +230,12 @@ namespace Palingenesis
         {
             if (target.Position.X > this.position.X)
             {
-                projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, Direction.Right, target, this.damage * 2));
+                projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.Right, target, this.damage * 2));
             }
 
             else
             {
-                projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, Direction.Left, target, this.damage * 2));
+                projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.Left, target, this.damage * 2));
             }
         }
 
@@ -245,7 +248,7 @@ namespace Palingenesis
                     {
                         for (int i = 0; i < rng.Next(10, 16); i++)
                         {
-                            specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, Direction.None, target, damage + 5));
+                            specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, BulletType.RiceGoddessSpecial, target, damage + 5));
 
                             //color is set to green so that they player knows that they won't be damage by the projectile yet 
                             specialList[i].Color = Color.Green;
@@ -256,12 +259,12 @@ namespace Palingenesis
                     {
                         if (target.Position.X > this.position.X)
                         {
-                            projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, Direction.SinRight, target, this.damage * 2));
+                            projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
                         }
 
                         else
                         {
-                            projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, Direction.SinRight, target, this.damage * 2));
+                            projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
                         }
             }
                     
@@ -289,7 +292,7 @@ namespace Palingenesis
             }
             
         }
-
+            //might be unnecessary
         public void RemoveBullet(double attackTimer, double initialValue)
         {
             
