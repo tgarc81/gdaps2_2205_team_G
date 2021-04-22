@@ -16,7 +16,7 @@ namespace Palingenesis
     public enum bossName
     {
         RiceGoddess,
-        NagaBoss
+        NagaBoss,
 
     }
     class Boss : GameObject
