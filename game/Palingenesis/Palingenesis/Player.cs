@@ -20,6 +20,8 @@ namespace Palingenesis
         private KeyboardState keyboardState;
         private Texture2D shotTexture;
         private Song takeDamadge;
+
+
         //for drawing based on player input
         private enum PlayerState
         {
@@ -33,11 +35,13 @@ namespace Palingenesis
             WalkBack
         }
 
+
         public List<Bullet> ShotList
         {
             get { return shotList; }
         }
 
+        //this is the constructor for the player
         public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.shotTexture = shotTexture;
@@ -96,8 +100,6 @@ namespace Palingenesis
         {
             keyboardState = Keyboard.GetState();
 
-
-
             if (keyboardState.IsKeyDown(Keys.Up) && prevKeyboardState.IsKeyUp(Keys.Up))
             {
                 //creates a rectangle 10 pixels above the player, will adjust exact values later
@@ -119,12 +121,10 @@ namespace Palingenesis
                 shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, BulletType.Left, target, 20));
             }
 
-            
-
         }
 
         
-
+        //Self-explanatory, this resets the player 
         public void Reset()
         {
             health = maxHealth;
