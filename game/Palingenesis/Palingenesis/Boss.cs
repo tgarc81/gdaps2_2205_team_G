@@ -33,6 +33,11 @@ namespace Palingenesis
         private bool isCharging = false;
         private Vector2 positionVector;
         private Vector2 ChargeUpdateVector;
+
+        public bool IsCharging
+        {
+            get { return isCharging; }
+        }
         
         public List<Bullet> ProjectileList
         {
@@ -52,14 +57,37 @@ namespace Palingenesis
             
         }
 
-
-
         public override void Update()
+        {
+            //nothing
+        }
+
+        public void Update(Player target)
         {
             if(isCharging == true)
             {
-
+                color = Color.Red;
+                if(positionVector.X > 0 && positionVector.X < (windowWidth - position.Width) && positionVector.Y > 0 && positionVector.Y < (windowHeight - position.Height))
+                {
+                    positionVector += ChargeUpdateVector;
+                    position.X = (int)positionVector.X;
+                    position.Y = (int)positionVector.Y;
+                    if (position.Intersects(target.Position))
+                    {
+                        target.Health -= 10;
+                    }
+                   
+                }
+                else
+                {
+                    isCharging = false;
+                    color = Color.White;
+                   
+                }
+                
             }
+
+           
         }
 
         //helper method fills bullet list
@@ -201,8 +229,8 @@ namespace Palingenesis
         public void Charge(Player target, GameTime gameTime)
         {
             positionVector = new Vector2(position.X, position.Y);
-            //sets color to red to telegraph the attack to the player 
-            color = Color.Red;
+            
+           
             isCharging = true;
 
             
@@ -210,20 +238,18 @@ namespace Palingenesis
             Vector2 direction = new Vector2(target.Position.X - position.X, target.Position.Y - position.Y);
             direction.Normalize();
 
-            Point tmp = new Point(target.Position.X, target.Position.Y);
-
-            
-            positionVector.X += (float)(direction.X * 50 * gameTime.ElapsedGameTime.TotalSeconds);
-            positionVector.Y += (float)(direction.Y * 50 * gameTime.ElapsedGameTime.TotalSeconds);
             
 
+            
+            ChargeUpdateVector.X = (float)(direction.X * 500 * gameTime.ElapsedGameTime.TotalSeconds);
+            ChargeUpdateVector.Y = (float)(direction.Y * 500 * gameTime.ElapsedGameTime.TotalSeconds);
+            
 
-            position.X = (int)positionVector.X;
-            position.Y = (int)positionVector.Y;
+
+           
 
 
-            //after the boss has finished charging resets the color to white
-            color = Color.White;
+           
         }
         //fires a single large shot that does 2x damage at the player
         public void MegaShot(Player target)
@@ -288,7 +314,8 @@ namespace Palingenesis
             }
             else
             {
-                sb.Draw(texture, positionVector, color);
+                Point test = new Point((int)positionVector.X, (int)positionVector.Y);
+                sb.Draw(texture, new Rectangle(test, Position.Size), color);
             }
             
         }

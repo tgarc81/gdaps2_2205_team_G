@@ -224,6 +224,7 @@ namespace Palingenesis
                 case gameState.Game:
                     //updates player and bosses
                     player.Update();
+                    boss.Update(player);
                     player.Attack(boss, prevKbState);
                     BossHealth.Update(boss.Health);
                     PlayerHealth.Update(player.Health);
@@ -233,7 +234,7 @@ namespace Palingenesis
                     elapsed -= time;
 
                     //logic for drawing each order based on elapsed seconds
-                    if (elapsed < 0)
+                    if (elapsed < 0 && boss.IsCharging == false)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
                         int tmp = rng.Next(0, 5);
