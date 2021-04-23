@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Palingenesis
 {
+    //testing
     public enum bossName
     {
         RiceGoddess,
