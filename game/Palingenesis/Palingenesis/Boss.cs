@@ -34,7 +34,15 @@ namespace Palingenesis
         private bool isCharging = false;
         private Vector2 positionVector;
         private Vector2 ChargeUpdateVector;
+        private Texture2D teleportTexture;
+        private Texture2D primaryTexture;
+        private bool chargeEnded = false;
+        private bool chargeHit = false;
 
+        public bool ChargeEnded
+        {
+            get { return chargeEnded; }
+        }
         public bool IsCharging
         {
             get { return isCharging; }
@@ -49,12 +57,18 @@ namespace Palingenesis
             get { return specialList; }
         }
 
+        public Texture2D TeleportTexture
+        {
+            set { teleportTexture = value; }
+        }
+
         public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.type = type;
             this.bulletTexture = bulletTexture;
             this.texture = texture;
             this.takeDamage = takeDamage;
+            primaryTexture = texture;
             
         }
 
@@ -63,8 +77,9 @@ namespace Palingenesis
             //nothing
         }
 
-        public void Update(Player target)
+        public void Update(Player target, double timer)
         {
+            
             if(isCharging == true)
             {
                 color = Color.Red;
@@ -73,18 +88,40 @@ namespace Palingenesis
                     positionVector += ChargeUpdateVector;
                     position.X = (int)positionVector.X;
                     position.Y = (int)positionVector.Y;
-                    if (position.Intersects(target.Position))
+                    if (position.Intersects(target.Position) && chargeHit == false)
                     {
-                        target.Health -= 10;
+                        target.Health -= 30;
+                        chargeHit = true;
                     }
                    
                 }
                 else
                 {
                     isCharging = false;
+                    chargeEnded = true;
                     color = Color.White;
-                   
                 }
+                
+                
+            }
+            else if(isCharging == false && chargeEnded == true)
+            {
+                   
+                    if (timer > 0.5 && timer < 1)
+                    {
+                        texture = teleportTexture;
+                        timer = 0;
+                    }
+                    else if (timer > 1 && timer < 1.5)
+                    {
+                        Center();
+                        timer = 0;
+                    }
+                    else if (timer > 1.5)
+                    {
+                        texture = primaryTexture;
+                        timer = 0;
+                    }
                 
             }
 
@@ -230,8 +267,8 @@ namespace Palingenesis
         public void Charge(Player target, GameTime gameTime)
         {
             positionVector = new Vector2(position.X, position.Y);
-            
-           
+
+            chargeEnded = false;           
             isCharging = true;
 
             

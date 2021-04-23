@@ -37,6 +37,7 @@ namespace Palingenesis
         private SpriteFont fontVN;
         private double timer; // Represents the time elapsed in the game to be used for boss attacks
         private double time; // Represents total time elapsed in the game
+        private double bossUpdateTimer;
         private Player player; // Represents the actual player
         private Texture2D playerAsset; // Represents player image
         private Boss boss;
@@ -58,6 +59,7 @@ namespace Palingenesis
         private Texture2D scoreBoard;
         private Texture2D gameOver;
         private Texture2D bar;
+        private Texture2D teleportTexture;
         private bool BossBeaten;
         Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
         private int dialogueNum=0;
@@ -151,6 +153,7 @@ namespace Palingenesis
             RiceGoddessBackground = Content.Load<Texture2D>("RiceGodessBackground");
             NagaBackground = Content.Load<Texture2D>("NagaBackgroundFight");
             bar = Content.Load<Texture2D>("bar");
+            teleportTexture = Content.Load<Texture2D>("teleportPlaceHolder");
             takeDamadge = Content.Load<Song>("takeDamadge");
             deathSound= Content.Load<Song>("deathSound");
             hit = Content.Load<Song>("Punch_Hit_Sound_Effect");
@@ -218,13 +221,13 @@ namespace Palingenesis
                                 BossHealth = new HealthBar(textboxVN, bar, BossHPBar, new Vector2(WindowWidth / 2 - BossHPBar.Width / 4, (WindowHeight / 10) - WindowHeight / 20), fontVN, "Naga", boss.Health);
                                 break;
                         }
-
+                        boss.TeleportTexture = teleportTexture;
                     }
                     break;
                 case gameState.Game:
                     //updates player and bosses
                     player.Update();
-                    boss.Update(player);
+                    boss.Update(player, bossUpdateTimer);
                     player.Attack(boss, prevKbState);
                     BossHealth.Update(boss.Health);
                     PlayerHealth.Update(player.Health);
@@ -262,6 +265,12 @@ namespace Palingenesis
                     timer += gameTime.ElapsedGameTime.TotalSeconds;
                     scoreTimer += gameTime.ElapsedGameTime.TotalSeconds;
                     attackTimer += gameTime.TotalGameTime.TotalSeconds;
+                    
+                    if(boss.ChargeEnded == true)
+                    {
+                        bossUpdateTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                   
                     //Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
                     //pressing escape during the game pauses
                     if (SingleKeyPress(Keys.P, kbState))
