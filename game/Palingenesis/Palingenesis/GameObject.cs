@@ -20,11 +20,11 @@ namespace Palingenesis
         protected int moveSpeed;
         protected int attackSpeed;
         protected int damage;
-        protected Texture2D texture;
-        protected Rectangle position;
         protected int windowWidth;
         protected int windowHeight;
 
+        protected Texture2D texture;
+        protected Rectangle position;
 
         int frame;              // The current animation frame
         double timeCounter;     // The amount of time that has passed
@@ -37,7 +37,7 @@ namespace Palingenesis
         const int MarioRectHeight = 72;     // The height of a single frame
         const int MarioRectWidth = 44;      // The width of a single frame
 
-
+        //properties
         public int Health
         {
             get { return health; }
@@ -50,6 +50,17 @@ namespace Palingenesis
 
         }
 
+        /// <summary>
+        /// gameobject constructor
+        /// </summary>
+        /// <param name="health"></param>
+        /// <param name="moveSpeed"></param>
+        /// <param name="attackSpeed"></param>
+        /// <param name="Damage"></param>
+        /// <param name="texture"></param>
+        /// <param name="position"></param>
+        /// <param name="windowHeight"></param>
+        /// <param name="windowWidth"></param>
         public GameObject(int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, int windowHeight, int windowWidth)
         {
             this.health = health;
@@ -70,7 +81,11 @@ namespace Palingenesis
             sb.Draw(texture, position, Color.White);
         }
 
-        //checks if the character is overlaping with a different rectangle, can be used by all inheriting classes
+        /// <summary>
+        /// checks if the character is overlaping with a different rectangle, can be used by all inheriting classes
+        /// </summary>
+        /// <param name="collider"></param>
+        /// <returns></returns>
         public virtual bool CheckCollision(Rectangle collider)
         {
             if (position.Intersects(collider))
@@ -85,14 +100,23 @@ namespace Palingenesis
 
         public abstract void Update();
 
-        //can center either the player or boss on screen
+        /// <summary>
+        /// can center either the player or boss on screen
+        /// </summary>
         public void Center()
         {
             position.X = (windowWidth / 2) - (position.Width / 2);
             position.Y = (windowHeight / 2) - (position.Height / 2);
         }
+
+        /// <summary>
+        /// moves to the next frame of the spritesheet
+        /// </summary>
+        /// <param name="gameTime"></param>
         public void UpdateAnimation(GameTime gameTime)
         {
+            // TODO: finish this method!!!!!
+
             // Handle animation timing
             // - Add to the time counter
             // - Check if we have enough "time" to advance the frame
