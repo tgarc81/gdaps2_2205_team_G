@@ -25,6 +25,7 @@ namespace Palingenesis
 
     class Boss : GameObject
     {
+        //fields
         private Random rng = new Random();
 
         private Song takeDamage;
@@ -107,16 +108,23 @@ namespace Palingenesis
 
         public void Update(Player target, double timer)
         {
-            // TODO: write some freaking comments Lucas T^T
+            // if the boss is charging
             if(isCharging == true)
             {
+                //sets color to red
                 color = Color.Red;
 
+                //if the boss is not at the edge
                 if(positionVector.X > 0 && positionVector.X < (windowWidth - position.Width) && positionVector.Y > 0 && positionVector.Y < (windowHeight - position.Height))
                 {
+                    //updates the boss's position once per frame based on a value calculated in the charge method
                     positionVector += ChargeUpdateVector;
+
+                    //keeps the position up to date with the vector position
                     position.X = (int)positionVector.X;
                     position.Y = (int)positionVector.Y;
+
+                    //checks if the boss makes contact with the player
                     if (position.Intersects(target.Position) && chargeHit == false)
                     {
                         target.Health -= 30;
@@ -124,6 +132,7 @@ namespace Palingenesis
                     }
                    
                 }
+                //ends charge
                 else
                 {
                     isCharging = false;
@@ -131,20 +140,23 @@ namespace Palingenesis
                     color = Color.White;
                 }
             }
-
+            
+            //when the charge has ended
             else if(isCharging == false && chargeEnded == true)
             {
-                   
+                   //changes the boss's texture
                 if (timer > 0.5 && timer < 1)
                 {
                     texture = teleportTexture;
                     timer = 0;
                 }
+                //moves the boss to the center
                 else if (timer > 1 && timer < 1.5)
                 {
                     Center();
                     timer = 0;
                 }
+                //resets the boss's texture
                 else if (timer > 1.5)
                 {
                     texture = primaryTexture;
@@ -184,10 +196,7 @@ namespace Palingenesis
         /// <param name="gameTime"></param>
         public void AI(int tmp, Player target, double attackTimer, GameTime gameTime)
         {
-            // TODO: write some freaking comments Lucas T^T
-
-            double initialValue = 0;
-
+            //uses a random number generator to select what attack the boss uses
             if (tmp == 0)
             {
                 Line(target);
@@ -216,7 +225,7 @@ namespace Palingenesis
                 Ring(target, attackTimer);
             }
 
-            RemoveBullet(attackTimer, initialValue);            
+                      
         }
 
         /// <summary>
@@ -309,8 +318,10 @@ namespace Palingenesis
         /// <param name="gameTime"></param>
         public void Charge(Player target, GameTime gameTime)
         {
+            //sets the current position 
             positionVector = new Vector2(position.X, position.Y);
 
+            //sets bools used to track the state of the charge
             chargeEnded = false;           
             isCharging = true;
 
@@ -318,6 +329,7 @@ namespace Palingenesis
             Vector2 direction = new Vector2(target.Position.X - position.X, target.Position.Y - position.Y);
             direction.Normalize();
 
+            //calculates the amount to update the boss's position per frame
             ChargeUpdateVector.X = (float)(direction.X * 500 * gameTime.ElapsedGameTime.TotalSeconds);
             ChargeUpdateVector.Y = (float)(direction.Y * 500 * gameTime.ElapsedGameTime.TotalSeconds);
            
@@ -341,11 +353,12 @@ namespace Palingenesis
         }
 
         /// <summary>
-        /// I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player shell list
+        /// Each boss's unique attack
         /// </summary>
         /// <param name="target"></param>
         public void SpecialAttack(Player target)
         {
+            //spawns shots around the screen randomly that start doing damge after a certain period
             if(type == bossName.RiceGoddess)
             {
                 for (int i = 0; i < rng.Next(10, 16); i++)
@@ -357,6 +370,7 @@ namespace Palingenesis
 
                 }
             }
+            //spawns a large shot that moves based on a sign wave
             else if(type == bossName.NagaBoss)
             {
                 if (target.Position.X > this.position.X)
