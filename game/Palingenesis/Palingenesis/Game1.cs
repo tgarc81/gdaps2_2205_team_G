@@ -49,7 +49,7 @@ namespace Palingenesis
         private SpriteFont font;
         private SpriteFont fontVN;
 
-        private double timer; // Represents the time elapsed in the game to be used for boss attacks
+        private double specialTimer; // Represents the time elapsed in the game to be used for boss attacks
         private double time; // Represents total time elapsed in the game
         private double bossUpdateTimer;
         double scoreTimer = 0;
@@ -108,6 +108,7 @@ namespace Palingenesis
         private Texture2D textboxVN;
         private Texture2D textboxNameVN;
         private Texture2D NAVNDefault;
+        private Texture2D NAVNAlterternate;
         private Texture2D NAbackgroundVN;
         private Texture2D pauseScreen;
 
@@ -190,7 +191,8 @@ namespace Palingenesis
             RGVNAlternate = Content.Load<Texture2D>("RiceGoddessVisualNovelExpression2");
             RGVNWise = Content.Load<Texture2D>("ricegoddessWise");
             NAbackgroundVN = Content.Load<Texture2D>("NagaBackground");
-            NAVNDefault= Content.Load<Texture2D>("bingus");
+            NAVNDefault= Content.Load<Texture2D>("nagaBossVNMain");
+            NAVNAlterternate = Content.Load<Texture2D>("nagaBossVnAlternate");
             forwardVN = Content.Load<Song>("forward_sound");
 
             
@@ -263,7 +265,7 @@ namespace Palingenesis
                         //I moved the random variable generation oustide the AI method to save on memory
                         int tmp = rng.Next(0, 5);
                        
-                        boss.AI(tmp, player, elapsed, gameTime);
+                        boss.AI(3, player, elapsed, gameTime);
 
                         //updates timer
                         elapsed = Elapsed;
@@ -275,7 +277,7 @@ namespace Palingenesis
                     //runs update on each bullet after the pattern is spawned by AI
                     for (int i = 0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss.ProjectileList[i].Update(timer, boss);
+                        boss.ProjectileList[i].Update(specialTimer, boss);
                     }
 
                     for (int i = 0; i < player.ShotList.Count; i++)
@@ -283,10 +285,35 @@ namespace Palingenesis
                         player.ShotList[i].Update();
                     }
 
-                    timer += gameTime.ElapsedGameTime.TotalSeconds;
+                    for (int i = 0; i < boss.ProjectileList.Count; i++)
+                    {
+                        if (boss.ProjectileList[i].HasHit == true)
+                        {
+                            boss.ProjectileList.RemoveAt(i);
+                        }
+                    }
+
+                    for (int i = 0; i < player.ShotList.Count; i++)
+                    {
+                        if (player.ShotList[i].HasHit == true)
+                        {
+                            player.ShotList.RemoveAt(i);
+                        }
+                    }
+
                     scoreTimer += gameTime.ElapsedGameTime.TotalSeconds;
                     attackTimer += gameTime.TotalGameTime.TotalSeconds;
-                    
+
+                    if(boss.SpecialActive == true)
+                    {
+                        specialTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+
+                    if(specialTimer > 4)
+                    {
+                        specialTimer = 0;
+
+                    }
                     if(boss.ChargeEnded == true)
                     {
                         bossUpdateTimer += gameTime.ElapsedGameTime.TotalSeconds;
@@ -415,7 +442,11 @@ namespace Palingenesis
                      
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
-                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);                   
+                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
+
+
+                    //debug only
+                    //_spriteBatch.DrawString(font, string.Format("{0}", specialTimer), new Vector2(0, 150), Color.White);
 
                     //calling object draw methods
                     player.Draw(_spriteBatch);
@@ -429,18 +460,9 @@ namespace Palingenesis
                         boss.ProjectileList[i].Draw(_spriteBatch);
                         
                     }
-                    for(int i = 0; i < boss.SpecialList.Count; i++)
-                    {
-                        boss.SpecialList[i].Draw(_spriteBatch);
-                    }
+                   
 
-                    for (int i = 0; i < boss.ProjectileList.Count; i++)
-                    {
-                        if(boss.ProjectileList[i].HasHit == true)
-                        {
-                            boss.ProjectileList.RemoveAt(i);
-                        }
-                    }
+                  
 
                     for (int i = 0; i < player.ShotList.Count; i++)
                     {
@@ -448,13 +470,7 @@ namespace Palingenesis
 
                     }
 
-                    for (int i = 0; i < player.ShotList.Count; i++)
-                    {
-                        if(player.ShotList[i].HasHit == true)
-                        {
-                            player.ShotList.RemoveAt(i);
-                        }
-                    }
+                    
 
                     break;
 
@@ -521,7 +537,7 @@ namespace Palingenesis
         private void LoadBoss()
         {
             Random rng = new Random();
-            randomChoice = 1; //temporarily set so only the rice goddess will appear
+            randomChoice = rng.Next(1,3); //temporarily set so only the rice goddess will appear
             if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
                 if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet

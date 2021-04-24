@@ -42,6 +42,7 @@ namespace Palingenesis
         private bool chargeEnded = false;
         private bool chargeHit = false;
         private bool isCharging = false;
+        private bool specialActive = false;
 
         private List<Bullet> projectileList = new List<Bullet>();
         private List<Bullet> specialList = new List<Bullet>();
@@ -55,6 +56,12 @@ namespace Palingenesis
         public bool ChargeEnded
         {
             get { return chargeEnded; }
+        }
+
+        public bool SpecialActive
+        {
+            get { return specialActive; }
+            set { specialActive = value; }
         }
 
         public bool IsCharging
@@ -213,7 +220,8 @@ namespace Palingenesis
             else if(tmp == 3)
             {
                
-                SpecialAttack(target); 
+                SpecialAttack(target);
+                specialActive = true;
             }
             else if(tmp == 4)
             {
@@ -367,6 +375,7 @@ namespace Palingenesis
 
                     //color is set to green so that they player knows that they won't be damage by the projectile yet 
                     specialList[i].Color = Color.Green;
+                    projectileList.Add(specialList[i]);
 
                 }
             }

@@ -106,6 +106,14 @@ namespace Palingenesis
             {
                 position.X += moveSpeed;
             }
+
+            if (position.Intersects(target.Position) && CanDamage == true)
+            {
+                MediaPlayer.Play(takeDamadge);
+                target.Health -= damage;
+                hasHit = true;
+
+            }
         }
 
         public void Update(double timer, Boss boss)
@@ -140,16 +148,18 @@ namespace Palingenesis
             }
             else if(Type == BulletType.RiceGoddessSpecial)
             {
-               if(timer > 2)
+               if(timer > 2 && timer < 4)
                {
                     color = Color.Red;
                     CanDamage = true;
+                    
                }
                //after 4 seconds. 2 seconds after they become active
-               if(timer > 4)
+               else if(timer > 4)
                {
+                    boss.SpecialActive = false;
                     hasHit = true;
-                    timer = 0;
+                    
                }
             }
 
