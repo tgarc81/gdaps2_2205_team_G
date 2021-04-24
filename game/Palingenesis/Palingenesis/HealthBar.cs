@@ -9,21 +9,35 @@ namespace Palingenesis
 {
     class HealthBar
     {
-        int actualHealth;
-        int visibleHealth;
         string name;
-        int totalHealth;
+
+        SpriteFont font;
+
+        Texture2D barCase;
+        Texture2D bar;
+
+        Vector2 location;
+        Vector2 BossNameFormat;
+
         Rectangle greenHealthBar;
         Rectangle redHealthBar;
         Rectangle Fullbar;
-        Texture2D barCase;
-        Texture2D bar;
-        SpriteFont font;
-        Vector2 location;
-        Vector2 BossNameFormat;
+
+        int actualHealth;
+        int visibleHealth;
+        int totalHealth;
         int tempHealth;
 
-        //Constructor that takes all of the info for making the health bar
+        /// <summary>
+        /// Constructor that takes all of the info for making the health bar
+        /// </summary>
+        /// <param name="barCase"></param>
+        /// <param name="bar"></param>
+        /// <param name="barSize"></param>
+        /// <param name="location"></param>
+        /// <param name="font"></param>
+        /// <param name="name"></param>
+        /// <param name="health"></param>
         public HealthBar(Texture2D barCase, Texture2D bar, Rectangle barSize, Vector2 location, SpriteFont font, string  name, int health)
         {
             this.barCase = barCase;
@@ -41,13 +55,19 @@ namespace Palingenesis
             BossNameFormat = location;
         }
 
-        //Reset method for health bar
+        /// <summary>
+        /// Reset method for health bar
+        /// </summary>
+        /// <param name="health"></param>
         public void ResetHealth(int health)
         {
             actualHealth = visibleHealth = health;
         }
 
-        //Updates health bar 
+        /// <summary>
+        /// Updates health bar 
+        /// </summary>
+        /// <param name="damadge"></param>
         public void Update(int damadge)
         {
             //only updates health bar when damadge is taken  (damadge=current player HP)
@@ -78,7 +98,10 @@ namespace Palingenesis
             redHealthBar.Width = visibleHealth;
         }
 
-        //Draws the health bar rectangles
+        /// <summary>
+        /// Draws the health bar rectangles
+        /// </summary>
+        /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
            

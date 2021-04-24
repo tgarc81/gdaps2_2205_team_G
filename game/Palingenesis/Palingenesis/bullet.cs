@@ -26,6 +26,7 @@ namespace Palingenesis
         RiceGoddessSpecial,
         ring
     }
+
     //projectiles to be fired by bosses
     class Bullet : GameObject
     {
@@ -34,10 +35,11 @@ namespace Palingenesis
         private Texture2D texture;
         private GameObject target;
         private Song takeDamadge;
-        private bool hasHit = false;
         private Color color = Color.White;
+        private bool hasHit = false;
         private double timer = 0;
 
+        //properties
         public BulletType Direction
         {
             get { return this.direction; }
@@ -55,7 +57,17 @@ namespace Palingenesis
             set { color = value; }
         }
 
-        //contructor
+        /// <summary>
+        /// Bullet class constructor
+        /// </summary>
+        /// <param name="texture"></param>
+        /// <param name="position"></param>
+        /// <param name="takeDamadge"></param>
+        /// <param name="windowHeight"></param>
+        /// <param name="windowWidth"></param>
+        /// <param name="direction"></param>
+        /// <param name="target"></param>
+        /// <param name="damage"></param>
         public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, BulletType direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
@@ -66,7 +78,6 @@ namespace Palingenesis
 
         public override void Update()
         {
-            
             if(Direction == BulletType.Up)
             {
                 //moves up the screen by the set amount movespeed
@@ -88,13 +99,11 @@ namespace Palingenesis
             {
                 position.X -= moveSpeed;
                 
-                
-                    position.Y += (int)Math.Sin(timer);
-                    timer += 0.001;
-                
-
+                position.Y += (int)Math.Sin(timer);
+                timer += 0.001;
             }
 
+            //for player intersection
             if (position.Intersects(target.Position))
             {
                 MediaPlayer.Play(takeDamadge);
@@ -110,7 +119,6 @@ namespace Palingenesis
             //only drawn while on screen
             if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
             sb.Draw(texture, position, color);
-            
         }
 
     }
