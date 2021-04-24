@@ -13,36 +13,49 @@ using Microsoft.Xna.Framework.Media;
 
 namespace Palingenesis
 {
-    //testing
+    /// <summary>
+    /// boss class enumerator
+    /// </summary>
     public enum bossName
     {
         RiceGoddess,
         NagaBoss,
 
     }
+
     class Boss : GameObject
     {
-        private bossName type;
-        private Point playerPosition;
-        private List<Bullet> projectileList = new List<Bullet>();
         private Random rng = new Random();
-        private Texture2D bulletTexture;
+
         private Song takeDamage;
+
         private Color color = Color.White;
-        private List<Bullet> specialList = new List<Bullet>();
-        List<Bullet> ringList = new List<Bullet>();
-        private bool isCharging = false;
+
+        private bossName type;
+
+        private Point playerPosition;
+
         private Vector2 positionVector;
         private Vector2 ChargeUpdateVector;
-        private Texture2D teleportTexture;
-        private Texture2D primaryTexture;
+
         private bool chargeEnded = false;
         private bool chargeHit = false;
+        private bool isCharging = false;
 
+        private List<Bullet> projectileList = new List<Bullet>();
+        private List<Bullet> specialList = new List<Bullet>();
+        List<Bullet> ringList = new List<Bullet>();
+
+        private Texture2D bulletTexture;
+        private Texture2D teleportTexture;
+        private Texture2D primaryTexture;
+
+        //properties
         public bool ChargeEnded
         {
             get { return chargeEnded; }
         }
+
         public bool IsCharging
         {
             get { return isCharging; }
@@ -52,6 +65,7 @@ namespace Palingenesis
         {
             get { return projectileList; }
         }
+
         public List<Bullet> SpecialList
         {
             get { return specialList; }
@@ -62,6 +76,20 @@ namespace Palingenesis
             set { teleportTexture = value; }
         }
 
+        /// <summary>
+        /// Boss class constructor
+        /// </summary>
+        /// <param name="health"></param>
+        /// <param name="moveSpeed"></param>
+        /// <param name="attackSpeed"></param>
+        /// <param name="Damage"></param>
+        /// <param name="texture"></param>
+        /// <param name="position"></param>
+        /// <param name="takeDamage"></param>
+        /// <param name="windowHeight"></param>
+        /// <param name="windowWidth"></param>
+        /// <param name="type"></param>
+        /// <param name="bulletTexture"></param>
         public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.type = type;
@@ -79,10 +107,11 @@ namespace Palingenesis
 
         public void Update(Player target, double timer)
         {
-            
+            // TODO: write some freaking comments Lucas T^T
             if(isCharging == true)
             {
                 color = Color.Red;
+
                 if(positionVector.X > 0 && positionVector.X < (windowWidth - position.Width) && positionVector.Y > 0 && positionVector.Y < (windowHeight - position.Height))
                 {
                     positionVector += ChargeUpdateVector;
@@ -101,34 +130,39 @@ namespace Palingenesis
                     chargeEnded = true;
                     color = Color.White;
                 }
-                
-                
             }
+
             else if(isCharging == false && chargeEnded == true)
             {
                    
-                    if (timer > 0.5 && timer < 1)
-                    {
-                        texture = teleportTexture;
-                        timer = 0;
-                    }
-                    else if (timer > 1 && timer < 1.5)
-                    {
-                        Center();
-                        timer = 0;
-                    }
-                    else if (timer > 1.5)
-                    {
-                        texture = primaryTexture;
-                        timer = 0;
-                    }
+                if (timer > 0.5 && timer < 1)
+                {
+                    texture = teleportTexture;
+                    timer = 0;
+                }
+                else if (timer > 1 && timer < 1.5)
+                {
+                    Center();
+                    timer = 0;
+                }
+                else if (timer > 1.5)
+                {
+                    texture = primaryTexture;
+                    timer = 0;
+                }
                 
             }
-
-           
         }
 
-        //helper method fills bullet list
+        /// <summary>
+        /// helper method fills bullet list
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="direction"></param>
+        /// <param name="position"></param>
+        /// <param name="xSpacing"></param>
+        /// <param name="ySpacing"></param>
+        /// <param name="target"></param>
         public void CreateProjectiles(int amount, BulletType direction, Rectangle position, int xSpacing, int ySpacing, Player target)
         {
             for(int i = 0; i < amount; i++)
@@ -136,64 +170,67 @@ namespace Palingenesis
                
                 projectileList.Add(new Bullet(bulletTexture, position, takeDamage, this.windowHeight, this.windowWidth, direction, target, this.damage));
                 
-                    position.X += xSpacing;
-                    position.Y += ySpacing;
-                
-                
-
+                position.X += xSpacing;
+                position.Y += ySpacing;                
             }
         }
 
-        //used to decide what attack the boss will use with a random
+        /// <summary>
+        /// used to decide what attack the boss will use with a random
+        /// </summary>
+        /// <param name="tmp"></param>
+        /// <param name="target"></param>
+        /// <param name="attackTimer"></param>
+        /// <param name="gameTime"></param>
         public void AI(int tmp, Player target, double attackTimer, GameTime gameTime)
         {
-            
+            // TODO: write some freaking comments Lucas T^T
+
             double initialValue = 0;
 
-                if (tmp == 0)
-                {
-                    Line(target);
-                }
-                else if (tmp == 1)
-                {
-                    MegaShot(target);
-                }
-                else if(tmp == 2)
-                {
-                    Circle(target);
+            if (tmp == 0)
+            {
+                Line(target);
+            }
+            else if (tmp == 1)
+            {
+                MegaShot(target);
+            }
+            else if(tmp == 2)
+            {
+                Circle(target);
                     
-                }
-                else if(tmp == 3)
-                {
+            }
+            else if(tmp == 3)
+            {
                
-                    SpecialAttack(target); 
-                }
-                else if(tmp == 4)
-                {
-                    Charge(target, gameTime);
-                }
+                SpecialAttack(target); 
+            }
+            else if(tmp == 4)
+            {
+                Charge(target, gameTime);
+            }
                
-                else
-                {
-                    Ring(target, attackTimer);
-                }
+            else
+            {
+                Ring(target, attackTimer);
+            }
 
-            RemoveBullet(attackTimer, initialValue);
-            
-            
+            RemoveBullet(attackTimer, initialValue);            
         }
 
-        //standard attacks
-
+        /// <summary>
+        /// method for standard attacks
+        /// </summary>
+        /// <param name="target"></param>
         public void Line(Player target) //currently busted 
         {
-
             //if the player is to the Right of the boss
             if(target.Position.X > this.position.X)
             {
                 //creates between 1 and 5 projectiles that fly to the Right
                 //each is set 50 pixels to the Right of the boss
-                ///each bullet spawns 75 pixels apart on the y axis
+                //each bullet spawns 75 pixels apart on the y axis
                 CreateProjectiles(rng.Next(5, 11), BulletType.Right, new Rectangle((this.Position.X + 100), 0, 25, 25), 0, 100, target);
             }
 
@@ -201,11 +238,14 @@ namespace Palingenesis
             {
                 CreateProjectiles(rng.Next(5, 11), BulletType.Left, new Rectangle((this.Position.X - 100), 0, 25, 25), 0, 100, target);
             }
-
           
         }
 
-        //spawns a ring of shots around the boss to make the player retreat
+        /// <summary>
+        /// spawns a ring of shots around the boss to make the player retreat
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="timer"></param>
         public void Ring(Player target, double timer)
         {
             //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
@@ -220,9 +260,7 @@ namespace Palingenesis
             Bullet rightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
             Bullet bottomrightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
 
-            //creates a shell list so that I can loop through all of the ring bullets
-            
-
+            //creates a shell list so that I can loop through all of the ring bullets            
             ringList.Add(topRightCorner);
             ringList.Add(RightMiddle);
             ringList.Add(bottomRightCorner);
@@ -241,12 +279,13 @@ namespace Palingenesis
             {
                 projectileList.Clear();
             }
-               
-            
-            
+                           
         }
 
-        //fires out shots in a circle around the boss
+        /// <summary>
+        /// fires out shots in a circle around the boss
+        /// </summary>
+        /// <param name="target"></param>
         public void Circle(Player target)
         {
             //Left
@@ -263,7 +302,11 @@ namespace Palingenesis
 
         }
 
-        //boss charges once at the player  and if it makes contact with the player deals damage
+        /// <summary>
+        /// boss charges once at the player  and if it makes contact with the player deals damage
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="gameTime"></param>
         public void Charge(Player target, GameTime gameTime)
         {
             positionVector = new Vector2(position.X, position.Y);
@@ -271,25 +314,19 @@ namespace Palingenesis
             chargeEnded = false;           
             isCharging = true;
 
-            
             //finds the vector of difference between the boss and the player's positions
             Vector2 direction = new Vector2(target.Position.X - position.X, target.Position.Y - position.Y);
             direction.Normalize();
 
-            
-
-            
             ChargeUpdateVector.X = (float)(direction.X * 500 * gameTime.ElapsedGameTime.TotalSeconds);
             ChargeUpdateVector.Y = (float)(direction.Y * 500 * gameTime.ElapsedGameTime.TotalSeconds);
-            
-
-
-           
-
-
            
         }
-        //fires a single large shot that does 2x damage at the player
+
+        /// <summary>
+        /// fires a single large shot that does 2x damage at the player
+        /// </summary>
+        /// <param name="target"></param>
         public void MegaShot(Player target)
         {
             if (target.Position.X > this.position.X)
@@ -303,38 +340,36 @@ namespace Palingenesis
             }
         }
 
-            public void SpecialAttack(Player target)
+        /// <summary>
+        /// I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player shell list
+        /// </summary>
+        /// <param name="target"></param>
+        public void SpecialAttack(Player target)
+        {
+            if(type == bossName.RiceGoddess)
             {
-                
-                    //I want this to create between 10-15 of shots around the screen randomly that after a certain amount of time will start to damage the player
-                    //shell list
-                    if(type == bossName.RiceGoddess)
-                    {
-                        for (int i = 0; i < rng.Next(10, 16); i++)
-                        {
-                            specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, BulletType.RiceGoddessSpecial, target, damage + 5));
+                for (int i = 0; i < rng.Next(10, 16); i++)
+                {
+                    specialList.Add(new Bullet(bulletTexture, new Rectangle(rng.Next(0, windowWidth), rng.Next(0, windowHeight), 30, 30), takeDamage, windowHeight, windowWidth, BulletType.RiceGoddessSpecial, target, damage + 5));
 
-                            //color is set to green so that they player knows that they won't be damage by the projectile yet 
-                            specialList[i].Color = Color.Green;
+                    //color is set to green so that they player knows that they won't be damage by the projectile yet 
+                    specialList[i].Color = Color.Green;
 
-                        }
+                }
             }
-                    else if(type == bossName.NagaBoss)
-                    {
-                        if (target.Position.X > this.position.X)
-                        {
-                            projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
-                        }
+            else if(type == bossName.NagaBoss)
+            {
+                if (target.Position.X > this.position.X)
+                {
+                    projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
+                }
 
-                        else
-                        {
-                            projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
-                        }
+                else
+                {
+                    projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
+                }
             }
-                    
-
-                    
-            }
+        }
 
         public void Reset()
         {
@@ -344,6 +379,10 @@ namespace Palingenesis
             projectileList.Clear();
         }
 
+        /// <summary>
+        /// boss draw method
+        /// </summary>
+        /// <param name="sb"></param>
         public override void Draw(SpriteBatch sb)
         {
             if (!isCharging)
@@ -357,10 +396,10 @@ namespace Palingenesis
             }
             
         }
-            //might be unnecessary
+
+        //might be unnecessary
         public void RemoveBullet(double attackTimer, double initialValue)
         {
-            
             //after 2 seconds
             if(attackTimer >= (initialValue + 2))
             {
