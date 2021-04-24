@@ -15,16 +15,19 @@ namespace Palingenesis
 {
     class Dialogue
     {
+        private bool isPlayer;
+
+        private SpriteFont font;
+
+        private string convo;
+        private string playername = "Theophania";
+        private string bossname = "Rice Godess";
+
         private Texture2D player;
         private Texture2D boss;
         private Texture2D background;
         private Texture2D textBoxColor;
         private Texture2D textBoxName;
-        private SpriteFont font;
-        private string convo;
-        private bool isPlayer;
-        private string playername = "Theophania";
-        private string bossname = "Rice Godess";
 
         //rectangles for text boxes
         private Rectangle backgroundBox = new Rectangle(0, 0, 1920, 1080);
@@ -34,8 +37,18 @@ namespace Palingenesis
         private Rectangle playerName = new Rectangle(50, 700, 300, 150);
         private Rectangle bossName = new Rectangle(1500, 700, 300, 150);
 
-       
-        //constructor that gets all of the texture info and actual dialogue
+
+        /// <summary>
+        /// constructor that gets all of the texture info and actual dialogue
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="boss"></param>
+        /// <param name="background"></param>
+        /// <param name="textBoxColor"></param>
+        /// <param name="textBoxName"></param>
+        /// <param name="font"></param>
+        /// <param name="convo"></param>
+        /// <param name="isPlayer"></param>
         public Dialogue(Texture2D player, Texture2D boss, Texture2D background, Texture2D textBoxColor, Texture2D textBoxName, SpriteFont font, string convo, bool isPlayer)
         { 
             this.player = player;
@@ -48,7 +61,10 @@ namespace Palingenesis
             this.textBoxName = textBoxName;
         }
 
-        //Specific draw method that draws all of the components for each frame
+        /// <summary>
+        /// Specific draw method that draws all of the components for each frame
+        /// </summary>
+        /// <param name="sb"></param>
         public void Draw(SpriteBatch sb)
         {
             //draws boss blacked out and displays player name box
