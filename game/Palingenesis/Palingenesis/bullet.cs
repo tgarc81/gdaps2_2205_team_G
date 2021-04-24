@@ -31,19 +31,20 @@ namespace Palingenesis
     class Bullet : GameObject
     {
         //use 1,2,3,4 for up down left right
-        private BulletType direction;
+        private BulletType Type;
         private Texture2D texture;
         private GameObject target;
         private Song takeDamadge;
         private Color color = Color.White;
         private bool hasHit = false;
         private double timer = 0;
+        private bool CanDamage;
 
         //properties
-        public BulletType Direction
+        public BulletType BulletType
         {
-            get { return this.direction; }
-            set { direction = value; }
+            get { return this.Type; }
+            set { Type = value; }
         }
 
         public bool HasHit
@@ -68,43 +69,93 @@ namespace Palingenesis
         /// <param name="direction"></param>
         /// <param name="target"></param>
         /// <param name="damage"></param>
-        public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, BulletType direction, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, BulletType Type, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
-            this.direction = direction;
+            this.Type = Type;
             this.target = target;
             this.takeDamadge = takeDamadge;
+
+            if(Type == BulletType.ring || Type == BulletType.RiceGoddessSpecial)
+            {
+                CanDamage = false;
+            }
+            else
+            {
+                CanDamage = true;
+            }
         }
 
+        //player can only shoot in the 4 cardinal directions so they use this method without the parameters
         public override void Update()
         {
-            if(Direction == BulletType.Up)
+            if (Type == BulletType.Up)
             {
                 //moves up the screen by the set amount movespeed
                 position.Y -= moveSpeed;
             }
-            else if(direction == BulletType.Down)
+            else if (Type == BulletType.Down)
             {
                 position.Y += moveSpeed;
             }
-            else if (direction == BulletType.Left)
+            else if (Type == BulletType.Left)
             {
                 position.X -= moveSpeed;
             }
-            else if (direction == BulletType.Right)
+            else if (Type == BulletType.Right)
             {
                 position.X += moveSpeed;
             }
-            else if(direction == BulletType.SinLeft)
+        }
+
+        public void Update(double timer, Boss boss)
+        {
+            if(Type == BulletType.Up)
+            {
+                //moves up the screen by the set amount movespeed
+                position.Y -= moveSpeed;
+            }
+            else if(Type == BulletType.Down)
+            {
+                position.Y += moveSpeed;
+            }
+            else if (Type == BulletType.Left)
+            {
+                position.X -= moveSpeed;
+            }
+            else if (Type == BulletType.Right)
+            {
+                position.X += moveSpeed;
+            }
+            else if(Type == BulletType.SinLeft)
             {
                 position.X -= moveSpeed;
                 
                 position.Y += (int)Math.Sin(timer);
                 timer += 0.001;
             }
+            else if(Type == BulletType.ring)
+            {
+
+            }
+            else if(Type == BulletType.RiceGoddessSpecial)
+            {
+               if(timer > 2)
+               {
+                    color = Color.Red;
+                    CanDamage = true;
+               }
+               //after 4 seconds. 2 seconds after they become active
+               if(timer > 4)
+               {
+                    hasHit = true;
+                    timer = 0;
+               }
+            }
+
 
             //for player intersection
-            if (position.Intersects(target.Position))
+            if (position.Intersects(target.Position) && CanDamage == true)
             {
                 MediaPlayer.Play(takeDamadge);
                 target.Health -= damage;

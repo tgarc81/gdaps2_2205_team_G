@@ -263,7 +263,7 @@ namespace Palingenesis
                         //I moved the random variable generation oustide the AI method to save on memory
                         int tmp = rng.Next(0, 5);
                        
-                        boss.AI(4, player, elapsed, gameTime);
+                        boss.AI(tmp, player, elapsed, gameTime);
 
                         //updates timer
                         elapsed = Elapsed;
@@ -275,7 +275,7 @@ namespace Palingenesis
                     //runs update on each bullet after the pattern is spawned by AI
                     for (int i = 0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss.ProjectileList[i].Update();
+                        boss.ProjectileList[i].Update(timer, boss);
                     }
 
                     for (int i = 0; i < player.ShotList.Count; i++)

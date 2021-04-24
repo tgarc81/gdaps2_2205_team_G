@@ -417,11 +417,7 @@ namespace Palingenesis
             //after 2 seconds
             if(attackTimer >= (initialValue + 2))
             {
-                for (int i = 0; i < specialList.Count; i++)
-                {
-                    specialList[i].Color = Color.Red;
-                    projectileList.Add(specialList[i]);
-                }
+               
                 for (int i = 0; i < ringList.Count; i++)
                 {
                     projectileList.Remove(ringList[i]);
