@@ -15,7 +15,9 @@ using Microsoft.Xna.Framework.Media;
 //check
 namespace Palingenesis
 {
-    //enum used in the FSM
+    /// <summary>
+    /// enum used in the FSM
+    /// </summary>
     enum gameState
     {
         Menu,
@@ -31,24 +33,58 @@ namespace Palingenesis
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch _spriteBatch;
+
+        Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
+
+        private Random rng = new Random();
+
+        //game starts in the menu state
+        private gameState currentState = gameState.Menu;
+
+        private GameTime gametime = new GameTime();
+
         private KeyboardState kbState;
         private KeyboardState prevKbState;
+
         private SpriteFont font;
         private SpriteFont fontVN;
+
         private double timer; // Represents the time elapsed in the game to be used for boss attacks
         private double time; // Represents total time elapsed in the game
         private double bossUpdateTimer;
+        double scoreTimer = 0;
+        private double attackTimer;
+        private double elapsed = 2;
+        private const double Elapsed = 2;
+
         private Player player; // Represents the actual player
-        private Texture2D playerAsset; // Represents player image
-        private Boss boss;
+        private Boss boss; //boss object
+
+        //health bar objects
+        HealthBar BossHealth;
+        HealthBar PlayerHealth;
+
+        int randomChoice;
+        private int dialogueNum = 0;
         private int numberOfDialougeFrames;
+        private int bossesDefeated;
+        private const int NumberOfBosses = 2;
+        private const int WindowWidth = 1920;
+        private const int WindowHeight = 1080;
+
         // private List<string> dialougeList = new List<string>();
         private List<Dialogue> dialougeList;
+        private List<string> names; // Represents all the names to go in leaderboard
+        private List<double> times; // Represents all the times to go in leaderboard
+
         private String currentLine;
+
         private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
         private bool isNagaBossLoaded; // Bool that represents whether Naga boss has been loaded in this game
-        private int bossesDefeated;
-        private const int numberOfBosses = 2;
+        private bool BossBeaten;
+
+        //Texture2D attributes
+        private Texture2D playerAsset; // Represents player image
         private Texture2D attackTextureRG;
         private Texture2D attackTextureNA;
         private Texture2D attackTexturePlayer;
@@ -60,15 +96,8 @@ namespace Palingenesis
         private Texture2D gameOver;
         private Texture2D bar;
         private Texture2D teleportTexture;
-        private bool BossBeaten;
-        Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
-        private int dialogueNum=0;
-        private Random rng = new Random();
-        private List<string> names; // Represents all the names to go in leaderboard
-        private List<double> times; // Represents all the times to go in leaderboard
-        //game starts in the menu state
-        private gameState currentState = gameState.Menu;
-        private GameTime gametime = new GameTime();
+        private Texture2D nagaBossTexture;
+
         //VN variables are for visual novel.
         private Texture2D RGVNDefault;
         private Texture2D RGVNAlternate;
@@ -81,33 +110,22 @@ namespace Palingenesis
         private Texture2D NAVNDefault;
         private Texture2D NAbackgroundVN;
         private Texture2D pauseScreen;
-        double scoreTimer = 0;
+
         //Load sounds
         public Song takeDamadge;
         private Song deathSound;
         private Song forwardVN;
         private Song hit;
         private Song error;
-        private Song RiceGoddessOST;
-        private const int WindowWidth = 1920;
-        private const int WindowHeight = 1080;
-        private double attackTimer;
-        int randomChoice;
-        private double elapsed = 2;
-        private const double Elapsed = 2;
+        private Song RiceGoddessOST;       
 
-
-        HealthBar BossHealth;
-        HealthBar PlayerHealth;
-
-        private Texture2D nagaBossTexture;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-        //the
+
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
@@ -134,10 +152,10 @@ namespace Palingenesis
 
             // TODO: use this.Content to load your game content here
             
+            //Loading fonts
             font = Content.Load<SpriteFont>("font");
             fontVN = Content.Load<SpriteFont>("bigfont");
             
-
             //Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
             pauseScreen = Content.Load<Texture2D>("PauseScreen");
@@ -158,6 +176,7 @@ namespace Palingenesis
             deathSound= Content.Load<Song>("deathSound");
             hit = Content.Load<Song>("Punch_Hit_Sound_Effect");
             RiceGoddessOST = Content.Load<Song>("Sad but True - The HU");
+
             //Load GameOver Textures
             gameOver= Content.Load<Texture2D>("GameOver");
 
@@ -176,7 +195,7 @@ namespace Palingenesis
 
             
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
-            //note: make a placeholder asset for the boss
+            // TODO: make a placeholder asset for the boss
             boss = null;
         }
 
@@ -223,7 +242,9 @@ namespace Palingenesis
                         }
                         boss.TeleportTexture = teleportTexture;
                     }
+
                     break;
+
                 case gameState.Game:
                     //updates player and bosses
                     player.Update();
@@ -293,7 +314,6 @@ namespace Palingenesis
                         LoadBoss();
                     }
 
-                    
                     break;
 
                 case gameState.GameOver:
@@ -328,8 +348,7 @@ namespace Palingenesis
                         currentState = gameState.Game;
                         dialogueNum++;
                     }
-                   
-
+                    
                     break;
 
                 case gameState.Pause:
@@ -343,6 +362,7 @@ namespace Palingenesis
                     {
                         currentState = gameState.Menu;
                     }
+
                     break;
 
                 case gameState.ScoreBoard:
@@ -351,6 +371,7 @@ namespace Palingenesis
                         currentState = gameState.Menu;
                         SaveScoreboard();
                     }
+
                     break;
             }
 
@@ -367,6 +388,7 @@ namespace Palingenesis
             switch (currentState)
             {
                 case gameState.Menu:
+                    //drawing menu text
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
                     _spriteBatch.DrawString(font, "PlaceHolder for menu", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Press enter to start game", new Vector2(0, 20), Color.White);
@@ -386,20 +408,21 @@ namespace Palingenesis
 
                     }
 
+                    //drawing game text
                     _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
                     _spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
                     _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
                      
                     _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
-                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
+                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);                   
 
-                   
-
+                    //calling object draw methods
                     player.Draw(_spriteBatch);
                     BossHealth.Draw(_spriteBatch);
                     PlayerHealth.Draw(_spriteBatch);
 
+                    //drawing projectiles
                     boss.Draw(_spriteBatch);
                     for(int i =0; i < boss.ProjectileList.Count; i++)
                     {
@@ -451,16 +474,17 @@ namespace Palingenesis
 
                 case gameState.Pause:
                     _spriteBatch.Draw(pauseScreen, fullScreen, Color.White);
-                    
+
                     /*
-                    _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
-                    _spriteBatch.DrawString(font, "Press P to return to game", new Vector2(0, 20), Color.White);
-                    _spriteBatch.DrawString(font, "Press M to return to main menu", new Vector2(0, 40), Color.White);
-                    */
+                     * _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
+                     * _spriteBatch.DrawString(font, "Press P to return to game", new Vector2(0, 20), Color.White);
+                     * _spriteBatch.DrawString(font, "Press M to return to main menu", new Vector2(0, 40), Color.White);
+                     */
 
                     break;
 
                 case gameState.ScoreBoard:
+                    //drawing final time on scoreboard
                     _spriteBatch.Draw(scoreBoard, fullScreen, Color.White);
                     _spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(1150, 200), Color.White);
                     dialogueNum = 0;
@@ -472,6 +496,12 @@ namespace Palingenesis
             base.Draw(gameTime);
         }
 
+        /// <summary>
+        /// Helper method to check if a key has been pressed
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="kbState"></param>
+        /// <returns></returns>
         private bool SingleKeyPress(Keys key, KeyboardState kbState)
         {
             //if the specified key is currently down and was previously up, returns as true
@@ -485,6 +515,9 @@ namespace Palingenesis
             }
         }
 
+        /// <summary>
+        /// Loads in boss data from file
+        /// </summary>
         private void LoadBoss()
         {
             Random rng = new Random();
@@ -512,7 +545,7 @@ namespace Palingenesis
                     }
                     catch (Exception e)
                     {
-                        // A way to output to user
+                        // TODO: A way to output to user
                     }
                 }
                 //I commented this out because it would always end up loading the opposite boss dialogue
@@ -588,7 +621,7 @@ namespace Palingenesis
             }
             catch(Exception e)
             {
-                //Output error message
+                // TODO: Output error message
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (output != null)
@@ -620,7 +653,7 @@ namespace Palingenesis
             }
             catch(Exception e)
             {
-                // Error message
+                // TODO: Error message
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (input != null)
@@ -629,8 +662,9 @@ namespace Palingenesis
             }
         }
 
-        //Adds dialougue to list, after reading in textures type in text and true or false based on if the player is speaking
-        //insert null to break to fight
+        /// <summary>
+        /// Adds dialougue to list, after reading in textures type in text and true or false based on if the player is speaking, insert null to break to fight
+        /// </summary>
         private void DialogueListAdd()
         {
             switch (randomChoice)
@@ -653,7 +687,7 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, "ALL the responsiblity for what happens next lies on your shoulders.", false));
                     dialougeList.Add(null);
 
-             break;
+                    break;
 
                 case 2:
                     //Adds naga dialogue
@@ -678,6 +712,7 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "As you progress, don't forget that true strength manifests itself from within.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, "...", true));
                     dialougeList.Add(null);
+
                     break;
             
             }
