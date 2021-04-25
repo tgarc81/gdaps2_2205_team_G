@@ -449,7 +449,10 @@ namespace Palingenesis
                     //_spriteBatch.DrawString(font, string.Format("{0}", specialTimer), new Vector2(0, 150), Color.White);
 
                     //calling object draw methods
-                    player.Draw(_spriteBatch);
+                    player.Draw(_spriteBatch, Color.White);
+
+                    //TODO: If bullet collides with player, pass in red instead
+
                     BossHealth.Draw(_spriteBatch);
                     PlayerHealth.Draw(_spriteBatch);
 

@@ -170,7 +170,7 @@ namespace Palingenesis
                 MediaPlayer.Play(takeDamadge);
                 target.Health -= damage;
                 hasHit = true;
-                
+
             }
 
         }

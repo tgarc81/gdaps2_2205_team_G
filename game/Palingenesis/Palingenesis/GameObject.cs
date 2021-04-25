@@ -76,9 +76,9 @@ namespace Palingenesis
         }
 
         //draws object
-        public virtual void Draw(SpriteBatch sb)
-        {
-            sb.Draw(texture, position, Color.White);
+        public virtual void Draw(SpriteBatch sb, Color color)
+        { 
+             sb.Draw(texture, position, color);
         }
 
         /// <summary>
