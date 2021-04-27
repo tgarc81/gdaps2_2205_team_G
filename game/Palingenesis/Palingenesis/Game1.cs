@@ -179,7 +179,7 @@ namespace Palingenesis
             RiceGoddessOST = Content.Load<Song>("Sad but True - The HU");
 
             //Load GameOver Textures
-            gameOver= Content.Load<Texture2D>("GameOver");
+            gameOver= Content.Load<Texture2D>("GameOverScreen");
 
             //Load VN textures
             textboxVN = Content.Load<Texture2D>("textbox");
