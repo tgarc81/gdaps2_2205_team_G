@@ -451,30 +451,33 @@ namespace Palingenesis
                     //calling object draw methods
                     player.Draw(_spriteBatch, Color.White);
 
+                    foreach (Bullet obj in boss.ProjectileList)
+                    {
+                        if (obj.HasHit)
+                        {
+                            player.Draw(_spriteBatch, Color.Red);
+                        }
+                    }
                     //TODO: If bullet collides with player, pass in red instead
 
                     BossHealth.Draw(_spriteBatch);
                     PlayerHealth.Draw(_spriteBatch);
 
                     //drawing projectiles
-                    boss.Draw(_spriteBatch);
+                    boss.Draw(_spriteBatch, Color.White);
                     for(int i =0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss.ProjectileList[i].Draw(_spriteBatch);
+                        boss.ProjectileList[i].Draw(_spriteBatch, Color.White);
                         
                     }
-                   
-
-                  
 
                     for (int i = 0; i < player.ShotList.Count; i++)
                     {
-                        player.ShotList[i].Draw(_spriteBatch);
+                        player.ShotList[i].Draw(_spriteBatch, Color.White);
 
                     }
 
-                    
-
+                   
                     break;
 
                 case gameState.GameOver:

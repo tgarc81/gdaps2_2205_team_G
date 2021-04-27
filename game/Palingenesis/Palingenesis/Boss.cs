@@ -406,11 +406,11 @@ namespace Palingenesis
         /// boss draw method
         /// </summary>
         /// <param name="sb"></param>
-        public override void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb, Color color)
         {
             if (!isCharging)
             {
-                sb.Draw(texture, Position, color);
+                sb.Draw(texture, Position, Color.White);
             }
             else
             {

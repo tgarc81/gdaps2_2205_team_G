@@ -175,7 +175,7 @@ namespace Palingenesis
 
         }
 
-        public override void Draw(SpriteBatch sb)
+        public override void Draw(SpriteBatch sb, Color test)
         {
             //only drawn while on screen
             if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
