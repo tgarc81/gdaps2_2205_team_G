@@ -150,7 +150,7 @@ namespace Palingenesis
             {
                 if(color == Color.Green)
                 {
-                    CanDamage == false;
+                    CanDamage = false;
                 }
                if(timer > 2 && timer < 4)
                {
