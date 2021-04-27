@@ -148,6 +148,10 @@ namespace Palingenesis
             }
             else if(Type == BulletType.RiceGoddessSpecial)
             {
+                if(color == Color.Green)
+                {
+                    CanDamage == false;
+                }
                if(timer > 2 && timer < 4)
                {
                     color = Color.Red;
