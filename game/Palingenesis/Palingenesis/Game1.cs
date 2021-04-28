@@ -543,7 +543,7 @@ namespace Palingenesis
         private void LoadBoss()
         {
             Random rng = new Random();
-            randomChoice = rng.Next(1,3); //temporarily set so only the rice goddess will appear
+            randomChoice = 2; //temporarily set so only the naga will appear
             if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
                 if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet

@@ -39,6 +39,9 @@ namespace Palingenesis
         private bool hasHit = false;
         private double timer = 0;
         private bool CanDamage;
+        private Vector2 initialPosition;
+        private bool goingUp = true;
+        private bool goingDown = false;
 
         //properties
         public BulletType BulletType
@@ -58,6 +61,10 @@ namespace Palingenesis
             set { color = value; }
         }
 
+        public Vector2 InitialPosition
+        {
+            set { initialPosition = value; }
+        }
         /// <summary>
         /// Bullet class constructor
         /// </summary>
@@ -137,10 +144,52 @@ namespace Palingenesis
             }
             else if(Type == BulletType.SinLeft)
             {
-                position.X -= moveSpeed;
                 
-                position.Y += (int)Math.Sin(timer);
-                timer += 0.001;
+
+                position.X -= moveSpeed;
+
+                if(position.Y > initialPosition.Y - 70 && goingUp == true)
+                {
+                    position.Y -= 3;
+                    
+                }
+                else if(position.Y < initialPosition.Y -70 && goingUp == true)
+                {
+                  
+                        goingUp = false;
+                        goingDown = true;
+                    
+                }
+
+               if((position.Y < initialPosition.Y + 70) && goingDown == true)
+               {
+                    position.Y += 3;
+                    
+
+                    
+               }
+               else if((position.Y > initialPosition.Y + 70) && goingDown == true) 
+               {
+
+                    goingDown = false;
+                    goingUp = true;
+                }
+                
+              
+            }
+            else if (Type == BulletType.SinRight)
+            {
+                position.X -= moveSpeed;
+
+                if (position.Y > initialPosition.Y - 70)
+                {
+                    position.Y -= 2;
+                }
+
+                if (position.Y < initialPosition.Y + 70)
+                {
+                    position.Y += 2;
+                }
             }
             else if(Type == BulletType.ring)
             {

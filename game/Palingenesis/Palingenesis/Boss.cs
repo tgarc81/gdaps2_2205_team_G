@@ -384,12 +384,16 @@ namespace Palingenesis
             {
                 if (target.Position.X > this.position.X)
                 {
-                    projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
+                    Bullet specialBullet = new Bullet(bulletTexture, new Rectangle((this.Position.X + 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2);
+                    specialBullet.InitialPosition = new Vector2(specialBullet.Position.X, specialBullet.Position.Y);
+                    projectileList.Add(specialBullet);
                 }
 
                 else
                 {
-                    projectileList.Add(new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinRight, target, this.damage * 2));
+                    Bullet specialBullet = new Bullet(bulletTexture, new Rectangle((this.Position.X - 100), target.Position.Y, 100, 100), this.takeDamage, windowHeight, windowWidth, BulletType.SinLeft, target, this.damage * 2);
+                    specialBullet.InitialPosition = new Vector2(specialBullet.Position.X, specialBullet.Position.Y);
+                    projectileList.Add(specialBullet);
                 }
             }
         }
