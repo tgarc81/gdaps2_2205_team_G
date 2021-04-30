@@ -49,6 +49,7 @@ namespace Palingenesis
         private SpriteFont font;
         private SpriteFont fontVN;
 
+        private double ringTimer; 
         private double specialTimer; // Represents the time elapsed in the game to be used for boss attacks
         private double time; // Represents total time elapsed in the game
         private double bossUpdateTimer;
@@ -263,9 +264,9 @@ namespace Palingenesis
                     if (elapsed < 0 && boss.IsCharging == false)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
-                        int tmp = rng.Next(0, 5);
+                        int tmp = rng.Next(0, 6);
                        
-                        boss.AI(3, player, elapsed, gameTime);
+                        boss.AI(tmp, player, elapsed, gameTime);
 
                         //updates timer
                         elapsed = Elapsed;
@@ -277,7 +278,7 @@ namespace Palingenesis
                     //runs update on each bullet after the pattern is spawned by AI
                     for (int i = 0; i < boss.ProjectileList.Count; i++)
                     {
-                        boss.ProjectileList[i].Update(specialTimer, boss);
+                        boss.ProjectileList[i].Update(specialTimer, ringTimer, boss);
                     }
 
                     for (int i = 0; i < player.ShotList.Count; i++)
@@ -309,14 +310,24 @@ namespace Palingenesis
                         specialTimer += gameTime.ElapsedGameTime.TotalSeconds;
                     }
 
+                    if(boss.RingActive == true)
+                    {
+                        ringTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+
                     if(specialTimer > 4)
                     {
                         specialTimer = 0;
 
                     }
+
                     if(boss.ChargeEnded == true)
                     {
                         bossUpdateTimer += gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+                    else
+                    {
+                        bossUpdateTimer = 0;   
                     }
                    
                     //Console.WriteLine(gameTime.ElapsedGameTime.TotalSeconds);
@@ -543,7 +554,7 @@ namespace Palingenesis
         private void LoadBoss()
         {
             Random rng = new Random();
-            randomChoice = 2; //temporarily set so only the naga will appear
+            randomChoice = rng.Next(1,3); //temporarily set so only the naga will appear
             if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
                 if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet

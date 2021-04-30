@@ -43,6 +43,7 @@ namespace Palingenesis
         private bool chargeHit = false;
         private bool isCharging = false;
         private bool specialActive = false;
+        private bool ringActive = false;
 
         private List<Bullet> projectileList = new List<Bullet>();
         private List<Bullet> specialList = new List<Bullet>();
@@ -61,6 +62,12 @@ namespace Palingenesis
         public bool SpecialActive
         {
             get { return specialActive; }
+            set { specialActive = value; }
+        }
+
+        public bool RingActive
+        {
+            get { return ringActive; }
             set { specialActive = value; }
         }
 
@@ -118,6 +125,10 @@ namespace Palingenesis
             // if the boss is charging
             if(isCharging == true)
             {
+                for (int i = 0; i < ringList.Count; i++)
+                {
+                    projectileList.Remove(ringList[i]);
+                }
                 //sets color to red
                 color = Color.Red;
 
@@ -154,6 +165,7 @@ namespace Palingenesis
                    //changes the boss's texture
                 if (timer > 0.5 && timer < 1)
                 {
+                    
                     texture = teleportTexture;
                     timer = 0;
                 }
@@ -266,36 +278,35 @@ namespace Palingenesis
         public void Ring(Player target, double timer)
         {
             //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
-            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y - 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet bottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y - 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet LeftMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet bottomLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y + 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
 
-            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y - 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
 
-            Bullet toprightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y - 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet rightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet bottomrightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + 100), this.position.Y + 100, 50, 50), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            int changeAmount = 100 - position.Width;
 
-            //creates a shell list so that I can loop through all of the ring bullets            
-            ringList.Add(topRightCorner);
-            ringList.Add(RightMiddle);
-            ringList.Add(bottomRightCorner);
+            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y - 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y + 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+
+
+            ringList.Add(topLeftCorner);
+            ringList.Add(LeftMiddle);
+            ringList.Add(bottomLeftCorner);
+
             ringList.Add(bottom);
             ringList.Add(top);
+
             ringList.Add(topRightCorner);
             ringList.Add(RightMiddle);
-            ringList.Add(bottomRightCorner);
+            ringList.Add(BottomRightCorner);
 
-            for(int i = 0; i < ringList.Count; i++)
+            for (int i = 0; i < ringList.Count; i++)
             {
-                //adds each of the ring bullets to the main list
                 projectileList.Add(ringList[i]);
-            }
-            if (timer <= 0)
-            {
-                projectileList.Clear();
-            }
+            }            
                            
         }
 
@@ -424,28 +435,6 @@ namespace Palingenesis
             
         }
 
-        //might be unnecessary
-        public void RemoveBullet(double attackTimer, double initialValue)
-        {
-            //after 2 seconds
-            if(attackTimer >= (initialValue + 2))
-            {
-               
-                for (int i = 0; i < ringList.Count; i++)
-                {
-                    projectileList.Remove(ringList[i]);
-                }
-
-            }
-
-            if(attackTimer >= initialValue + 4)
-            {
-                for (int i = 0; i < specialList.Count; i++)
-                {
-                    projectileList.Remove(specialList[i]);
-                }
-            }
-
-        }
+        
     }
 }

@@ -123,7 +123,7 @@ namespace Palingenesis
             }
         }
 
-        public void Update(double timer, Boss boss)
+        public void Update(double specialTimer, double ringTimer, Boss boss)
         {
             if(Type == BulletType.Up)
             {
@@ -164,9 +164,7 @@ namespace Palingenesis
                if((position.Y < initialPosition.Y + 70) && goingDown == true)
                {
                     position.Y += 3;
-                    
-
-                    
+                  
                }
                else if((position.Y > initialPosition.Y + 70) && goingDown == true) 
                {
@@ -179,21 +177,45 @@ namespace Palingenesis
             }
             else if (Type == BulletType.SinRight)
             {
-                position.X -= moveSpeed;
+                position.X += moveSpeed;
 
-                if (position.Y > initialPosition.Y - 70)
+                if (position.Y > initialPosition.Y - 70 && goingUp == true)
                 {
-                    position.Y -= 2;
+                    position.Y -= 3;
+
+                }
+                else if (position.Y < initialPosition.Y - 70 && goingUp == true)
+                {
+
+                    goingUp = false;
+                    goingDown = true;
+
                 }
 
-                if (position.Y < initialPosition.Y + 70)
+                if ((position.Y < initialPosition.Y + 70) && goingDown == true)
                 {
-                    position.Y += 2;
+                    position.Y += 3;
+
+                }
+                else if ((position.Y > initialPosition.Y + 70) && goingDown == true)
+                {
+
+                    goingDown = false;
+                    goingUp = true;
                 }
             }
             else if(Type == BulletType.ring)
             {
-
+                if(specialTimer < 2)
+                {
+                    boss.RingActive = true;
+                    color = Color.Blue;
+                }
+                else
+                {
+                    color = Color.White;
+                    CanDamage = true;
+                }
             }
             else if(Type == BulletType.RiceGoddessSpecial)
             {
@@ -201,14 +223,14 @@ namespace Palingenesis
                 {
                     CanDamage = false;
                 }
-               if(timer > 2 && timer < 4)
+               if(specialTimer > 2 && specialTimer < 4)
                {
                     color = Color.Red;
                     CanDamage = true;
                     
                }
                //after 4 seconds. 2 seconds after they become active
-               else if(timer > 4)
+               else if(specialTimer > 4)
                {
                     boss.SpecialActive = false;
                     hasHit = true;
@@ -232,7 +254,10 @@ namespace Palingenesis
         {
             //only drawn while on screen
             if(position.X > (0 - position.Width) && position.X < (windowWidth + 10) && position.Y > (0 - position.Height) && position.Y < (windowHeight + 10))
-            sb.Draw(texture, position, color);
+            {
+                sb.Draw(texture, position, color);
+            }
+           
         }
 
     }
