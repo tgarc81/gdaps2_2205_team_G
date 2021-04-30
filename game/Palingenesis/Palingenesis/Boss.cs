@@ -14,15 +14,15 @@ using Microsoft.Xna.Framework.Media;
 namespace Palingenesis
 {
     /// <summary>
-    /// boss class enumerator
+    /// boss class enumerator, used to define each boss's unique behavior and look 
     /// </summary>
     public enum bossName
     {
         RiceGoddess,
         NagaBoss,
-
+        
     }
-
+    
     class Boss : GameObject
     {
         //fields
