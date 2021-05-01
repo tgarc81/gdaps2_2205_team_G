@@ -25,7 +25,9 @@ namespace Palingenesis
         Game,
         GameOver,
         Dialouge,
-        Pause
+        Pause,
+        Instructions,
+        EnterName
     }
     
     
@@ -93,6 +95,7 @@ namespace Palingenesis
         private Texture2D RiceGoddessBackground;
         private Texture2D NagaBackground;
         private Texture2D titleScreen;
+        private Texture2D instructions;
         private Texture2D scoreBoard;
         private Texture2D gameOver;
         private Texture2D bar;
@@ -160,6 +163,7 @@ namespace Palingenesis
             
             //Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
+            instructions = Content.Load<Texture2D>("InstructionsPlaceHolder");
             pauseScreen = Content.Load<Texture2D>("PauseScreen");
             scoreBoard= Content.Load<Texture2D>("ScoreBoard");
 
@@ -222,7 +226,7 @@ namespace Palingenesis
                         boss.Reset();
                         scoreTimer = 0;
                         DialogueListAdd();
-                        currentState = gameState.Dialouge;
+                        currentState = gameState.Instructions;
                         MediaPlayer.Play(forwardVN);
                         
                         //Makes the rectangles for player and boss HP
@@ -248,6 +252,14 @@ namespace Palingenesis
 
                     break;
 
+                case gameState.Instructions:
+                    //when the player is finished reading instructions presses 
+                    if(SingleKeyPress(Keys.Enter, kbState))
+                    {
+                        currentState = gameState.Dialouge;
+                    }
+
+                    break;
                 case gameState.Game:
                     //updates player and bosses
                     player.Update();
@@ -426,10 +438,15 @@ namespace Palingenesis
             switch (currentState)
             {
                 case gameState.Menu:
-                    //drawing menu text
+                    //drawing title screen
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
-                    _spriteBatch.DrawString(font, "PlaceHolder for menu", new Vector2(0, 0), Color.White);
-                    _spriteBatch.DrawString(font, "Press enter to start game", new Vector2(0, 20), Color.White);
+                    
+                    break;
+
+                case gameState.Instructions:
+                    _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
+                    // TODO: make image for instructions
+                    _spriteBatch.Draw(instructions, new Vector2(), Color.White);
                     break;
 
                 case gameState.Game:
@@ -500,20 +517,13 @@ namespace Palingenesis
                 case gameState.Dialouge:
                     //draws object from dialgoe list using that object's dialogue method.
                     dialougeList[dialogueNum].Draw(_spriteBatch); // possible bug
-                    //figure out the actual position later
-
+                    // TODO: figure out the actual position later
+                    
                    // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
-
+                  
                 case gameState.Pause:
                     _spriteBatch.Draw(pauseScreen, fullScreen, Color.White);
-
-                    /*
-                     * _spriteBatch.DrawString(font, "Pause", new Vector2(0, 0), Color.White);
-                     * _spriteBatch.DrawString(font, "Press P to return to game", new Vector2(0, 20), Color.White);
-                     * _spriteBatch.DrawString(font, "Press M to return to main menu", new Vector2(0, 40), Color.White);
-                     */
-
                     break;
 
                 case gameState.ScoreBoard:
@@ -751,5 +761,25 @@ namespace Palingenesis
             }
           
         }
+
+        /*
+         * what we need: name to display + save to scoreboard file
+         * 
+         * - see which keys are being pressed
+         *      - use kbstate.GetKeysPressed
+         *      - have conditions for pressing enter or backspace
+         * - save pressed keys to a string of characters
+         * - return the string and add it as a key to the dictionary (TBD)
+         
+        private string ScoreboardInput()
+        {
+            string name = null;
+            Keys input = Keys.S;
+            while(input != Keys.Enter)
+            {
+                //Keys kbState.GetPressedKeys
+            }
+        }
+        */
     }
 }
