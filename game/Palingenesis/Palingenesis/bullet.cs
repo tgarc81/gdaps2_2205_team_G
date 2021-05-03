@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
 //Name: G-Force
 //Date: 3/16/21
+//Updated: 5/3/21
 //Professor Mesh
 //Purpose: To initialize bullet traits and behaviors.
 
@@ -34,7 +36,7 @@ namespace Palingenesis
         private BulletType Type;
         private Texture2D texture;
         private GameObject target;
-        private Song takeDamadge;
+        private SoundEffect takeDamadge;
         private Color color = Color.White;
         private bool hasHit = false;
         private double timer = 0;
@@ -76,7 +78,7 @@ namespace Palingenesis
         /// <param name="direction"></param>
         /// <param name="target"></param>
         /// <param name="damage"></param>
-        public Bullet(Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, BulletType Type, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, SoundEffect takeDamadge, int windowHeight, int windowWidth, BulletType Type, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
             this.Type = Type;
@@ -116,7 +118,7 @@ namespace Palingenesis
 
             if (position.Intersects(target.Position) && CanDamage == true)
             {
-                MediaPlayer.Play(takeDamadge);
+                takeDamadge.Play();
                 target.Health -= damage;
                 hasHit = true;
 
@@ -242,7 +244,7 @@ namespace Palingenesis
             //for player intersection
             if (position.Intersects(target.Position) && CanDamage == true)
             {
-                MediaPlayer.Play(takeDamadge);
+                takeDamadge.Play();
                 target.Health -= damage;
                 hasHit = true;
 

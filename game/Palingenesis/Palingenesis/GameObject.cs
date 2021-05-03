@@ -6,7 +6,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 //Name: G-Force
-//Date: 3/16/2
+//Date: 3/16/21
+//Updated: 5/3/21
 //Professor Mesh
 //Purpose: To initialize player traits and movement.
 
@@ -38,6 +39,11 @@ namespace Palingenesis
         const int MarioRectWidth = 44;      // The width of a single frame
 
         //properties
+        public int MaxHealth
+        {
+            get { return maxHealth; }
+        }
+
         public int Health
         {
             get { return health; }
