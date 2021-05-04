@@ -68,6 +68,8 @@ namespace Palingenesis
         HealthBar BossHealth;
         HealthBar PlayerHealth;
 
+        private string name = "";
+
         int randomChoice;
         private int dialogueNum = 0;
         private int numberOfDialougeFrames;
@@ -265,10 +267,45 @@ namespace Palingenesis
                     //when the player is finished reading instructions presses 
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Dialouge;
+                        currentState = gameState.EnterName;
                     }
 
                     break;
+
+                case gameState.EnterName:
+                    bool nameEntered = false;
+
+                    while (!nameEntered)
+                    {
+                        Keys currentKey = ScoreboardInput();
+
+                        if (currentKey != Keys.Back)
+                        {
+                            name += currentKey.ToString();
+                        }
+                        else
+                        {
+                            name = name[name.Length - 1];
+                        }
+                        //run method to enter letters into the name here
+
+                        if (SingleKeyPress(Keys.Enter, kbState))
+                        {
+                            nameEntered = true;
+                        }
+                        else if (SingleKeyPress(Keys.Back, kbState))
+                        {
+
+                        }
+                    }
+
+
+                    if (SingleKeyPress(Keys.Enter, kbState) && nameEntered == true)
+                    {
+                        currentState = gameState.Dialouge;
+                    }
+                    break;
+
                 case gameState.Game:
                     //updates player and bosses
                     player.Update();
@@ -417,8 +454,6 @@ namespace Palingenesis
 
                        
                     }
-
-                    
 
                     break;
 
@@ -893,24 +928,27 @@ namespace Palingenesis
                     break;
             }
         }
-    /*
-     * what we need: name to display + save to scoreboard file
-     * 
-     * - see which keys are being pressed
-     *      - use kbstate.GetKeysPressed
-     *      - have conditions for pressing enter or backspace
-     * - save pressed keys to a string of characters
-     * - return the string and add it as a key to the dictionary (TBD)
 
-    private string ScoreboardInput()
-    {
-        string name = null;
-        Keys input = Keys.S;
-        while(input != Keys.Enter)
+        /*
+         * what we need: name to display + save to scoreboard file
+         * 
+         * - see which keys are being pressed
+         *      - use kbstate.GetKeysPressed
+         *      - have conditions for pressing enter or backspace
+         * - save pressed keys to a string of characters
+         * - return the string and add it as a key to the dictionary (TBD)
+        */
+        private Keys ScoreboardInput()
         {
-            //Keys kbState.GetPressedKeys
+            //string name = null;
+            //Keys input = Keys.S;
+
+            Keys[] currentKeyArray = kbState.GetPressedKeys();
+
+            Keys LastKeyPressed = currentKeyArray[0];
+
+            return LastKeyPressed;
         }
+    
     }
-    */
-}
 }
