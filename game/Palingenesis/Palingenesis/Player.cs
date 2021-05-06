@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -20,7 +21,7 @@ namespace Palingenesis
         private List<Bullet> shotList = new List<Bullet>();
         private KeyboardState keyboardState;
         private Texture2D shotTexture;
-        private Song takeDamadge;
+        private SoundEffect takeDamadge;
 
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace Palingenesis
         /// <param name="windowHeight"></param>
         /// <param name="windowWidth"></param>
         /// <param name="shotTexture"></param>
-        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamadge, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        public Player (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, SoundEffect takeDamadge, int windowHeight, int windowWidth, Texture2D shotTexture) : base (health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.shotTexture = shotTexture;
             this.takeDamadge = takeDamadge;

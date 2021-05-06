@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
@@ -28,7 +29,7 @@ namespace Palingenesis
         //fields
         private Random rng = new Random();
 
-        private Song takeDamage;
+        private SoundEffect takeDamage;
 
         private Color color = Color.White;
 
@@ -105,7 +106,8 @@ namespace Palingenesis
         /// <param name="windowWidth"></param>
         /// <param name="type"></param>
         /// <param name="bulletTexture"></param>
-        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, Song takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture) : base(health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
+        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, SoundEffect takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture): 
+                     base(health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.type = type;
             this.bulletTexture = bulletTexture;

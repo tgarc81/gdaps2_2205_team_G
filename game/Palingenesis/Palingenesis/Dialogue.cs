@@ -15,13 +15,12 @@ namespace Palingenesis
 {
     class Dialogue
     {
-        private bool isPlayer;
-
         private SpriteFont font;
-
+        private bool isPlayer;
         private string convo;
-        private string playername = "Theophania";
-        private string bossname = "Rice Godess";
+        private string playerName = "Theophania";
+        private string bossName;
+        private int dialogueNum;
 
         private Texture2D player;
         private Texture2D boss;
@@ -30,12 +29,14 @@ namespace Palingenesis
         private Texture2D textBoxName;
 
         //rectangles for text boxes
-        private Rectangle backgroundBox = new Rectangle(0, 0, 1920, 1080);
-        private Rectangle textBox = new Rectangle(0, 800, 1920, 280);
-        private Rectangle playerBox = new Rectangle(0, 100, 600, 1080);
-        private Rectangle bossBox = new Rectangle(1400, 100, 550, 1080);
-        private Rectangle playerName = new Rectangle(50, 700, 300, 150);
-        private Rectangle bossName = new Rectangle(1500, 700, 300, 150);
+        private Rectangle backgroundBox;
+        private Rectangle textBox;
+        private Rectangle playerBox;
+        private Rectangle bossBox;
+        private Rectangle PlayerName;
+        private Rectangle BossName;
+        private Color BossColor;
+       
 
 
         /// <summary>
@@ -49,17 +50,39 @@ namespace Palingenesis
         /// <param name="font"></param>
         /// <param name="convo"></param>
         /// <param name="isPlayer"></param>
-        public Dialogue(Texture2D player, Texture2D boss, Texture2D background, Texture2D textBoxColor, Texture2D textBoxName, SpriteFont font, string convo, bool isPlayer)
+        public Dialogue(Texture2D player, Texture2D boss, Texture2D background, Texture2D textBoxColor, Texture2D textBoxName, SpriteFont font, Color BossColor, string bossName, string convo, bool isPlayer)
         { 
             this.player = player;
             this.boss = boss;
             this.background = background;
             this.font = font;
-            this.convo = convo;
             this.isPlayer = isPlayer;
+            this.bossName = bossName;
+            this.convo = convo;
+            this.BossColor = BossColor;
             this.textBoxColor = textBoxColor;
             this.textBoxName = textBoxName;
+
+            backgroundBox = new Rectangle(0, 0, 1920, 1080);
+            textBox = new Rectangle(0, 800, 1920, 280);
+            playerBox = new Rectangle(0, 100, 600, 1080);
+            bossBox = new Rectangle(1400, 100, 550, 1080);
+            PlayerName = new Rectangle(50, 700, 300, 150);
+           
+            if (bossName == "Rice Goddess")
+            {
+                BossName = new Rectangle(1490, 700, 350, 150);
+            }
+            else if(bossName == "Naga")
+            {
+                BossName = new Rectangle(1450, 700, 275, 150);
+            }
+            else
+            {
+                BossName = new Rectangle(1500, 700, 300, 150);
+            }
         }
+      
 
         /// <summary>
         /// Specific draw method that draws all of the components for each frame
@@ -74,8 +97,8 @@ namespace Palingenesis
                 sb.Draw(boss, bossBox, Color.Black);
                 sb.Draw(player, playerBox, Color.White);
                 sb.Draw(textBoxColor, textBox, Color.White);
-                sb.Draw(textBoxName, playerName, Color.Red);
-                sb.DrawString(font, playername, new Vector2(65, 750), Color.White);
+                sb.Draw(textBoxName, PlayerName, Color.Red);
+                sb.DrawString(font, playerName, new Vector2(65, 750), Color.White);
                 sb.DrawString(font, convo, new Vector2(60, 900), Color.White);
             }
             
@@ -86,8 +109,8 @@ namespace Palingenesis
                 sb.Draw(player, playerBox, Color.Black);
                 sb.Draw(boss, bossBox, Color.White);
                 sb.Draw(textBoxColor, textBox, Color.White);
-                sb.Draw(textBoxName, bossName, Color.Green);
-                sb.DrawString(font, bossname, new Vector2(1515, 750), Color.White);
+                sb.Draw(textBoxName, BossName, BossColor);
+                sb.DrawString(font, bossName, new Vector2(1515, 750), Color.White);
                 sb.DrawString(font, convo, new Vector2(60, 900), Color.White);
             }
         }

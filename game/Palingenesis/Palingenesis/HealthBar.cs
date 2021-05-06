@@ -5,6 +5,12 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+//Name: G-Force
+//Date: 3/16/21
+//Updated: 5/3/21
+//Professor Mesh
+//Purpose: To intialize the health bars that display health information to the user
+
 namespace Palingenesis
 {
     class HealthBar
@@ -22,6 +28,7 @@ namespace Palingenesis
         Rectangle greenHealthBar;
         Rectangle redHealthBar;
         Rectangle Fullbar;
+        Rectangle BarSize;
 
         int actualHealth;
         int visibleHealth;
@@ -51,7 +58,8 @@ namespace Palingenesis
             totalHealth = health;
             greenHealthBar = barSize;
             redHealthBar = barSize;
-            Fullbar = barSize;
+            BarSize = barSize;
+            Fullbar = new Rectangle(barSize.X - (barSize.Width/100), barSize.Y- (barSize.Height/25), barSize.Width + (barSize.Width/50), barSize.Height + (barSize.Height/10));
             BossNameFormat = location;
         }
 
@@ -93,9 +101,9 @@ namespace Palingenesis
             //updates previous health to current health
             tempHealth = damadge;
 
-            //actually updates the health rectangles
-            greenHealthBar.Width = actualHealth;
-            redHealthBar.Width = visibleHealth;
+            //actually updates the health rectangles using percentages
+            greenHealthBar.Width = BarSize.Width * actualHealth /totalHealth;
+            redHealthBar.Width =  BarSize.Width * visibleHealth / totalHealth;
         }
 
         /// <summary>
