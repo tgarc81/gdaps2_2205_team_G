@@ -62,7 +62,7 @@ namespace Palingenesis
         private const double Elapsed = 2;
         private Dictionary<string, int> scoreBoardInfo = new Dictionary<string, int>();
         private SortedList timesSorted = new SortedList();
-        private string name;
+        
         private int PlayerTime = 0;
 
         private Player player; // Represents the actual player
@@ -73,6 +73,7 @@ namespace Palingenesis
         HealthBar PlayerHealth;
 
         private string name = "";
+       
 
         int randomChoice;
         private int dialogueNum = 0;
@@ -254,54 +255,45 @@ namespace Palingenesis
                     //pressing enter on the main menu starts the game
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
-                       
+
                         LoadBoss(randomChoice);
                         player.Reset();
                         boss.Reset();
                         scoreTimer = 0;
                         DialogueListAdd();
-                        currentState = gameState.Instructions;
-                        MediaPlayer.Play(forwardVN);
-                        
+
+
+                        currentState = gameState.EnterName;
+                        //MediaPlayer.Play(forwardVN);
+
                         //Makes the rectangles for player and boss HP
                         Rectangle BossHPBar = new Rectangle(WindowWidth / 2 - WindowWidth / 4, WindowHeight / 10, boss.Health, 50);
-                        Rectangle PlayerHPBar = new Rectangle(WindowWidth / 10 , WindowHeight - WindowHeight/20, player.Health, 50);
+                        Rectangle PlayerHPBar = new Rectangle(WindowWidth / 10, WindowHeight - WindowHeight / 20, player.Health, 50);
 
-                case gameState.Instructions:
-                    //when the player is finished reading instructions presses 
-                    if(SingleKeyPress(Keys.Enter, kbState))
-                    {
-                        currentState = gameState.EnterName;
                     }
-
                     break;
 
                 case gameState.EnterName:
-                    bool nameEntered = false;
-
-                    while (!nameEntered)
+                    if(name.Length < 3)
                     {
-                        Keys currentKey = ScoreboardInput();
-
-                        if (currentKey != Keys.Back)
+                        if(ScoreboardInput() != null && ScoreboardInput() != "back")
                         {
-                            name += currentKey.ToString();
+                            name += ScoreboardInput();
                         }
-                        else
-                        {
-                            name = name[name.Length - 1];
-                        }
-                        //run method to enter letters into the name here
-
-                        if (SingleKeyPress(Keys.Enter, kbState))
-                        {
-                            nameEntered = true;
-                        }
-                        else if (SingleKeyPress(Keys.Back, kbState))
-                        {
-
-                        }
+                        
                     }
+
+                    if (ScoreboardInput() == "back" && name.Length >= 1)
+                    {
+                        name = name.Remove(name.Length - 1, 1);
+                    }
+
+                    if (SingleKeyPress(Keys.Enter, kbState))
+                    {
+                        scoreBoardInfo[name] = 0;
+                        currentState = gameState.Instructions;
+                    }
+                    break;
 
 
                 case gameState.Instructions:
@@ -585,6 +577,8 @@ namespace Palingenesis
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
                     
                     break;
+
+               
 
                 case gameState.Instructions:
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
@@ -946,24 +940,122 @@ namespace Palingenesis
             }
         }
 
-        /*
-         * what we need: name to display + save to scoreboard file
-         * 
-         * - see which keys are being pressed
-         *      - use kbstate.GetKeysPressed
-         *      - have conditions for pressing enter or backspace
-         * - save pressed keys to a string of characters
-         * - return the string and add it as a key to the dictionary (TBD)
+        
          
         private string ScoreboardInput()
         {
-            string name = null;
-            Keys input = Keys.S;
-            while(input != Keys.Enter)
+            if(SingleKeyPress(Keys.A, kbState))
             {
-                //Keys kbState.GetPressedKeys
+                return "a";
             }
+            if (SingleKeyPress(Keys.B, kbState))
+            {
+                return "b";
+            }
+            if (SingleKeyPress(Keys.C, kbState))
+            {
+                return "c";
+            }
+            if (SingleKeyPress(Keys.D, kbState))
+            {
+                return "d";
+            }
+            if (SingleKeyPress(Keys.E, kbState))
+            {
+                return "e";
+            }
+            if (SingleKeyPress(Keys.F, kbState))
+            {
+                return "f";
+            }
+            if (SingleKeyPress(Keys.G, kbState))
+            {
+                return "g";
+            }
+            if (SingleKeyPress(Keys.H, kbState))
+            {
+                return "h";
+            }
+            if (SingleKeyPress(Keys.I, kbState))
+            {
+                return "i";
+            }
+            if (SingleKeyPress(Keys.J, kbState))
+            {
+                return "j";
+            }
+            if (SingleKeyPress(Keys.K, kbState))
+            {
+                return "k";
+            }
+            if (SingleKeyPress(Keys.L, kbState))
+            {
+                return "l";
+            }
+            if (SingleKeyPress(Keys.M, kbState))
+            {
+                return "m";
+            }
+            if (SingleKeyPress(Keys.N, kbState))
+            {
+                return "n";
+            }
+            if (SingleKeyPress(Keys.O, kbState))
+            {
+                return "o";
+            }
+            if (SingleKeyPress(Keys.P, kbState))
+            {
+                return "p";
+            }
+            if (SingleKeyPress(Keys.Q, kbState))
+            {
+                return "q";
+            }
+            if (SingleKeyPress(Keys.R, kbState))
+            {
+                return "r";
+            }
+            if (SingleKeyPress(Keys.S, kbState))
+            {
+                return "s";
+            }
+            if (SingleKeyPress(Keys.T, kbState))
+            {
+                return "t";
+            }
+            if (SingleKeyPress(Keys.U, kbState))
+            {
+                return "u";
+            }
+            if (SingleKeyPress(Keys.V, kbState))
+            {
+                return "v";
+            }
+            if (SingleKeyPress(Keys.W, kbState))
+            {
+                return "w";
+            }
+            if (SingleKeyPress(Keys.X, kbState))
+            {
+                return "x";
+            }
+            if (SingleKeyPress(Keys.Y, kbState))
+            {
+                return "y";
+            }
+            if (SingleKeyPress(Keys.Z, kbState))
+            {
+                return "z";
+            }
+            if (SingleKeyPress(Keys.Back, kbState))
+            {
+                return "back";
+            }
+
+            return null;
+            
         }
-        */
+        
     }
 }
