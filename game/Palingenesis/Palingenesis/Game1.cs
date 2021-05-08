@@ -336,7 +336,7 @@ namespace Palingenesis
                     elapsed -= time;
 
                     //logic for drawing each order based on elapsed seconds
-                    if (elapsed < 0 && boss.IsCharging == false)
+                    if (elapsed < 1 && boss.IsCharging == false)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
                         int tmp = rng.Next(0, 7);
@@ -446,14 +446,13 @@ namespace Palingenesis
                         //Loads other boss that was not loaded already
                         if(randomChoice==1)
                         {
-                            LoadBoss(2);
                             randomChoice = 2;
+                            
                             DialogueListAdd();
                             LoadHealthBars();
                         }
                         else if(randomChoice==2)
                         {
-                            LoadBoss(1);
                             randomChoice = 1;
                             DialogueListAdd();
                             LoadHealthBars();
@@ -751,7 +750,7 @@ namespace Palingenesis
                         int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
                         int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
                         int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
+                        nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
                         line = input.ReadLine();
                     }
                     lineNumber++;
