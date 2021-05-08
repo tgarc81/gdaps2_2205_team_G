@@ -78,7 +78,7 @@ namespace Palingenesis
         /// <param name="direction"></param>
         /// <param name="target"></param>
         /// <param name="damage"></param>
-        public Bullet(Texture2D texture, Rectangle position, SoundEffect takeDamadge, int windowHeight, int windowWidth, BulletType Type, GameObject target, int damage) : base(0, 10, 0, damage, texture, position, windowHeight, windowWidth)
+        public Bullet(Texture2D texture, Rectangle position, SoundEffect takeDamadge, int windowHeight, int windowWidth, BulletType Type, GameObject target, int damage, int moveSpeed) : base(0, moveSpeed, 0, damage, texture, position, windowHeight, windowWidth)
         {
             this.texture = texture;
             this.Type = Type;

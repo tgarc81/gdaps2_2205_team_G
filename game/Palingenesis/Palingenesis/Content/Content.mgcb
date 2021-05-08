@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin 10 Min.Meditation Music for Positive Energy - GUARANTEED Find Inner Peace within 10 Min..mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:10 Min.Meditation Music for Positive Energy - GUARANTEED Find Inner Peace within 10 Min..mp3
+
 #begin attackPlaceholder.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -24,6 +30,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:attackPlaceholder.png
+
+#begin back-error_sound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:back-error_sound.wav
 
 #begin bar.jpg
 /importer:TextureImporter
@@ -80,6 +92,12 @@
 /processorParam:TextureFormat=Color
 /build:Bingus.png
 
+#begin Bonk.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Bonk.wav
+
 #begin bossPlaceHolder.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -97,6 +115,18 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:deathSound.mp3
+
+#begin deathSound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:deathSound.wav
+
+#begin Fire Sanctuary - The Legend of Zelda Skyward Sword.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Fire Sanctuary - The Legend of Zelda Skyward Sword.mp3
 
 #begin Fireball.png
 /importer:TextureImporter
@@ -116,6 +146,12 @@
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:font.spritefont
+
+#begin forward_sound.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:forward_sound.wav
 
 #begin GameOver.png
 /importer:TextureImporter
@@ -141,6 +177,18 @@
 /processorParam:TextureFormat=Color
 /build:GameOverScreen.jpg
 
+#begin instructions screen.PNG
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:instructions screen.PNG
+
 #begin InstructionsPlaceHolder.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -152,6 +200,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:InstructionsPlaceHolder.png
+
+#begin Landia - Kirby's Return to Dream Land.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Landia - Kirby's Return to Dream Land.mp3
 
 #begin naga fire worm.png
 /importer:TextureImporter
@@ -212,6 +266,42 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:nagaBossVNMain.png
+
+#begin nagaclosedNervous.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:nagaclosedNervous.png
+
+#begin nagaopenMad.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:nagaopenMad.png
+
+#begin NagaTeleport.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:NagaTeleport.png
 
 #begin namebox.jpg
 /importer:TextureImporter
@@ -284,6 +374,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:RGbackgroundVN.jpg
+
+#begin RGTeleport.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:RGTeleport.png
 
 #begin rice.png
 /importer:TextureImporter
@@ -423,6 +525,12 @@
 /processorParam:TextureFormat=Color
 /build:spriteSheetPalagenisis.png
 
+#begin takeDamadge.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:takeDamadge.wav
+
 #begin teleportPlaceHolder.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -507,105 +615,9 @@
 /processorParam:TextureFormat=Color
 /build:titlescreen.png
 
-#begin nagaopenMad.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:nagaopenMad.png
-
-#begin nagaclosedNervous.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:nagaclosedNervous.png
-
 #begin VOICES- Cello Instrumental by Yoko Kanno.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:VOICES- Cello Instrumental by Yoko Kanno.mp3
-
-#begin Landia - Kirby's Return to Dream Land.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Landia - Kirby's Return to Dream Land.mp3
-
-#begin Fire Sanctuary - The Legend of Zelda Skyward Sword.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:Fire Sanctuary - The Legend of Zelda Skyward Sword.mp3
-
-#begin Bonk.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:Bonk.wav
-
-#begin deathSound.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:deathSound.wav
-
-#begin forward_sound.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:forward_sound.wav
-
-#begin back-error_sound.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:back-error_sound.wav
-
-#begin takeDamadge.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:takeDamadge.wav
-
-#begin 10 Min.Meditation Music for Positive Energy - GUARANTEED Find Inner Peace within 10 Min..mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:10 Min.Meditation Music for Positive Energy - GUARANTEED Find Inner Peace within 10 Min..mp3
-
-#begin NagaTeleport.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NagaTeleport.png
-
-#begin RGTeleport.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:RGTeleport.png
 

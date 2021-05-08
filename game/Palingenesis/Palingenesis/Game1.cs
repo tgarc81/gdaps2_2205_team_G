@@ -60,13 +60,22 @@ namespace Palingenesis
         private double attackTimer;
         private double elapsed = 2;
         private const double Elapsed = 2;
+        private Dictionary<string, int> scoreBoardInfo = new Dictionary<string, int>();
+        private SortedList timesSorted = new SortedList();
+        
+        private int PlayerTime = 0;
 
         private Player player; // Represents the actual player
         private Boss boss; //boss object
+        private Boss riceGoddess; // Rice Goddess boss
+        private Boss nagaBoss; // Naga Boss
 
         //health bar objects
         HealthBar BossHealth;
         HealthBar PlayerHealth;
+
+        private string name = "";
+       
 
         int randomChoice;
         private int dialogueNum = 0;
@@ -106,6 +115,7 @@ namespace Palingenesis
         private Texture2D RGteleportTexture;
         private Texture2D NAteleportTexture;
         private Texture2D nagaBossTexture;
+        private Texture2D instructionScreen;
 
         //VN variables are for visual novel.
         private Texture2D RGVNDefault;
@@ -183,9 +193,10 @@ namespace Palingenesis
             
             //Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
-            instructions = Content.Load<Texture2D>("InstructionsPlaceHolder");
+            instructions = Content.Load<Texture2D>("instructions screen");
             pauseScreen = Content.Load<Texture2D>("PauseScreen");
             scoreBoard= Content.Load<Texture2D>("ScoreBoard");
+            name = "";
 
             //Load gameplay textures
             riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
@@ -229,8 +240,8 @@ namespace Palingenesis
 
 
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
-            // TODO: make a placeholder asset for the boss
             boss = null;
+            time = 0;
         }
 
         protected override void Update(GameTime gameTime)
@@ -247,19 +258,50 @@ namespace Palingenesis
                     //pressing enter on the main menu starts the game
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
-                       
+
                         LoadBoss(randomChoice);
                         player.Reset();
-                        boss.Reset();
+                        //boss.Reset();
                         scoreTimer = 0;
                         DialogueListAdd();
                         currentState = gameState.Instructions;
                         forwardVN.Play();
                         LoadHealthBars();
-                       
+
+
+                        currentState = gameState.EnterName;
+                        //MediaPlayer.Play(forwardVN);
+
+                        //Makes the rectangles for player and boss HP
+                        Rectangle BossHPBar = new Rectangle(WindowWidth / 2 - WindowWidth / 4, WindowHeight / 10, boss.Health, 50);
+                        Rectangle PlayerHPBar = new Rectangle(WindowWidth / 10, WindowHeight - WindowHeight / 20, player.Health, 50);
+
+                    }
+                    break;
+
+                case gameState.EnterName:
+                    if(name.Length < 3)
+                    {
+                        if(ScoreboardInput() != null && ScoreboardInput() != "back")
+                        {
+                            name += ScoreboardInput();
+                        }
+                        
                     }
 
+                    if (ScoreboardInput() == "back" && name.Length >= 1)
+                    {
+                        name = name.Remove(name.Length - 1, 1);
+                    }
+
+                    if (SingleKeyPress(Keys.Enter, kbState) && name.Length > 0)
+                    {
+                        scoreBoardInfo[name] = 0;
+                        currentState = gameState.Instructions;
+                    }
+                    
                     break;
+
 
                 case gameState.Instructions:
                     //when the player is finished reading instructions presses 
@@ -267,8 +309,8 @@ namespace Palingenesis
                     {
                         currentState = gameState.Dialouge;
                     }
-
                     break;
+
                 case gameState.Game:
                     //updates player and bosses
                     player.Update();
@@ -294,10 +336,10 @@ namespace Palingenesis
                     elapsed -= time;
 
                     //logic for drawing each order based on elapsed seconds
-                    if (elapsed < 0 && boss.IsCharging == false)
+                    if (elapsed < 1 && boss.IsCharging == false)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
-                        int tmp = rng.Next(0, 6);
+                        int tmp = rng.Next(0, 7);
                        
                         boss.AI(tmp, player, elapsed, gameTime);
 
@@ -383,6 +425,7 @@ namespace Palingenesis
                     if ((boss.Health <= 0) && (Boss1Beaten == true))
                     {
                         Boss2Beaten = true;
+                        player.Reset();
                         currentState = gameState.Dialouge;
                         IsMusicPlaying = false;
                         MediaPlayer.Stop();
@@ -397,19 +440,19 @@ namespace Palingenesis
                         IsMusicPlaying = false;
                         player.Health = player.MaxHealth;
                         PlayerHealth.ResetHealth(player.MaxHealth);
+                        player.Reset();
                         MediaPlayer.Stop();
 
                         //Loads other boss that was not loaded already
                         if(randomChoice==1)
                         {
-                            LoadBoss(2);
                             randomChoice = 2;
+                            
                             DialogueListAdd();
                             LoadHealthBars();
                         }
                         else if(randomChoice==2)
                         {
-                            LoadBoss(1);
                             randomChoice = 1;
                             DialogueListAdd();
                             LoadHealthBars();
@@ -417,8 +460,6 @@ namespace Palingenesis
 
                        
                     }
-
-                    
 
                     break;
 
@@ -481,6 +522,7 @@ namespace Palingenesis
                         Boss1Beaten = false;
                         Boss2Beaten = false;
                         hasFoughtBoss2 = false;
+                        
                         MediaPlayer.Stop();
                         LoadScoreboard();
                         break;
@@ -498,6 +540,7 @@ namespace Palingenesis
                     //when there is no remaining dialouge starts the next section of the game
                     if (dialougeList[dialogueNum]== null)
                     {
+                        boss.Reset();
                         currentState = gameState.Game;
                         IsMusicPlaying = false;
                         MediaPlayer.Stop();
@@ -516,11 +559,15 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.M, kbState))
                     {
                         currentState = gameState.Menu;
+                        MediaPlayer.Stop();
                     }
 
                     break;
 
                 case gameState.ScoreBoard:
+
+                    scoreBoardInfo[name] = (int)scoreTimer;
+
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
@@ -548,10 +595,20 @@ namespace Palingenesis
                     
                     break;
 
+               
+
                 case gameState.Instructions:
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
-                    // TODO: make image for instructions
                     _spriteBatch.Draw(instructions, new Vector2(), Color.White);
+                    break;
+
+                case gameState.EnterName:
+                    if(name != null)
+                    {
+                        _spriteBatch.DrawString(font, name, new Vector2(100, 100), Color.Black);
+                    }
+                    
+                    
                     break;
 
                 case gameState.Game:
@@ -591,7 +648,6 @@ namespace Palingenesis
                             player.Draw(_spriteBatch, Color.Red);
                         }
                     }
-                    //TODO: If bullet collides with player, pass in red instead
 
                     BossHealth.Draw(_spriteBatch);
                     PlayerHealth.Draw(_spriteBatch);
@@ -622,7 +678,6 @@ namespace Palingenesis
                 case gameState.Dialouge:
                     //draws object from dialgoe list using that object's dialogue method.
                     dialougeList[dialogueNum].Draw(_spriteBatch); // possible bug
-                    // TODO: figure out the actual position later
                     
                    // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
@@ -668,74 +723,59 @@ namespace Palingenesis
         /// </summary>
         private void LoadBoss(int randomChoice)
         {
+            StreamReader input = null;
+            try
+            {
+                input = new StreamReader("../../../BossFile.txt"); // Opens a StreamReader specifically to the BossFile file
+                string line = "DEFAULT";
+                int lineNumber = 1; // The current line in the file, initialized at 1
+                string[] data;
+                while (line != null) // If there are still lines in the BossFile document
+                {
+                    if(lineNumber == 1) // Initializes each boss based on the current line in the file
+                    {
+                        line = input.ReadLine();
+                        data = line.Split(',');
+                        int health = int.Parse(data[0]); // Makes health based on first element of data
+                        int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                        int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                        int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                        riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
+                    }
+                    else if(lineNumber == 2) // Initializes each boss based on the current line in the file
+                    {
+                        line = input.ReadLine();
+                        data = line.Split(',');
+                        int health = int.Parse(data[0]); // Makes health based on first element of data
+                        int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                        int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                        int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                        nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
+                        line = input.ReadLine();
+                    }
+                    lineNumber++;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
             //temporarily set so only the naga will appear
             if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
             {
                 if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
                 {
                     isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
-                    StreamReader input = null;
-                    try
-                    {
-                        input = new StreamReader("../../../RiceGoddess.txt"); // Opens a StreamReader specifically to the RiceGoddess file
-                        string line = null;
-                        string[] data;
-                        while ((line = input.ReadLine()) != null) // Reads line in Rice Goddess document
-                        {
-                            data = line.Split(',');
-                            int health = int.Parse(data[0]); // Makes health based on first element of data
-                            int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
-                            int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
-                            int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        // TODO: A way to output to user
-                    }
+                    boss = riceGoddess; // Makes the current boss the Rice Goddess
                 }
-                //I commented this out because it would always end up loading the opposite boss dialogue
-                /*
-                while(randomChoice == 1)
-                {
-                    randomChoice = rng.Next(1, 3);
-                }
-                */
             }
             else if (randomChoice == 2) // If it randomly chooses to load the Naga boss
             {
                 if (!isNagaBossLoaded) // If the Naga boss hasn't been loaded in this game yet
                 {
                     isNagaBossLoaded = true; // Changes bool so that Naga boss has been loaded in this game
-                    StreamReader input = null;
-                    try
-                    {
-                        input = new StreamReader("../../../NagaBoss.txt"); // Opens a StreamReader specifically to the Naga boss file
-                        string line = null;
-                        string[] data;
-                        while ((line = input.ReadLine()) != null) // Reads line in Naga boss document
-                        {
-                            data = line.Split(',');
-                            int health = int.Parse(data[0]); // Makes health based on first element of data
-                            int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
-                            int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
-                            int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                            boss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga boss using data gathered from the file
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        // A way to output to user
-                    }
+                    boss = nagaBoss; // Makes the current boss the Naga Boss
                 }
-                //I commented this out because it would always end up loading the opposite boss dialogue
-                /*
-                while (randomChoice == 2)
-                {
-                    randomChoice = rng.Next(1, 3);
-                }
-                */
             }
             if (boss != null)
             {
@@ -768,7 +808,7 @@ namespace Palingenesis
             }
             catch(Exception e)
             {
-                // TODO: Output error message
+                System.Diagnostics.Debug.WriteLine("boss failed to load");
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (output != null)
@@ -800,7 +840,7 @@ namespace Palingenesis
             }
             catch(Exception e)
             {
-                // TODO: Error message
+                System.Diagnostics.Debug.WriteLine("Score board load failed");
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (input != null)
@@ -901,24 +941,123 @@ namespace Palingenesis
                     break;
             }
         }
-    /*
-     * what we need: name to display + save to scoreboard file
-     * 
-     * - see which keys are being pressed
-     *      - use kbstate.GetKeysPressed
-     *      - have conditions for pressing enter or backspace
-     * - save pressed keys to a string of characters
-     * - return the string and add it as a key to the dictionary (TBD)
 
-    private string ScoreboardInput()
-    {
-        string name = null;
-        Keys input = Keys.S;
-        while(input != Keys.Enter)
+        
+         
+        private string ScoreboardInput()
         {
-            //Keys kbState.GetPressedKeys
+            if(SingleKeyPress(Keys.A, kbState))
+            {
+                return "a";
+            }
+            if (SingleKeyPress(Keys.B, kbState))
+            {
+                return "b";
+            }
+            if (SingleKeyPress(Keys.C, kbState))
+            {
+                return "c";
+            }
+            if (SingleKeyPress(Keys.D, kbState))
+            {
+                return "d";
+            }
+            if (SingleKeyPress(Keys.E, kbState))
+            {
+                return "e";
+            }
+            if (SingleKeyPress(Keys.F, kbState))
+            {
+                return "f";
+            }
+            if (SingleKeyPress(Keys.G, kbState))
+            {
+                return "g";
+            }
+            if (SingleKeyPress(Keys.H, kbState))
+            {
+                return "h";
+            }
+            if (SingleKeyPress(Keys.I, kbState))
+            {
+                return "i";
+            }
+            if (SingleKeyPress(Keys.J, kbState))
+            {
+                return "j";
+            }
+            if (SingleKeyPress(Keys.K, kbState))
+            {
+                return "k";
+            }
+            if (SingleKeyPress(Keys.L, kbState))
+            {
+                return "l";
+            }
+            if (SingleKeyPress(Keys.M, kbState))
+            {
+                return "m";
+            }
+            if (SingleKeyPress(Keys.N, kbState))
+            {
+                return "n";
+            }
+            if (SingleKeyPress(Keys.O, kbState))
+            {
+                return "o";
+            }
+            if (SingleKeyPress(Keys.P, kbState))
+            {
+                return "p";
+            }
+            if (SingleKeyPress(Keys.Q, kbState))
+            {
+                return "q";
+            }
+            if (SingleKeyPress(Keys.R, kbState))
+            {
+                return "r";
+            }
+            if (SingleKeyPress(Keys.S, kbState))
+            {
+                return "s";
+            }
+            if (SingleKeyPress(Keys.T, kbState))
+            {
+                return "t";
+            }
+            if (SingleKeyPress(Keys.U, kbState))
+            {
+                return "u";
+            }
+            if (SingleKeyPress(Keys.V, kbState))
+            {
+                return "v";
+            }
+            if (SingleKeyPress(Keys.W, kbState))
+            {
+                return "w";
+            }
+            if (SingleKeyPress(Keys.X, kbState))
+            {
+                return "x";
+            }
+            if (SingleKeyPress(Keys.Y, kbState))
+            {
+                return "y";
+            }
+            if (SingleKeyPress(Keys.Z, kbState))
+            {
+                return "z";
+            }
+            if (SingleKeyPress(Keys.Back, kbState))
+            {
+                return "back";
+            }
+
+            return null;
+            
         }
+        
     }
-    */
-}
 }
