@@ -263,6 +263,9 @@ namespace Palingenesis
                         boss.Reset();
                         scoreTimer = 0;
                         DialogueListAdd();
+                        currentState = gameState.Instructions;
+                        forwardVN.Play();
+                        LoadHealthBars();
 
 
                         currentState = gameState.EnterName;
@@ -463,6 +466,12 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
+                        dialogueNum = 0;
+                        dialougeList.Clear();
+                        IsMusicPlaying = false;
+                        Boss1Beaten = false;
+                        Boss2Beaten = false;
+                        hasFoughtBoss2 = false;
                     }
 
                     break;
@@ -511,6 +520,7 @@ namespace Palingenesis
                         Boss1Beaten = false;
                         Boss2Beaten = false;
                         hasFoughtBoss2 = false;
+                        
                         MediaPlayer.Stop();
                         LoadScoreboard();
                         break;
@@ -546,6 +556,7 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.M, kbState))
                     {
                         currentState = gameState.Menu;
+                        MediaPlayer.Stop();
                     }
 
                     break;
@@ -736,16 +747,9 @@ namespace Palingenesis
                     }
                     catch (Exception e)
                     {
-                        // TODO: A way to output to user
+                        
                     }
                 }
-                //I commented this out because it would always end up loading the opposite boss dialogue
-                /*
-                while(randomChoice == 1)
-                {
-                    randomChoice = rng.Next(1, 3);
-                }
-                */
             }
             else if (randomChoice == 2) // If it randomly chooses to load the Naga boss
             {
