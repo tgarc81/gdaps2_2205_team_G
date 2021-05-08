@@ -19,7 +19,7 @@ namespace Palingenesis
     /// <summary>
     /// enum used in the FSM
     /// </summary>
-    enum gameState
+    enum GameState
     {
         Menu,
         ScoreBoard,
@@ -30,7 +30,7 @@ namespace Palingenesis
         Instructions,
         EnterName
     }
-    
+   
     
     public class Game1 : Game
     {
@@ -42,7 +42,9 @@ namespace Palingenesis
         private Random rng = new Random();
 
         //game starts in the menu state
-        private gameState currentState = gameState.Menu;
+        private GameState currentState;
+       
+
 
         private GameTime gametime = new GameTime();
 
@@ -97,7 +99,7 @@ namespace Palingenesis
         private bool Boss1Beaten;
         private bool Boss2Beaten;
         private bool IsMusicPlaying;
-        private bool hasFoughtBoss2;
+        private bool hasAdvanced;
 
         //Texture2D attributes
         private Texture2D playerAsset; // Represents player image
@@ -159,7 +161,7 @@ namespace Palingenesis
             bossesDefeated = 0;
             Boss1Beaten = false;
             Boss2Beaten = false;
-            hasFoughtBoss2 = false;
+            hasAdvanced = false;
             names = new List<string>();
             times = new List<double>();
             dialougeList = new List<Dialogue>();
@@ -167,6 +169,8 @@ namespace Palingenesis
             Random rng = new Random();
             randomChoice = rng.Next(1,3);
 
+            currentState = GameState.Menu;
+           
             //Media player properties (change volume if sounds are too loud)
             MediaPlayer.Volume = 1;
             MediaPlayer.IsRepeating = true;
@@ -254,7 +258,7 @@ namespace Palingenesis
 
             switch (currentState)
             {
-                case gameState.Menu:
+                case GameState.Menu:
                     //pressing enter on the main menu starts the game
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
@@ -264,12 +268,13 @@ namespace Palingenesis
                         //boss.Reset();
                         scoreTimer = 0;
                         DialogueListAdd();
-                        currentState = gameState.Instructions;
+                        currentState = GameState.Instructions;
                         forwardVN.Play();
                         LoadHealthBars();
+                        hasAdvanced = false;
 
 
-                        currentState = gameState.EnterName;
+                        currentState = GameState.EnterName;
                         //MediaPlayer.Play(forwardVN);
 
                         //Makes the rectangles for player and boss HP
@@ -279,7 +284,7 @@ namespace Palingenesis
                     }
                     break;
 
-                case gameState.EnterName:
+                case GameState.EnterName:
                     if(name.Length < 3)
                     {
                         if(ScoreboardInput() != null && ScoreboardInput() != "back")
@@ -297,21 +302,21 @@ namespace Palingenesis
                     if (SingleKeyPress(Keys.Enter, kbState) && name.Length > 0)
                     {
                         scoreBoardInfo[name] = 0;
-                        currentState = gameState.Instructions;
+                        currentState = GameState.Instructions;
                     }
                     
                     break;
 
 
-                case gameState.Instructions:
+                case GameState.Instructions:
                     //when the player is finished reading instructions presses 
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Dialouge;
+                        currentState = GameState.Dialouge;
                     }
                     break;
 
-                case gameState.Game:
+                case GameState.Game:
                     //updates player and bosses
                     player.Update();
                     boss.Update(player, bossUpdateTimer);
@@ -409,14 +414,14 @@ namespace Palingenesis
                     //pressing escape during the game pauses
                     if (SingleKeyPress(Keys.P, kbState))
                     {
-                        currentState = gameState.Pause;
+                        currentState = GameState.Pause;
                     }
 
                     //if the players health reaches zero game over
                     if(player.Health <= 0)
                     {
                         deathSound.Play();
-                        currentState = gameState.GameOver;
+                        currentState = GameState.GameOver;
                         IsMusicPlaying = false;
                         MediaPlayer.Stop();
                     }
@@ -426,7 +431,7 @@ namespace Palingenesis
                     {
                         Boss2Beaten = true;
                         player.Reset();
-                        currentState = gameState.Dialouge;
+                        currentState = GameState.Dialouge;
                         IsMusicPlaying = false;
                         MediaPlayer.Stop();
 
@@ -436,7 +441,7 @@ namespace Palingenesis
                     {
                         //resets player health and changes to dialogue section
                         Boss1Beaten = true;
-                        currentState = gameState.Dialouge;
+                        currentState = GameState.Dialouge;
                         IsMusicPlaying = false;
                         player.Health = player.MaxHealth;
                         PlayerHealth.ResetHealth(player.MaxHealth);
@@ -447,15 +452,16 @@ namespace Palingenesis
                         if(randomChoice==1)
                         {
                             randomChoice = 2;
-                            
                             DialogueListAdd();
-                            LoadHealthBars();
+                            randomChoice = 1;
+
+
                         }
                         else if(randomChoice==2)
                         {
                             randomChoice = 1;
                             DialogueListAdd();
-                            LoadHealthBars();
+                            randomChoice = 2;
                         }
 
                        
@@ -463,37 +469,24 @@ namespace Palingenesis
 
                     break;
 
-                case gameState.GameOver:
+                case GameState.GameOver:
                     //pressing enter on the game over screen sends you to the menu
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Menu;
+                        currentState = GameState.Menu;
                         dialogueNum = 0;
                         dialougeList.Clear();
                         IsMusicPlaying = false;
                         Boss1Beaten = false;
                         Boss2Beaten = false;
-                        hasFoughtBoss2 = false;
+                        hasAdvanced = false;
                     }
 
                     break;
 
-                case gameState.Dialouge:
+                case GameState.Dialouge:
 
-                    //Determines which music to play
-                    if ((randomChoice == 2) && (Boss1Beaten == true) && (hasFoughtBoss2 == false) && (!IsMusicPlaying))
-                    {
-                        MediaPlayer.Play(VNRiceGoddessOST);
-                        IsMusicPlaying = true;
-                    }
-
-                    else if ((randomChoice == 1) && (Boss1Beaten == true) && (hasFoughtBoss2 == false) && (!IsMusicPlaying))
-                    {
-                        MediaPlayer.Play(VNNagaOST);
-                        IsMusicPlaying = true;
-                    }
-
-                    else if (randomChoice == 1 && !IsMusicPlaying)
+                    if (randomChoice==1 && !IsMusicPlaying)
                     {
                         MediaPlayer.Play(VNRiceGoddessOST);
                         IsMusicPlaying = true;
@@ -513,35 +506,48 @@ namespace Palingenesis
                     }
 
                     //if you finish all the dialouge after beating both bosses it will take you to the scoreboard
-                    if ((dialougeList[dialogueNum] == null) && (Boss1Beaten == true) && (Boss2Beaten==true))
+                    if ((dialougeList[dialogueNum] == null) && (Boss1Beaten == true) && (Boss2Beaten == true))
                     {
-                        currentState = gameState.ScoreBoard;
+                        currentState = GameState.ScoreBoard;
                         dialogueNum = 0;
                         dialougeList.Clear();
                         IsMusicPlaying = false;
                         Boss1Beaten = false;
                         Boss2Beaten = false;
-                        hasFoughtBoss2 = false;
-                        
+                        hasAdvanced = false;
                         MediaPlayer.Stop();
                         LoadScoreboard();
                         break;
                     }
 
                     //checks for dialogue after game
-                    if ((dialougeList[dialogueNum + 1] == null) && (Boss1Beaten == true) &&(Boss2Beaten==false) && (hasFoughtBoss2==false))
+                    else if ((dialougeList[dialogueNum] == null) && (Boss1Beaten == true) && (Boss2Beaten == false)&& (hasAdvanced==false))
                     {
-                        currentState = gameState.Dialouge;
-                        dialogueNum =  dialogueNum+2;
+                        currentState = GameState.Dialouge;
+                        dialogueNum = dialogueNum +2;
+
+                        //Loads other boss that was not loaded already
+                        if (randomChoice == 1)
+                        {
+                            randomChoice = 2;
+                            LoadBoss(randomChoice);
+                            LoadHealthBars();
+                        }
+                        else if (randomChoice == 2)
+                        {
+                            randomChoice = 1;
+                            LoadBoss(randomChoice);
+                            LoadHealthBars();
+                        }
+                        hasAdvanced = true;
                         IsMusicPlaying = false;
-                        hasFoughtBoss2 = true;
                     }
 
                     //when there is no remaining dialouge starts the next section of the game
-                    if (dialougeList[dialogueNum]== null)
+                    else if (dialougeList[dialogueNum] == null)
                     {
                         boss.Reset();
-                        currentState = gameState.Game;
+                        currentState = GameState.Game;
                         IsMusicPlaying = false;
                         MediaPlayer.Stop();
                         dialogueNum++;
@@ -549,28 +555,28 @@ namespace Palingenesis
                     
                     break;
 
-                case gameState.Pause:
+                case GameState.Pause:
 
                     //pressing escape on pause restarts the game
                     if(SingleKeyPress(Keys.R, kbState))
                     {
-                        currentState = gameState.Game;
+                        currentState = GameState.Game;
                     }
                     if(SingleKeyPress(Keys.M, kbState))
                     {
-                        currentState = gameState.Menu;
+                        currentState = GameState.Menu;
                         MediaPlayer.Stop();
                     }
 
                     break;
 
-                case gameState.ScoreBoard:
+                case GameState.ScoreBoard:
 
                     scoreBoardInfo[name] = (int)scoreTimer;
 
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
-                        currentState = gameState.Menu;
+                        currentState = GameState.Menu;
                         SaveScoreboard();
                     }
 
@@ -589,7 +595,7 @@ namespace Palingenesis
             // TODO: Add your drawing code here
             switch (currentState)
             {
-                case gameState.Menu:
+                case GameState.Menu:
                     //drawing title screen
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
                     
@@ -597,12 +603,12 @@ namespace Palingenesis
 
                
 
-                case gameState.Instructions:
+                case GameState.Instructions:
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
                     _spriteBatch.Draw(instructions, new Vector2(), Color.White);
                     break;
 
-                case gameState.EnterName:
+                case GameState.EnterName:
                     if(name != null)
                     {
                         _spriteBatch.DrawString(font, name, new Vector2(100, 100), Color.Black);
@@ -611,7 +617,7 @@ namespace Palingenesis
                     
                     break;
 
-                case gameState.Game:
+                case GameState.Game:
                     //draws backgrounds for bosses
                     switch (randomChoice)
                     {
@@ -626,13 +632,13 @@ namespace Palingenesis
                     }
 
                     //drawing game text
-                    _spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
-                    _spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
-                    _spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
+                    //_spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
+                    //_spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
+                    //_spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
                      
-                    _spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
-                    _spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
-                    _spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
+                    //_spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
+                    //_spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
+                    //_spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
 
 
                     //debug only
@@ -669,24 +675,24 @@ namespace Palingenesis
                    
                     break;
 
-                case gameState.GameOver:
+                case GameState.GameOver:
                     _spriteBatch.Draw(gameOver, fullScreen, Color.White);
                     _spriteBatch.DrawString(font, "Press enter to return to Main menu", new Vector2(0, 0), Color.White);
                     
                     break;
 
-                case gameState.Dialouge:
+                case GameState.Dialouge:
                     //draws object from dialgoe list using that object's dialogue method.
                     dialougeList[dialogueNum].Draw(_spriteBatch); // possible bug
                     
                    // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
                   
-                case gameState.Pause:
+                case GameState.Pause:
                     _spriteBatch.Draw(pauseScreen, fullScreen, Color.White);
                     break;
 
-                case gameState.ScoreBoard:
+                case GameState.ScoreBoard:
                     //drawing final time on scoreboard
                     _spriteBatch.Draw(scoreBoard, fullScreen, Color.White);
                     _spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(1150, 200), Color.White);
@@ -718,6 +724,7 @@ namespace Palingenesis
             }
         }
 
+        /*
         /// <summary>
         /// Loads in boss data from file
         /// </summary>
@@ -742,7 +749,7 @@ namespace Palingenesis
                         int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
                         riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
                     }
-                    else if(lineNumber == 2) // Initializes each boss based on the current line in the file
+                    if(lineNumber == 2) // Initializes each boss based on the current line in the file
                     {
                         line = input.ReadLine();
                         data = line.Split(',');
@@ -769,7 +776,7 @@ namespace Palingenesis
                     boss = riceGoddess; // Makes the current boss the Rice Goddess
                 }
             }
-            else if (randomChoice == 2) // If it randomly chooses to load the Naga boss
+            if (randomChoice == 2) // If it randomly chooses to load the Naga boss
             {
                 if (!isNagaBossLoaded) // If the Naga boss hasn't been loaded in this game yet
                 {
@@ -783,6 +790,58 @@ namespace Palingenesis
             }
             
         }
+        */
+
+        private void LoadBoss(int randomChoice)
+        {
+
+            if (randomChoice == 1 && isRiceGoddessLoaded == false) // Initializes each boss based on the current line in the file
+            {
+
+                int health = 1000; // Makes health based on first element of data
+                int moveSpeed = 0; // Makes moveSpeed based on second element of data
+                int attackSpeed = 10; // Makes attackSpeed based on third element of data
+                int damage = 10; // Makes damage based on fourth element of data
+                riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
+                boss = riceGoddess;
+                isRiceGoddessLoaded = true;
+            }
+            else if (randomChoice==1)
+            {
+                boss = riceGoddess;
+            }
+
+            if (randomChoice == 2 && isNagaBossLoaded == false) // Initializes each boss based on the current line in the file
+            {
+
+                int health = 800; // Makes health based on first element of data
+                int moveSpeed = 0; // Makes moveSpeed based on second element of data
+                int attackSpeed = 20; // Makes attackSpeed based on third element of data
+                int damage = 10; // Makes damage based on fourth element of data
+                nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
+                boss = nagaBoss;
+                isNagaBossLoaded = true;
+            }
+            else if (randomChoice==2)
+            {
+                boss = nagaBoss;
+            }
+
+            if (boss != null)
+            {
+                boss.Center();
+            }
+            else
+            {
+                boss = riceGoddess;
+            }
+
+        }
+
+
+
+
+
 
         /// <summary>
         /// Saves the current scoreboard information to a file so that it may be saved and loaded in later on
@@ -878,7 +937,6 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "No, I'm good.", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "I'll give you my blessing, but remember that this is your path.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "ALL the responsiblity for what happens next lies on your shoulders.", false));
-                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "ALL the responsiblity for what happens next lies on your shoulders.", false));
                     dialougeList.Add(null);
 
                     break;
@@ -906,7 +964,6 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNAlternate, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "Sorry Naga.", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "See that wasn't so hard, recieve my blessing.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "As you progress, don't forget that true strength manifests itself from within.", false));
-                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "...", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "...", true));
                     dialougeList.Add(null);
                     break;

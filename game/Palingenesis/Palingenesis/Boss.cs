@@ -233,7 +233,6 @@ namespace Palingenesis
             }
             else if(tmp == 3)
             {
-               
                 SpecialAttack(target);
                 specialActive = true;
             }
