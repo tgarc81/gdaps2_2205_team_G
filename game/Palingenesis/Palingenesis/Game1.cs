@@ -427,6 +427,12 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = gameState.Menu;
+                        dialogueNum = 0;
+                        dialougeList.Clear();
+                        IsMusicPlaying = false;
+                        Boss1Beaten = false;
+                        Boss2Beaten = false;
+                        hasFoughtBoss2 = false;
                     }
 
                     break;
@@ -832,6 +838,7 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "No, I'm good.", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "I'll give you my blessing, but remember that this is your path.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "ALL the responsiblity for what happens next lies on your shoulders.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "ALL the responsiblity for what happens next lies on your shoulders.", false));
                     dialougeList.Add(null);
 
                     break;
@@ -859,6 +866,7 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNAlternate, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "Sorry Naga.", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "See that wasn't so hard, recieve my blessing.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "As you progress, don't forget that true strength manifests itself from within.", false));
+                    dialougeList.Add(new Dialogue(playerVNDefault, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "...", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "...", true));
                     dialougeList.Add(null);
                     break;
