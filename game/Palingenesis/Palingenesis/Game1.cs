@@ -240,7 +240,6 @@ namespace Palingenesis
 
 
             player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
-            // TODO: make a placeholder asset for the boss
             boss = null;
             time = 0;
         }
@@ -426,6 +425,7 @@ namespace Palingenesis
                     if ((boss.Health <= 0) && (Boss1Beaten == true))
                     {
                         Boss2Beaten = true;
+                        player.Reset();
                         currentState = gameState.Dialouge;
                         IsMusicPlaying = false;
                         MediaPlayer.Stop();
@@ -440,6 +440,7 @@ namespace Palingenesis
                         IsMusicPlaying = false;
                         player.Health = player.MaxHealth;
                         PlayerHealth.ResetHealth(player.MaxHealth);
+                        player.Reset();
                         MediaPlayer.Stop();
 
                         //Loads other boss that was not loaded already
@@ -599,7 +600,6 @@ namespace Palingenesis
 
                 case gameState.Instructions:
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
-                    // TODO: make image for instructions
                     _spriteBatch.Draw(instructions, new Vector2(), Color.White);
                     break;
 
@@ -649,7 +649,6 @@ namespace Palingenesis
                             player.Draw(_spriteBatch, Color.Red);
                         }
                     }
-                    //TODO: If bullet collides with player, pass in red instead
 
                     BossHealth.Draw(_spriteBatch);
                     PlayerHealth.Draw(_spriteBatch);
@@ -680,7 +679,6 @@ namespace Palingenesis
                 case gameState.Dialouge:
                     //draws object from dialgoe list using that object's dialogue method.
                     dialougeList[dialogueNum].Draw(_spriteBatch); // possible bug
-                    // TODO: figure out the actual position later
                     
                    // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
@@ -811,7 +809,7 @@ namespace Palingenesis
             }
             catch(Exception e)
             {
-                // TODO: Output error message
+                System.Diagnostics.Debug.WriteLine("boss failed to load");
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (output != null)
@@ -843,7 +841,7 @@ namespace Palingenesis
             }
             catch(Exception e)
             {
-                // TODO: Error message
+                System.Diagnostics.Debug.WriteLine("Score board load failed");
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (input != null)
