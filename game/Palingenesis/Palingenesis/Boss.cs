@@ -312,6 +312,40 @@ namespace Palingenesis
                            
         }
 
+        public void BRing(Player target, double timer)
+        {
+            //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
+            Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet LeftMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet bottomLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+
+            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+
+            int changeAmount = position.Width;
+
+            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+
+
+            ringList.Add(topLeftCorner);
+            ringList.Add(LeftMiddle);
+            ringList.Add(bottomLeftCorner);
+
+            ringList.Add(bottom);
+            ringList.Add(top);
+
+            ringList.Add(topRightCorner);
+            ringList.Add(RightMiddle);
+            ringList.Add(BottomRightCorner);
+
+            for (int i = 0; i < ringList.Count; i++)
+            {
+                projectileList.Add(ringList[i]);
+            }
+
+        }
         /// <summary>
         /// fires out shots in a circle around the boss
         /// </summary>
