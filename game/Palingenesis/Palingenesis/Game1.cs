@@ -113,6 +113,7 @@ namespace Palingenesis
         private Texture2D RGteleportTexture;
         private Texture2D NAteleportTexture;
         private Texture2D nagaBossTexture;
+        private Texture2D instructionScreen;
 
         //VN variables are for visual novel.
         private Texture2D RGVNDefault;
@@ -190,10 +191,11 @@ namespace Palingenesis
             
             //Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
-            instructions = Content.Load<Texture2D>("InstructionsPlaceHolder");
+            instructions = Content.Load<Texture2D>("instructions screen");
             pauseScreen = Content.Load<Texture2D>("PauseScreen");
             scoreBoard= Content.Load<Texture2D>("ScoreBoard");
             name = "";
+
             //Load gameplay textures
             riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
             nagaBossTexture = Content.Load<Texture2D>("naga fire worm");
@@ -288,11 +290,12 @@ namespace Palingenesis
                         name = name.Remove(name.Length - 1, 1);
                     }
 
-                    if (SingleKeyPress(Keys.Enter, kbState))
+                    if (SingleKeyPress(Keys.Enter, kbState) && name.Length > 0)
                     {
                         scoreBoardInfo[name] = 0;
                         currentState = gameState.Instructions;
                     }
+                    
                     break;
 
 
@@ -591,6 +594,7 @@ namespace Palingenesis
                     {
                         _spriteBatch.DrawString(font, name, new Vector2(100, 100), Color.Black);
                     }
+                    
                     
                     break;
 
