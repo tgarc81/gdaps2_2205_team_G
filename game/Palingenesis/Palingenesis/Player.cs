@@ -125,7 +125,7 @@ namespace Palingenesis
             //if statements for each arrow key direction
             if (keyboardState.IsKeyDown(Keys.Up) && prevKeyboardState.IsKeyUp(Keys.Up))
             {
-                // TODO: creates a rectangle 10 pixels above the player, will adjust exact values later
+                //creates a rectangle 10 pixels above the player
                 shotList.Add(new Bullet(shotTexture, new Rectangle(position.X, position.Y, 20, 20), takeDamadge, windowHeight, windowWidth, BulletType.Up, target, damage, attackSpeed));
                 
             }

@@ -241,8 +241,11 @@ namespace Palingenesis
             {
                 Charge(target, gameTime);
             }
-               
-            else
+            else if (tmp == 5)
+            {
+                BigRing(target, attackTimer);
+            }
+            else if (tmp==6)
             {
                 Ring(target, attackTimer);
             }
@@ -312,21 +315,26 @@ namespace Palingenesis
                            
         }
 
-        public void BRing(Player target, double timer)
+        /// <summary>
+        /// spawns a BIG ring of shots around the boss to make the player retreat
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="timer"></param>
+        public void BigRing(Player target, double timer)
         {
             //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
-            Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet LeftMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet bottomLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet LeftMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet bottomLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
-            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
             int changeAmount = position.Width;
 
-            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
-            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage);
+            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount/4), this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount/4), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount/4), this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
 
             ringList.Add(topLeftCorner);

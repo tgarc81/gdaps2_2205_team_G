@@ -340,7 +340,7 @@ namespace Palingenesis
                     if (elapsed < 0 && boss.IsCharging == false)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
-                        int tmp = rng.Next(0, 6);
+                        int tmp = rng.Next(0, 7);
                        
                         boss.AI(tmp, player, elapsed, gameTime);
 

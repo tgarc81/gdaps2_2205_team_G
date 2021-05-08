@@ -119,28 +119,27 @@ namespace Palingenesis
         /// moves to the next frame of the spritesheet
         /// </summary>
         /// <param name="gameTime"></param>
-        public void UpdateAnimation(GameTime gameTime)
-        {
-            // TODO: finish this method!!!!!
+        //public void UpdateAnimation(GameTime gameTime)
+        //{
 
-            // Handle animation timing
-            // - Add to the time counter
-            // - Check if we have enough "time" to advance the frame
+        //    // Handle animation timing
+        //    // - Add to the time counter
+        //    // - Check if we have enough "time" to advance the frame
 
-            // How much time has passed?  
-            timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
+        //    // How much time has passed?  
+        //    timeCounter += gameTime.ElapsedGameTime.TotalSeconds;
 
-            // If enough time has passed:
-            if (timeCounter >= timePerFrame)
-            {
-                frame += 1;                     // Adjust the frame to the next image
+        //    // If enough time has passed:
+        //    if (timeCounter >= timePerFrame)
+        //    {
+        //        frame += 1;                     // Adjust the frame to the next image
 
-                if (frame > WalkFrameCount)     // Check the bounds - have we reached the end of walk cycle?
-                    frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
+        //        if (frame > WalkFrameCount)     // Check the bounds - have we reached the end of walk cycle?
+        //            frame = 1;                  // Back to 1 (since 0 is the "standing" frame)
 
-                timeCounter -= timePerFrame;    // Remove the time we "used" - don't reset to 0
-                                                // This keeps the time passed 
-            }
-        }
+        //        timeCounter -= timePerFrame;    // Remove the time we "used" - don't reset to 0
+        //                                        // This keeps the time passed 
+        //    }
+        //}
     }
 }
