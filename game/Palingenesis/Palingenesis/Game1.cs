@@ -798,7 +798,7 @@ namespace Palingenesis
             if (randomChoice == 1 && isRiceGoddessLoaded == false) // Initializes each boss based on the current line in the file
             {
 
-                int health = 1000; // Makes health based on first element of data
+                int health = 1200; // Makes health based on first element of data
                 int moveSpeed = 0; // Makes moveSpeed based on second element of data
                 int attackSpeed = 10; // Makes attackSpeed based on third element of data
                 int damage = 10; // Makes damage based on fourth element of data
