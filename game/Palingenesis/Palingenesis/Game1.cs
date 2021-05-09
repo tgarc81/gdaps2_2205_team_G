@@ -62,7 +62,7 @@ namespace Palingenesis
         private double attackTimer;
         private double elapsed = 2;
         private const double Elapsed = 2;
-        private Dictionary<string, int> scoreBoardInfo = new Dictionary<string, int>();
+        private Dictionary<string, double> scoreBoardInfo = new Dictionary<string, double>();
         private SortedList timesSorted = new SortedList();
         
         private int PlayerTime = 0;
@@ -89,8 +89,6 @@ namespace Palingenesis
 
         // private List<string> dialougeList = new List<string>();
         private List<Dialogue> dialougeList;
-        private List<string> names; // Represents all the names to go in leaderboard
-        private List<double> times; // Represents all the times to go in leaderboard
 
         private String currentLine;
 
@@ -162,8 +160,6 @@ namespace Palingenesis
             Boss1Beaten = false;
             Boss2Beaten = false;
             hasAdvanced = false;
-            names = new List<string>();
-            times = new List<double>();
             dialougeList = new List<Dialogue>();
 
             Random rng = new Random();
@@ -301,7 +297,6 @@ namespace Palingenesis
 
                     if (SingleKeyPress(Keys.Enter, kbState) && name.Length > 0)
                     {
-                        scoreBoardInfo[name] = 0;
                         currentState = GameState.Instructions;
                     }
                     
@@ -516,7 +511,6 @@ namespace Palingenesis
                         Boss2Beaten = false;
                         hasAdvanced = false;
                         MediaPlayer.Stop();
-                        LoadScoreboard();
                         break;
                     }
 
@@ -572,11 +566,12 @@ namespace Palingenesis
 
                 case GameState.ScoreBoard:
 
-                    scoreBoardInfo[name] = (int)scoreTimer;
 
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = GameState.Menu;
+                        scoreBoardInfo.Add(name, scoreTimer);
+                        LoadScoreboard();
                         SaveScoreboard();
                     }
 
@@ -855,19 +850,15 @@ namespace Palingenesis
                 // When we open for writing, create the file if it doesn't exist yet
                 output = new StreamWriter("../../../Scoreboard.txt");
 
-                // We would get user input for name
-                string name = "DEFAULT"; // We would need a way to get user input for name
-                names.Add(name);
-                times.Add(scoreTimer);
-                for (int i = 0; i < names.Count; i++) // For each element in both the names and times List
+                foreach (KeyValuePair<string, double> kvp in scoreBoardInfo) // For every entry in the scoreboard info dictionary
                 {
-                    output.WriteLine($"{names[i]},{times[i]}"); // Add the corresponding name with their time in the file
+                    output.WriteLine($"{kvp.Key.ToString()},{kvp.Value.ToString()}"); // Save the name and time
                 }
                 // Confirmation message
             }
             catch(Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("boss failed to load");
+                System.Diagnostics.Debug.WriteLine("scoreboard failed to load");
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (output != null)
@@ -888,18 +879,17 @@ namespace Palingenesis
                 // Creating the streamreader opens the file
                 input = new StreamReader("../../../Scoreboard.txt");
                 string line = "DEFAULT";
-                String[] data = line.Split(",");
+                string[] data = line.Split(',');
                 // Loops through the file one line at a time
                 while ((line = input.ReadLine()) != null)
                 {
-                    names.Add(data[0]); // Adds the name in file to the list of names for scoreboard
-                    times.Add(int.Parse(data[1])); // Adds the corresponding times to match the name to the list of times for scoreboard
+                    scoreBoardInfo.Add(data[0], double.Parse(data[1]));
                 }
                 // Confirmation message
             }
             catch(Exception e)
             {
-                System.Diagnostics.Debug.WriteLine("Score board load failed");
+                System.Diagnostics.Debug.WriteLine($"Score board load failed: {e.Message}");
             }
             // Ensure that we can close the file, as long as it was actually opened in the first place
             if (input != null)
