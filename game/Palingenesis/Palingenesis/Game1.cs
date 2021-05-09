@@ -37,6 +37,8 @@ namespace Palingenesis
         private GraphicsDeviceManager graphics;
         private SpriteBatch _spriteBatch;
 
+        #region config game attributes
+
         Rectangle fullScreen = new Rectangle(0, 0, 1920, 1080);
 
         private Random rng = new Random();
@@ -44,62 +46,25 @@ namespace Palingenesis
         //game starts in the menu state
         private GameState currentState;
        
-
-
         private GameTime gametime = new GameTime();
 
         private KeyboardState kbState;
         private KeyboardState prevKbState;
+        #endregion
 
-        private SpriteFont font;
-        private SpriteFont fontVN;
-
+        #region timer attributes
         private double ringTimer; 
         private double specialTimer; // Represents the time elapsed in the game to be used for boss attacks
-        private double time; // Represents total time elapsed in the game
         private double bossUpdateTimer;
         private double scoreTimer = 0;
         private double attackTimer;
         private double elapsed = 2;
         private const double Elapsed = 2;
-        private Dictionary<string, double> scoreBoardInfo = new Dictionary<string, double>();
         private SortedList timesSorted = new SortedList();
-        
-        private int PlayerTime = 0;
+        private double time; // Represents total time elapsed in the game
+        #endregion
 
-        private Player player; // Represents the actual player
-        private Boss boss; //boss object
-        private Boss riceGoddess; // Rice Goddess boss
-        private Boss nagaBoss; // Naga Boss
-
-        //health bar objects
-        HealthBar BossHealth;
-        HealthBar PlayerHealth;
-
-        private string name = "";
-       
-
-        int randomChoice;
-        private int dialogueNum = 0;
-        private int numberOfDialougeFrames;
-        private int bossesDefeated;
-        private const int NumberOfBosses = 2;
-        private const int WindowWidth = 1920;
-        private const int WindowHeight = 1080;
-
-        // private List<string> dialougeList = new List<string>();
-        private List<Dialogue> dialougeList;
-
-        private String currentLine;
-
-        private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
-        private bool isNagaBossLoaded; // Bool that represents whether Naga boss has been loaded in this game
-        private bool Boss1Beaten;
-        private bool Boss2Beaten;
-        private bool IsMusicPlaying;
-        private bool hasAdvanced;
-
-        //Texture2D attributes
+        #region Texture2D attributes
         private Texture2D playerAsset; // Represents player image
         private Texture2D attackTextureRG;
         private Texture2D attackTextureNA;
@@ -117,8 +82,11 @@ namespace Palingenesis
         private Texture2D NAteleportTexture;
         private Texture2D nagaBossTexture;
         private Texture2D instructionScreen;
+        #endregion
 
-        //VN variables are for visual novel.
+        #region VN variables are for visual novel.
+        private SpriteFont font;
+        private SpriteFont fontVN;
         private Texture2D RGVNDefault;
         private Texture2D RGVNAlternate;
         private Texture2D RGVNWise;
@@ -133,8 +101,9 @@ namespace Palingenesis
         private Texture2D NAVNMad;
         private Texture2D NAbackgroundVN;
         private Texture2D pauseScreen;
+        #endregion
 
-        //Load sound effects and songs
+        #region Load sound effects and songs
         private SoundEffect takeDamadge;
         private SoundEffect deathSound;
         private SoundEffect forwardVN;
@@ -144,6 +113,43 @@ namespace Palingenesis
         private Song VNRiceGoddessOST;
         private Song NagaOST;
         private Song VNNagaOST;
+        #endregion
+
+        #region Game bools
+        private bool isRiceGoddessLoaded; // Bool that represents whether Rice Goddess boss has been loaded in this game
+        private bool isNagaBossLoaded; // Bool that represents whether Naga boss has been loaded in this game
+        private bool Boss1Beaten;
+        private bool Boss2Beaten;
+        private bool IsMusicPlaying;
+        private bool hasAdvanced;
+        #endregion
+
+        #region Game objects
+        private Player player; // Represents the actual player
+        private Boss boss; //boss object
+        private Boss riceGoddess; // Rice Goddess boss
+        private Boss nagaBoss; // Naga Boss
+
+        //health bar objects
+        HealthBar BossHealth;
+        HealthBar PlayerHealth;
+        #endregion
+
+        private Dictionary<string, double> scoreBoardInfo = new Dictionary<string, double>();
+        private int PlayerTime = 0;
+        private string name = "";
+
+        int randomChoice;
+        private int dialogueNum = 0;
+        private int numberOfDialougeFrames;
+        private int bossesDefeated;
+        private const int NumberOfBosses = 2;
+        private const int WindowWidth = 1920;
+        private const int WindowHeight = 1080;
+
+        private List<Dialogue> dialougeList;
+        private String currentLine;
+
 
         public Game1()
         {
@@ -179,7 +185,6 @@ namespace Palingenesis
             graphics.ApplyChanges();
             base.Initialize();
 
-            
         }
 
         protected override void LoadContent()
@@ -188,19 +193,16 @@ namespace Palingenesis
 
             // TODO: use this.Content to load your game content here
             
-            //Loading fonts
-            font = Content.Load<SpriteFont>("font");
-            fontVN = Content.Load<SpriteFont>("bigfont");
-            
-            //Load title screen textures
+            #region Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
-            instructions = Content.Load<Texture2D>("instructions screen");
+            instructions = Content.Load<Texture2D>("Instructions Screen (new)");
             namescreen = Content.Load<Texture2D>("enter_name_screen");
             pauseScreen = Content.Load<Texture2D>("PauseScreen");
             scoreBoard= Content.Load<Texture2D>("ScoreBoard");
             name = "";
+            #endregion
 
-            //Load gameplay textures
+            #region Load gameplay textures
             riceGoddessTexture = Content.Load<Texture2D>("RiceGoddessSprite");
             nagaBossTexture = Content.Load<Texture2D>("naga fire worm");
             playerAsset = Content.Load<Texture2D>("theophaniaInGame");
@@ -217,11 +219,9 @@ namespace Palingenesis
             hit = Content.Load<SoundEffect>("Bonk");
             RiceGoddessOST = Content.Load<Song>("Sad but True - The HU");
             NagaOST = Content.Load<Song>("Landia - Kirby's Return to Dream Land");
+            #endregion
 
-            //Load GameOver Textures
-            gameOver = Content.Load<Texture2D>("GameOverScreen");
-
-            //Load VN textures
+            #region Load VN textures
             textboxVN = Content.Load<Texture2D>("textbox");
             textboxNameVN = Content.Load<Texture2D>("rustyName");
             RGbackgroundVN = Content.Load<Texture2D>("RGbackgroundVN");
@@ -238,8 +238,14 @@ namespace Palingenesis
             forwardVN = Content.Load<SoundEffect>("forward_sound");
             VNRiceGoddessOST = Content.Load<Song>("10 Min.Meditation Music for Positive Energy - GUARANTEED Find Inner Peace within 10 Min.");
             VNNagaOST = Content.Load<Song>("Fire Sanctuary - The Legend of Zelda Skyward Sword");
-           
+            #endregion
 
+            //Loading fonts
+            font = Content.Load<SpriteFont>("font");
+            fontVN = Content.Load<SpriteFont>("bigfont");
+
+            //Load GameOver Textures
+            gameOver = Content.Load<Texture2D>("GameOverScreen");
 
             player = new Player(150, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
             boss = null;
@@ -254,6 +260,7 @@ namespace Palingenesis
             // TODO: Add your update logic here
             kbState = Keyboard.GetState();
 
+            //game state switch statement
             switch (currentState)
             {
                 case GameState.Menu:
@@ -271,16 +278,12 @@ namespace Palingenesis
                         LoadHealthBars();
                         hasAdvanced = false;
 
-
                         currentState = GameState.EnterName;
                         //MediaPlayer.Play(forwardVN);
-
-
                     }
                     break;
 
                 case GameState.EnterName:
-                    
                     //allows user to enter 3 charachters as a name
                     if(name.Length < 3)
                     {
@@ -290,19 +293,15 @@ namespace Palingenesis
                         }
                         
                     }
-
                     if (ScoreboardInput() == "back" && name.Length >= 1)
                     {
                         name = name.Remove(name.Length - 1, 1);
                     }
-
                     if (SingleKeyPress(Keys.Enter, kbState) && name.Length > 0)
                     {
                         currentState = GameState.Instructions;
                     }
-                    
                     break;
-
 
                 case GameState.Instructions:
                     //when the player is finished reading instructions presses 
@@ -310,6 +309,7 @@ namespace Palingenesis
                     {
                         currentState = GameState.Dialouge;
                     }
+
                     break;
 
                 case GameState.Game:
@@ -320,6 +320,7 @@ namespace Palingenesis
                     BossHealth.Update(boss.Health);
                     PlayerHealth.Update(player.Health);
 
+                    #region If-Statements and loops for the game
                     //Play Rice Goddess music
                     if (randomChoice==1 && !IsMusicPlaying)
                     {
@@ -463,7 +464,7 @@ namespace Palingenesis
                         }
 
                     }
-
+                    #endregion
                     break;
 
                 case GameState.GameOver:
@@ -480,11 +481,10 @@ namespace Palingenesis
                         Boss2Beaten = false;
                         hasAdvanced = false;
                     }
-
                     break;
 
                 case GameState.Dialouge:
-
+                    #region VN if statements
                     //plays rice godess VN music
                     if (randomChoice==1 && !IsMusicPlaying)
                     {
@@ -554,11 +554,10 @@ namespace Palingenesis
                         MediaPlayer.Stop();
                         dialogueNum++;
                     }
-                    
+                    #endregion
                     break;
 
                 case GameState.Pause:
-
                     //pressing escape on pause restarts the game
                     if(SingleKeyPress(Keys.R, kbState))
                     {
@@ -569,11 +568,9 @@ namespace Palingenesis
                         currentState = GameState.Menu;
                         MediaPlayer.Stop();
                     }
-
                     break;
 
                 case GameState.ScoreBoard:
-
                     //write and save scoreboard
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
@@ -582,10 +579,8 @@ namespace Palingenesis
                         LoadScoreboard();
                         SaveScoreboard();
                     }
-
                     break;
             }
-
 
             prevKbState = kbState;
             base.Update(gameTime);
@@ -614,9 +609,7 @@ namespace Palingenesis
                         _spriteBatch.Draw(namescreen, fullScreen, Color.White);
                         Vector2 pos = new Vector2(750, 670);
                         _spriteBatch.DrawString(fontVN, name, pos, Color.Black);
-                    }
-                    
-                    
+                    }                    
                     break;
 
                 case GameState.Game:
@@ -633,11 +626,12 @@ namespace Palingenesis
 
                     }
 
+                    #region commented out for now/might delete later
                     //drawing game text
                     //_spriteBatch.DrawString(font, "PlaceHolder for game", new Vector2(0, 0), Color.White);
                     //_spriteBatch.DrawString(font, "Use WASD to move player", new Vector2(0, 20), Color.White);
                     //_spriteBatch.DrawString(font, "Use arrow keys to attack", new Vector2(0, 40), Color.White);
-                     
+
                     //_spriteBatch.DrawString(font, "Press P to pause", new Vector2(0, 60), Color.White);
                     //_spriteBatch.DrawString(font, string.Format("Player Health: {0}", player.Health), new Vector2(0, 80), Color.White);
                     //_spriteBatch.DrawString(font, string.Format("Boss Health: {0}", boss.Health), new Vector2(0, 100), Color.White);
@@ -645,6 +639,7 @@ namespace Palingenesis
 
                     //debug only
                     //_spriteBatch.DrawString(font, string.Format("{0}", specialTimer), new Vector2(0, 150), Color.White);
+                    #endregion
 
                     //calling object draw methods
                     player.Draw(_spriteBatch, Color.White);
@@ -656,7 +651,6 @@ namespace Palingenesis
                             player.Draw(_spriteBatch, Color.Red);
                         }
                     }
-
                     BossHealth.Draw(_spriteBatch);
                     PlayerHealth.Draw(_spriteBatch);
 
@@ -672,9 +666,7 @@ namespace Palingenesis
                     {
                         player.ShotList[i].Draw(_spriteBatch, Color.White);
 
-                    }
-
-                   
+                    }                   
                     break;
 
                 case GameState.GameOver:
@@ -687,7 +679,7 @@ namespace Palingenesis
                     //draws object from dialgoe list using that object's dialogue method.
                     dialougeList[dialogueNum].Draw(_spriteBatch); // possible bug
                     
-                   // _spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
+                    //_spriteBatch.DrawString(font, string.Format("{0}", currentLine), new Vector2(100, 500), Color.White);
                     break;
                   
                 case GameState.Pause:
@@ -702,11 +694,12 @@ namespace Palingenesis
                     break;
             }
 
-
             _spriteBatch.End();
             base.Draw(gameTime);
         }
 
+
+        #region Game content methods (scroeboard, VN, bosses, healthbars, helper methods)
         /// <summary>
         /// Helper method to check if a key has been pressed
         /// </summary>
@@ -726,78 +719,14 @@ namespace Palingenesis
             }
         }
 
-        /*
         /// <summary>
-        /// Loads in boss data from file
+        /// Loads in boss data (not from a file)
         /// </summary>
+        /// <param name="randomChoice"></param>
         private void LoadBoss(int randomChoice)
         {
-            StreamReader input = null;
-            try
-            {
-                input = new StreamReader("../../../BossFile.txt"); // Opens a StreamReader specifically to the BossFile file
-                string line = "DEFAULT";
-                int lineNumber = 1; // The current line in the file, initialized at 1
-                string[] data;
-                while (line != null) // If there are still lines in the BossFile document
-                {
-                    if(lineNumber == 1) // Initializes each boss based on the current line in the file
-                    {
-                        line = input.ReadLine();
-                        data = line.Split(',');
-                        int health = int.Parse(data[0]); // Makes health based on first element of data
-                        int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
-                        int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
-                        int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
-                    }
-                    if(lineNumber == 2) // Initializes each boss based on the current line in the file
-                    {
-                        line = input.ReadLine();
-                        data = line.Split(',');
-                        int health = int.Parse(data[0]); // Makes health based on first element of data
-                        int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
-                        int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
-                        int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
-                        nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
-                        line = input.ReadLine();
-                    }
-                    lineNumber++;
-                }
-            }
-            catch (Exception e)
-            {
-
-            }
-            //temporarily set so only the naga will appear
-            if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
-            {
-                if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
-                {
-                    isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
-                    boss = riceGoddess; // Makes the current boss the Rice Goddess
-                }
-            }
-            if (randomChoice == 2) // If it randomly chooses to load the Naga boss
-            {
-                if (!isNagaBossLoaded) // If the Naga boss hasn't been loaded in this game yet
-                {
-                    isNagaBossLoaded = true; // Changes bool so that Naga boss has been loaded in this game
-                    boss = nagaBoss; // Makes the current boss the Naga Boss
-                }
-            }
-            if (boss != null)
-            {
-                boss.Center();
-            }
-            
-        }
-        */
-
-        private void LoadBoss(int randomChoice)
-        {
-
-            if (randomChoice == 1 && isRiceGoddessLoaded == false) // Initializes each boss based on the current line in the file
+            //randomly choosing boss
+            if (randomChoice == 1 && isRiceGoddessLoaded == false) 
             {
 
                 int health = 1200; // Makes health based on first element of data
@@ -839,11 +768,6 @@ namespace Palingenesis
             }
 
         }
-
-
-
-
-
 
         /// <summary>
         /// Saves the current scoreboard information to a file so that it may be saved and loaded in later on
@@ -909,16 +833,15 @@ namespace Palingenesis
         /// Adds dialougue to list, after reading in textures type in text and true or false based on if the player is speaking, insert null to break to fight
         /// </summary>
         private void DialogueListAdd()
-        {
-            
-
+        {            
             switch (randomChoice)
             {
                 
-             case 1:
+                case 1:
                     //Adds RiceGoddess dialougue
                     string BossName = "Rice Goddess";
                     Color BossColor = Color.Green;
+                    #region rice goddess dialougue
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "All this life in a place of death, kinda ironic.", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "This is not a place of death, it is a place of rebirth.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName,"Who are you supposed to be?", true));
@@ -935,13 +858,14 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNDefault, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "I'll give you my blessing, but remember that this is your path.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, RGVNWise, RGbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "ALL the responsiblity for what happens next lies on your shoulders.", false));
                     dialougeList.Add(null);
-
+                    #endregion
                     break;
 
                 case 2:
                     //Adds naga dialogue
                     BossName = "Naga";
                     BossColor = Color.Orange;
+                    #region naga dialogue
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "It's hot as hell down here.", true));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "Some heat will do some good to warm up that cold heart of yours.", false));
                     dialougeList.Add(new Dialogue(playerVNAlternate, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "Who are you calling cold, you snake...thing...whatever you are.", true));
@@ -963,10 +887,9 @@ namespace Palingenesis
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNDefault, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "As you progress, don't forget that true strength manifests itself from within.", false));
                     dialougeList.Add(new Dialogue(playerVNDefault, NAVNAlternate, NAbackgroundVN, textboxVN, textboxNameVN, fontVN, BossColor, BossName, "...", true));
                     dialougeList.Add(null);
+                    #endregion
                     break;
-            
             }
-          
         }
 
         /// <summary>
@@ -996,7 +919,6 @@ namespace Palingenesis
             }
         }
 
-        
         /// <summary>
         /// Gets user input for the input name section
         /// </summary>
@@ -1115,6 +1037,76 @@ namespace Palingenesis
             return null;
             
         }
-        
+        #endregion
+
+        //old load boss method (needs refinement)
+        /*
+/// <summary>
+/// Loads in boss data from file
+/// </summary>
+private void LoadBoss(int randomChoice)
+{
+    StreamReader input = null;
+    try
+    {
+        input = new StreamReader("../../../BossFile.txt"); // Opens a StreamReader specifically to the BossFile file
+        string line = "DEFAULT";
+        int lineNumber = 1; // The current line in the file, initialized at 1
+        string[] data;
+        while (line != null) // If there are still lines in the BossFile document
+        {
+            if(lineNumber == 1) // Initializes each boss based on the current line in the file
+            {
+                line = input.ReadLine();
+                data = line.Split(',');
+                int health = int.Parse(data[0]); // Makes health based on first element of data
+                int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
+            }
+            if(lineNumber == 2) // Initializes each boss based on the current line in the file
+            {
+                line = input.ReadLine();
+                data = line.Split(',');
+                int health = int.Parse(data[0]); // Makes health based on first element of data
+                int moveSpeed = int.Parse(data[1]); // Makes moveSpeed based on second element of data
+                int attackSpeed = int.Parse(data[2]); // Makes attackSpeed based on third element of data
+                int damage = int.Parse(data[3]); // Makes damage based on fourth element of data
+                nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
+                line = input.ReadLine();
+            }
+            lineNumber++;
+        }
+    }
+    catch (Exception e)
+    {
+
+    }
+    //temporarily set so only the naga will appear
+    if (randomChoice == 1) // If it randomly chooses to load the Rice Goddess
+    {
+        if (!isRiceGoddessLoaded) // If the Rice Goddess hasn't been loaded in this game yet
+        {
+            isRiceGoddessLoaded = true; // Changes bool so that Rice Goddess has been loaded in this game
+            boss = riceGoddess; // Makes the current boss the Rice Goddess
+        }
+    }
+    if (randomChoice == 2) // If it randomly chooses to load the Naga boss
+    {
+        if (!isNagaBossLoaded) // If the Naga boss hasn't been loaded in this game yet
+        {
+            isNagaBossLoaded = true; // Changes bool so that Naga boss has been loaded in this game
+            boss = nagaBoss; // Makes the current boss the Naga Boss
+        }
+    }
+    if (boss != null)
+    {
+        boss.Center();
+    }
+
+}
+*/
+
     }
 }

@@ -189,6 +189,18 @@
 /processorParam:TextureFormat=Color
 /build:GameOverScreen.jpg
 
+#begin Instructions Screen (new).png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Instructions Screen (new).png
+
 #begin instructions screen.PNG
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -218,6 +230,18 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:Landia - Kirby's Return to Dream Land.mp3
+
+#begin lavaBackground.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:lavaBackground.jpg
 
 #begin naga fire worm.png
 /importer:TextureImporter
@@ -254,6 +278,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:NagaBackgroundFight.jpg
+
+#begin NagaBG.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:NagaBG.jpg
 
 #begin nagaBossVNAlternate.png
 /importer:TextureImporter
@@ -632,28 +668,4 @@
 /processor:SongProcessor
 /processorParam:Quality=Best
 /build:VOICES- Cello Instrumental by Yoko Kanno.mp3
-
-#begin lavaBackground.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:lavaBackground.jpg
-
-#begin NagaBG.jpg
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:NagaBG.jpg
 

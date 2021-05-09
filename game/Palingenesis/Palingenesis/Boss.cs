@@ -263,7 +263,7 @@ namespace Palingenesis
         /// method for standard attacks
         /// </summary>
         /// <param name="target"></param>
-        private void Line(Player target) //currently busted 
+        private void Line(Player target) // TODO: currently busted 
         {
             //if the player is to the Right of the boss
             if(target.Position.X > this.position.X)
@@ -426,7 +426,7 @@ namespace Palingenesis
         /// Each boss's unique attack
         /// </summary>
         /// <param name="target"></param>
-        privatesswss void SpecialAttack(Player target)
+        private void SpecialAttack(Player target)
         {
             //spawns shots around the screen randomly that start doing damge after a certain period
             if(type == bossName.RiceGoddess)
