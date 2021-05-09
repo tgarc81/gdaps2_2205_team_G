@@ -40,12 +40,12 @@ namespace Palingenesis
         private Vector2 positionVector;
         private Vector2 ChargeUpdateVector;
 
-        private bool chargeEnded = false;
-        private bool chargeHit = false;
-        private bool isCharging = false;
-        private bool specialActive = false;
-        private bool ringActive = false;
-
+        private bool chargeEnded;
+        private bool chargeHit;
+        private bool isCharging;
+        private bool specialActive;
+        private bool ringActive;
+       
         private List<Bullet> projectileList = new List<Bullet>();
         private List<Bullet> specialList = new List<Bullet>();
         List<Bullet> ringList = new List<Bullet>();
@@ -106,7 +106,7 @@ namespace Palingenesis
         /// <param name="windowWidth"></param>
         /// <param name="type"></param>
         /// <param name="bulletTexture"></param>
-        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, SoundEffect takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture): 
+        public Boss (int health, int moveSpeed, int attackSpeed, int Damage, Texture2D texture, Rectangle position, SoundEffect takeDamage, int windowHeight, int windowWidth, bossName type, Texture2D bulletTexture, Texture2D teleportTexture): 
                      base(health, moveSpeed, attackSpeed, Damage, texture, position, windowHeight, windowWidth)
         {
             this.type = type;
@@ -114,7 +114,14 @@ namespace Palingenesis
             this.texture = texture;
             this.takeDamage = takeDamage;
             primaryTexture = texture;
-            
+            this.teleportTexture = teleportTexture;
+
+            chargeEnded = false;
+            chargeHit = false;
+            isCharging = false;
+            specialActive = false;
+            ringActive = false;
+          
         }
 
         public override void Update()
@@ -124,13 +131,16 @@ namespace Palingenesis
 
         public void Update(Player target, double timer)
         {
+            
+          
             // if the boss is charging
-            if(isCharging == true)
+            if (isCharging == true)
             {
                 for (int i = 0; i < ringList.Count; i++)
                 {
                     projectileList.Remove(ringList[i]);
                 }
+
                 //sets color to red
                 color = Color.Red;
 
@@ -164,27 +174,25 @@ namespace Palingenesis
             //when the charge has ended
             else if(isCharging == false && chargeEnded == true)
             {
-                   //changes the boss's texture
-                if (timer > 0.5 && timer < 1)
+                 //changes the boss's texture
+                if (timer > 0.2 && timer < 0.5)
                 {
-                    
                     texture = teleportTexture;
-                    timer = 0;
                 }
                 //moves the boss to the center
-                else if (timer > 1 && timer < 1.5)
+                else if (timer > 0.5 && timer < 0.75)
                 {
                     Center();
-                    timer = 0;
+                    chargeHit = false;
                 }
                 //resets the boss's texture
-                else if (timer > 1.5)
+                else if (timer > 0.75 && timer < 1)
                 {
                     texture = primaryTexture;
-                    timer = 0;
                 }
-                
+
             }
+
         }
 
         /// <summary>
@@ -248,15 +256,14 @@ namespace Palingenesis
             {
                 Ring(target, attackTimer);
             }
-
-                      
+               
         }
 
         /// <summary>
         /// method for standard attacks
         /// </summary>
         /// <param name="target"></param>
-        public void Line(Player target) //currently busted 
+        private void Line(Player target) //currently busted 
         {
             //if the player is to the Right of the boss
             if(target.Position.X > this.position.X)
@@ -279,7 +286,7 @@ namespace Palingenesis
         /// </summary>
         /// <param name="target"></param>
         /// <param name="timer"></param>
-        public void Ring(Player target, double timer)
+        private void Ring(Player target, double timer)
         {
             //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
             Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - 100, this.position.Y - 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
@@ -291,9 +298,9 @@ namespace Palingenesis
 
             int changeAmount = position.Width;
 
-            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y - 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount), this.position.Y + 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + changeAmount, this.position.Y - 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + changeAmount, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + changeAmount, this.position.Y + 100, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
 
             ringList.Add(topLeftCorner);
@@ -319,21 +326,21 @@ namespace Palingenesis
         /// </summary>
         /// <param name="target"></param>
         /// <param name="timer"></param>
-        public void BigRing(Player target, double timer)
+        private void BigRing(Player target, double timer)
         {
             //creates a ring of 9 bullets that don't move offset by 100 (in the y x or both directions) which will damage the player if they make contact
-            Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet LeftMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet bottomLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet topLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width*2, this.position.Y - position.Width*2, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet LeftMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width*2, this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet bottomLeftCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X - position.Width*2, this.position.Y + position.Width*2, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
-            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet bottom = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y + position.Width*2, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet top = new Bullet(bulletTexture, new Rectangle(this.Position.X, this.position.Y - position.Width*2, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
             int changeAmount = position.Width;
 
-            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount/4), this.position.Y - position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount/4), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
-            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width + changeAmount/4), this.position.Y + position.Width, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet topRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width*2 + changeAmount), this.position.Y - position.Width*2, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet RightMiddle = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width*2 + changeAmount), this.position.Y, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
+            Bullet BottomRightCorner = new Bullet(bulletTexture, new Rectangle(this.Position.X + (position.Width*2 + changeAmount), this.position.Y + position.Width*2, 60, 60), this.takeDamage, windowHeight, windowWidth, BulletType.ring, target, this.damage, this.attackSpeed);
 
 
             ringList.Add(topLeftCorner);
@@ -357,7 +364,7 @@ namespace Palingenesis
         /// fires out shots in a circle around the boss
         /// </summary>
         /// <param name="target"></param>
-        public void Circle(Player target)
+        private void Circle(Player target)
         {
             //Left
             CreateProjectiles(2, BulletType.Left, new Rectangle(position.X -position.Width/4, position.Y - position.Width / 2, 25, 25), 0, 75, target);
@@ -378,7 +385,7 @@ namespace Palingenesis
         /// </summary>
         /// <param name="target"></param>
         /// <param name="gameTime"></param>
-        public void Charge(Player target, GameTime gameTime)
+        private void Charge(Player target, GameTime gameTime)
         {
             //sets the current position 
             positionVector = new Vector2(position.X, position.Y);
@@ -397,11 +404,12 @@ namespace Palingenesis
            
         }
 
+
         /// <summary>
         /// fires a single large shot that does 2x damage at the player
         /// </summary>
         /// <param name="target"></param>
-        public void MegaShot(Player target)
+        private void MegaShot(Player target)
         {
             if (target.Position.X > this.position.X)
             {
@@ -418,7 +426,7 @@ namespace Palingenesis
         /// Each boss's unique attack
         /// </summary>
         /// <param name="target"></param>
-        public void SpecialAttack(Player target)
+        privatesswss void SpecialAttack(Player target)
         {
             //spawns shots around the screen randomly that start doing damge after a certain period
             if(type == bossName.RiceGoddess)

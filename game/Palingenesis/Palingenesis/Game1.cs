@@ -230,7 +230,7 @@ namespace Palingenesis
             RGVNDefault = Content.Load<Texture2D>("riceGoddessExpression1");
             RGVNAlternate = Content.Load<Texture2D>("RiceGoddessVisualNovelExpression2");
             RGVNWise = Content.Load<Texture2D>("ricegoddessWise");
-            NAbackgroundVN = Content.Load<Texture2D>("NagaBackground");
+            NAbackgroundVN = Content.Load<Texture2D>("NagaBG");
             NAVNDefault= Content.Load<Texture2D>("nagaBossVNMain");
             NAVNAlternate = Content.Load<Texture2D>("nagaBossVnAlternate");
             NAVNExasperated = Content.Load<Texture2D>("nagaclosedNervous");
@@ -241,7 +241,7 @@ namespace Palingenesis
            
 
 
-            player = new Player(100, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
+            player = new Player(150, 10, 10, 20, playerAsset, new Rectangle(200, 200, 50, 50),hit, WindowHeight, WindowWidth, attackTexturePlayer);
             boss = null;
             time = 0;
         }
@@ -275,14 +275,13 @@ namespace Palingenesis
                         currentState = GameState.EnterName;
                         //MediaPlayer.Play(forwardVN);
 
-                        //Makes the rectangles for player and boss HP
-                        Rectangle BossHPBar = new Rectangle(WindowWidth / 2 - WindowWidth / 4, WindowHeight / 10, boss.Health, 50);
-                        Rectangle PlayerHPBar = new Rectangle(WindowWidth / 10, WindowHeight - WindowHeight / 20, player.Health, 50);
 
                     }
                     break;
 
                 case GameState.EnterName:
+                    
+                    //allows user to enter 3 charachters as a name
                     if(name.Length < 3)
                     {
                         if(ScoreboardInput() != null && ScoreboardInput() != "back")
@@ -321,12 +320,14 @@ namespace Palingenesis
                     BossHealth.Update(boss.Health);
                     PlayerHealth.Update(player.Health);
 
+                    //Play Rice Goddess music
                     if (randomChoice==1 && !IsMusicPlaying)
                     {
                         MediaPlayer.Play(RiceGoddessOST);
                         IsMusicPlaying = true;
                     }
 
+                    //Play Naga music
                     if (randomChoice==2 && !IsMusicPlaying)
                     {
                         MediaPlayer.Play(NagaOST);
@@ -341,8 +342,8 @@ namespace Palingenesis
                     if (elapsed < 1 && boss.IsCharging == false)
                     {
                         //I moved the random variable generation oustide the AI method to save on memory
-                        int tmp = rng.Next(0, 7);
-                       
+                        int tmp = rng.Next(0,7);
+
                         boss.AI(tmp, player, elapsed, gameTime);
 
                         //updates timer
@@ -461,7 +462,6 @@ namespace Palingenesis
                             randomChoice = 2;
                         }
 
-                       
                     }
 
                     break;
@@ -471,6 +471,8 @@ namespace Palingenesis
                     if(SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = GameState.Menu;
+
+                        //resetting all the game data
                         dialogueNum = 0;
                         dialougeList.Clear();
                         IsMusicPlaying = false;
@@ -483,12 +485,14 @@ namespace Palingenesis
 
                 case GameState.Dialouge:
 
+                    //plays rice godess VN music
                     if (randomChoice==1 && !IsMusicPlaying)
                     {
                         MediaPlayer.Play(VNRiceGoddessOST);
                         IsMusicPlaying = true;
                     }
 
+                    //plays rice godess VN music
                     else if (randomChoice == 2 && !IsMusicPlaying)
                     {
                         MediaPlayer.Play(VNNagaOST);
@@ -506,6 +510,8 @@ namespace Palingenesis
                     if ((dialougeList[dialogueNum] == null) && (Boss1Beaten == true) && (Boss2Beaten == true))
                     {
                         currentState = GameState.ScoreBoard;
+
+                        //resetting all the game data
                         dialogueNum = 0;
                         dialougeList.Clear();
                         IsMusicPlaying = false;
@@ -568,7 +574,7 @@ namespace Palingenesis
 
                 case GameState.ScoreBoard:
 
-
+                    //write and save scoreboard
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = GameState.Menu;
@@ -798,7 +804,7 @@ namespace Palingenesis
                 int moveSpeed = 0; // Makes moveSpeed based on second element of data
                 int attackSpeed = 10; // Makes attackSpeed based on third element of data
                 int damage = 10; // Makes damage based on fourth element of data
-                riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG); // Makes Rice Goddess using data gathered from the file
+                riceGoddess = new Boss(health, moveSpeed, attackSpeed, damage, riceGoddessTexture, new Rectangle(500, 500, 100, 100), takeDamadge, WindowHeight, WindowWidth, bossName.RiceGoddess, attackTextureRG, RGteleportTexture); // Makes Rice Goddess using data gathered from the file
                 boss = riceGoddess;
                 isRiceGoddessLoaded = true;
             }
@@ -814,7 +820,7 @@ namespace Palingenesis
                 int moveSpeed = 0; // Makes moveSpeed based on second element of data
                 int attackSpeed = 20; // Makes attackSpeed based on third element of data
                 int damage = 10; // Makes damage based on fourth element of data
-                nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA); // Makes Naga Boss using data gathered from the file
+                nagaBoss = new Boss(health, moveSpeed, attackSpeed, damage, nagaBossTexture, new Rectangle(500, 500, 200, 200), takeDamadge, WindowHeight, WindowWidth, bossName.NagaBoss, attackTextureNA, NAteleportTexture); // Makes Naga Boss using data gathered from the file
                 boss = nagaBoss;
                 isNagaBossLoaded = true;
             }
@@ -991,7 +997,10 @@ namespace Palingenesis
         }
 
         
-        
+        /// <summary>
+        /// Gets user input for the input name section
+        /// </summary>
+        /// <returns><string>
         private string ScoreboardInput()
         {
             if(SingleKeyPress(Keys.A, kbState))
@@ -1008,7 +1017,7 @@ namespace Palingenesis
             }
             if (SingleKeyPress(Keys.D, kbState))
             {
-                return "DD";
+                return "D";
             }
             if (SingleKeyPress(Keys.E, kbState))
             {
