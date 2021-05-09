@@ -108,6 +108,7 @@ namespace Palingenesis
         private Texture2D RiceGoddessBackground;
         private Texture2D NagaBackground;
         private Texture2D titleScreen;
+        private Texture2D namescreen;
         private Texture2D instructions;
         private Texture2D scoreBoard;
         private Texture2D gameOver;
@@ -194,6 +195,7 @@ namespace Palingenesis
             //Load title screen textures
             titleScreen = Content.Load<Texture2D>("titlescreen");
             instructions = Content.Load<Texture2D>("instructions screen");
+            namescreen = Content.Load<Texture2D>("enter_name_screen");
             pauseScreen = Content.Load<Texture2D>("PauseScreen");
             scoreBoard= Content.Load<Texture2D>("ScoreBoard");
             name = "";
@@ -593,10 +595,7 @@ namespace Palingenesis
                 case GameState.Menu:
                     //drawing title screen
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
-                    
                     break;
-
-               
 
                 case GameState.Instructions:
                     _spriteBatch.Draw(titleScreen, fullScreen, Color.White);
@@ -606,7 +605,9 @@ namespace Palingenesis
                 case GameState.EnterName:
                     if(name != null)
                     {
-                        _spriteBatch.DrawString(font, name, new Vector2(100, 100), Color.Black);
+                        _spriteBatch.Draw(namescreen, fullScreen, Color.White);
+                        Vector2 pos = new Vector2(750, 670);
+                        _spriteBatch.DrawString(fontVN, name, pos, Color.Black);
                     }
                     
                     
@@ -990,112 +991,112 @@ namespace Palingenesis
         }
 
         
-         
+        
         private string ScoreboardInput()
         {
             if(SingleKeyPress(Keys.A, kbState))
             {
-                return "a";
+                return "A";
             }
             if (SingleKeyPress(Keys.B, kbState))
             {
-                return "b";
+                return "B";
             }
             if (SingleKeyPress(Keys.C, kbState))
             {
-                return "c";
+                return "C";
             }
             if (SingleKeyPress(Keys.D, kbState))
             {
-                return "d";
+                return "DD";
             }
             if (SingleKeyPress(Keys.E, kbState))
             {
-                return "e";
+                return "E";
             }
             if (SingleKeyPress(Keys.F, kbState))
             {
-                return "f";
+                return "F";
             }
             if (SingleKeyPress(Keys.G, kbState))
             {
-                return "g";
+                return "G";
             }
             if (SingleKeyPress(Keys.H, kbState))
             {
-                return "h";
+                return "H";
             }
             if (SingleKeyPress(Keys.I, kbState))
             {
-                return "i";
+                return "I";
             }
             if (SingleKeyPress(Keys.J, kbState))
             {
-                return "j";
+                return "J";
             }
             if (SingleKeyPress(Keys.K, kbState))
             {
-                return "k";
+                return "K";
             }
             if (SingleKeyPress(Keys.L, kbState))
             {
-                return "l";
+                return "L";
             }
             if (SingleKeyPress(Keys.M, kbState))
             {
-                return "m";
+                return "M";
             }
             if (SingleKeyPress(Keys.N, kbState))
             {
-                return "n";
+                return "N";
             }
             if (SingleKeyPress(Keys.O, kbState))
             {
-                return "o";
+                return "O";
             }
             if (SingleKeyPress(Keys.P, kbState))
             {
-                return "p";
+                return "P";
             }
             if (SingleKeyPress(Keys.Q, kbState))
             {
-                return "q";
+                return "Q";
             }
             if (SingleKeyPress(Keys.R, kbState))
             {
-                return "r";
+                return "R";
             }
             if (SingleKeyPress(Keys.S, kbState))
             {
-                return "s";
+                return "S";
             }
             if (SingleKeyPress(Keys.T, kbState))
             {
-                return "t";
+                return "T";
             }
             if (SingleKeyPress(Keys.U, kbState))
             {
-                return "u";
+                return "U";
             }
             if (SingleKeyPress(Keys.V, kbState))
             {
-                return "v";
+                return "V";
             }
             if (SingleKeyPress(Keys.W, kbState))
             {
-                return "w";
+                return "W";
             }
             if (SingleKeyPress(Keys.X, kbState))
             {
-                return "x";
+                return "X";
             }
             if (SingleKeyPress(Keys.Y, kbState))
             {
-                return "y";
+                return "Y";
             }
             if (SingleKeyPress(Keys.Z, kbState))
             {
-                return "z";
+                return "Z";
             }
             if (SingleKeyPress(Keys.Back, kbState))
             {
