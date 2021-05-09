@@ -300,7 +300,11 @@ namespace Palingenesis
                     if (SingleKeyPress(Keys.Enter, kbState) && name.Length > 0)
                     {
                         currentState = GameState.Instructions;
+                        //adding the player name and a default time to the scoreboard
+                        scoreBoardInfo.Add(name, 0);
                     }
+
+
                     break;
 
                 case GameState.Instructions:
@@ -575,7 +579,7 @@ namespace Palingenesis
                     if (SingleKeyPress(Keys.Enter, kbState))
                     {
                         currentState = GameState.Menu;
-                        scoreBoardInfo.Add(name, scoreTimer);
+                        scoreBoardInfo[name] = scoreTimer;
                         LoadScoreboard();
                         SaveScoreboard();
                     }
@@ -689,6 +693,7 @@ namespace Palingenesis
                 case GameState.ScoreBoard:
                     //drawing final time on scoreboard
                     _spriteBatch.Draw(scoreBoard, fullScreen, Color.White);
+                    _spriteBatch.DrawString(fontVN, name, new Vector2(650, 200), Color.White);
                     _spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(1150, 200), Color.White);
                     dialogueNum = 0;
                     break;
