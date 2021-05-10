@@ -277,6 +277,7 @@ namespace Palingenesis
                         forwardVN.Play();
                         LoadHealthBars();
                         hasAdvanced = false;
+                        //LoadScoreboard();
 
                         currentState = GameState.EnterName;
                         //MediaPlayer.Play(forwardVN);
@@ -303,7 +304,6 @@ namespace Palingenesis
                         //adding the player name and a default time to the scoreboard
                         scoreBoardInfo.Add(name, 0);
                     }
-
 
                     break;
 
@@ -783,12 +783,15 @@ namespace Palingenesis
             StreamWriter output = null;
             try
             {
+                LoadScoreboard();
+
                 // When we open for writing, create the file if it doesn't exist yet
                 output = new StreamWriter("../../../Scoreboard.txt");
 
                 foreach (KeyValuePair<string, double> kvp in scoreBoardInfo) // For every entry in the scoreboard info dictionary
                 {
-                    output.WriteLine($"{kvp.Key.ToString()},{kvp.Value.ToString()}"); // Save the name and time
+                    output.Write($"{kvp.Key.ToString()},{kvp.Value.ToString()}"); // Save the name and time
+                    output.WriteLine();
                 }
                 // Confirmation message
             }
@@ -815,15 +818,17 @@ namespace Palingenesis
                 // Creating the streamreader opens the file
                 input = new StreamReader("../../../Scoreboard.txt");
                 string line = "DEFAULT";
-                string[] data = line.Split(',');
                 // Loops through the file one line at a time
                 while ((line = input.ReadLine()) != null)
                 {
+                    string[] data = line.Split(',');
                     scoreBoardInfo.Add(data[0], double.Parse(data[1]));
                 }
                 // Confirmation message
+                System.Diagnostics.Debug.WriteLine($"Score board loaded successfully!");
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine($"Score board load failed: {e.Message}");
             }
