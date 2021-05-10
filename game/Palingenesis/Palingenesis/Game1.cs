@@ -146,6 +146,7 @@ namespace Palingenesis
         private const int NumberOfBosses = 2;
         private const int WindowWidth = 1920;
         private const int WindowHeight = 1080;
+        private bool happened = false;
 
         private List<Dialogue> dialougeList;
         private String currentLine;
@@ -693,8 +694,9 @@ namespace Palingenesis
                 case GameState.ScoreBoard:
                     //drawing final time on scoreboard
                     _spriteBatch.Draw(scoreBoard, fullScreen, Color.White);
-                    _spriteBatch.DrawString(fontVN, name, new Vector2(650, 200), Color.White);
-                    _spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(1150, 200), Color.White);
+                    SortedScores();
+                    //_spriteBatch.DrawString(fontVN, name, new Vector2(650, 200), Color.White);
+                    //_spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", scoreTimer), new Vector2(1150, 200), Color.White);
                     dialogueNum = 0;
                     break;
             }
@@ -774,6 +776,7 @@ namespace Palingenesis
 
         }
 
+        #region scoreboard methods
         /// <summary>
         /// Saves the current scoreboard information to a file so that it may be saved and loaded in later on
         /// </summary>
@@ -838,6 +841,111 @@ namespace Palingenesis
                 input.Close();
             }
         }
+
+        /// <summary>
+        /// Ensures the dictionary holds the top 5 times and sorts them from lowest to highest
+        /// </summary>
+        private void SortedScores()
+        {
+            /*
+             * if count > 5
+	                loop through da dictionary
+	                find highest time
+	                remove that
+	                continue until count = 5
+               else
+	                sort the dictionary!
+	                return sorted dictionary
+            */
+
+            double maxValue = 0;
+            double minValue = int.MaxValue;
+            double previousMinimum = 0;
+            int x = 1150;
+            int y = 200;
+            int namex = 650;
+            int namey = 200;
+
+
+            
+            if(!happened)
+            {
+                LoadScoreboard();
+                scoreBoardInfo[name] = scoreTimer;
+                happened = true;
+            }
+            
+
+            if (scoreBoardInfo.Count > 5)
+            {
+                while(scoreBoardInfo.Count > 5)
+                {
+                    foreach (KeyValuePair<string, double> item in scoreBoardInfo)
+                    {
+                        //seeing which value is the highest
+                        if (item.Value > maxValue)
+                        {
+                            maxValue = item.Value;
+                        }
+                    }
+
+                    //removing the max value
+                    foreach (KeyValuePair<string, double> item in scoreBoardInfo)
+                    {
+                        if (item.Value == maxValue)
+                        {
+                            scoreBoardInfo.Remove(item.Key);
+                        }
+                    }
+                }
+               
+
+            }
+            else
+            {
+                //sort the dictionary!!!!!!!!!!!!!
+                Dictionary<string, double> sortedScoreBoardInfo = new Dictionary<string, double>();
+                foreach (KeyValuePair<string, double> item in scoreBoardInfo)
+                {
+                    sortedScoreBoardInfo.Add(item.Key, item.Value);
+                }
+
+                //var ordered = scoreBoardInfo.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
+
+                foreach (KeyValuePair<string, double> item in sortedScoreBoardInfo)
+                {
+                    //finding min value
+                    foreach (KeyValuePair<string, double> currentItem in sortedScoreBoardInfo)
+                    {
+                        if (currentItem.Value <= minValue)
+                        {
+                            minValue = currentItem.Value;
+                        }
+                    }
+                    //prints lowest value to the screen
+                    foreach (KeyValuePair<string, double> currentItem in sortedScoreBoardInfo)
+                    {
+                        if (currentItem.Value == minValue)
+                        {
+                            _spriteBatch.DrawString(fontVN, currentItem.Key, new Vector2(namex, namey), Color.White);
+                            _spriteBatch.DrawString(fontVN, String.Format("final time: {0:F} seconds", currentItem.Value), new Vector2(x, y), Color.White);
+
+                            //removes lowest value so we can find the next lowest value
+                            sortedScoreBoardInfo.Remove(currentItem.Key);
+                            minValue = int.MaxValue;
+                        }
+                       
+                    }
+                    //formatting the name and timer
+                    namey += 200;
+                    y += 200;
+
+                }
+                
+                
+            }
+        }
+        #endregion
 
         /// <summary>
         /// Adds dialougue to list, after reading in textures type in text and true or false based on if the player is speaking, insert null to break to fight
