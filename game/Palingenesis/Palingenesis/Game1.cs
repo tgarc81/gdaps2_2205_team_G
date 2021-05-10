@@ -860,13 +860,11 @@ namespace Palingenesis
 
             double maxValue = 0;
             double minValue = int.MaxValue;
-            double previousMinimum = 0;
             int x = 1150;
             int y = 200;
             int namex = 650;
             int namey = 200;
-
-
+            
             
             if(!happened)
             {
@@ -912,7 +910,7 @@ namespace Palingenesis
 
                 //var ordered = scoreBoardInfo.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value).ToDictionary(pair => pair.Key, pair => pair.Value);
 
-                foreach (KeyValuePair<string, double> item in sortedScoreBoardInfo)
+                while(sortedScoreBoardInfo.Count > 0)
                 {
                     //finding min value
                     foreach (KeyValuePair<string, double> currentItem in sortedScoreBoardInfo)
@@ -937,8 +935,8 @@ namespace Palingenesis
                        
                     }
                     //formatting the name and timer
-                    namey += 200;
-                    y += 200;
+                    namey += 175;
+                    y += 175;
 
                 }
                 
